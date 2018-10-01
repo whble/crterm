@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace CRTERM
+namespace CRTerm
 {
-	static class Program
-	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main(string[] args)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			CommandParser parser = new CommandParser();
-			parser.DispatchCommandLine(args);
-			//Application.Run(new UI.FontTestPad());
-		}
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-	}
+            if (true)
+            {
+                Application.Run(new MainWindow());
+            }
+            else
+            {
+                TextConsole t = new TextConsole();
+                t.Setup();
+                t.Loop();
+            }
+        }
+
+    }
 }

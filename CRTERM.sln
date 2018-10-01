@@ -1,7 +1,16 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRTERM", "CRTERM\CRTERM.csproj", "{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRTerm", "CRTerm\CRTerm.csproj", "{85434C9C-64DE-48DB-BEE9-80C82F44B754}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6FE277FE-AEB0-430B-85EE-4CDD544EBBA3}"
+	ProjectSection(SolutionItems) = preProject
+		CRTerm.vsmdi = CRTerm.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,18 +22,34 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Debug|x86.ActiveCfg = Debug|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Debug|x86.Build.0 = Debug|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Release|Any CPU.ActiveCfg = Release|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Release|Mixed Platforms.Build.0 = Release|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Release|x86.ActiveCfg = Release|x86
-		{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}.Release|x86.Build.0 = Release|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|Any CPU.Build.0 = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|x86.ActiveCfg = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Debug|x86.Build.0 = Debug|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|Any CPU.ActiveCfg = Release|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|Mixed Platforms.Build.0 = Release|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|x86.ActiveCfg = Release|x86
+		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6BD4E5A-9733-4E49-8875-0F88AC20F034}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://wilsontp.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CRTerm\\CRTerm.csproj
+		SccProjectName1 = CRTerm
+		SccLocalPath1 = CRTerm
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = CRTerm.vsmdi
 	EndGlobalSection
 EndGlobal

@@ -5,14 +5,18 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EDDBCEA9-BAF2-4900-A54C-9B3CDA115B11}</ProjectGuid>
+    <ProjectGuid>{85434C9C-64DE-48DB-BEE9-80C82F44B754}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CRTERM</RootNamespace>
-    <AssemblyName>CRTERM</AssemblyName>
+    <RootNamespace>CRTerm</RootNamespace>
+    <AssemblyName>CRTerm</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -23,7 +27,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>0067</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -33,6 +36,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,109 +53,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandParser.cs" />
-    <Compile Include="Common\ConfigList.cs" />
-    <Compile Include="Common\ConfigItem.cs" />
-    <Compile Include="Common\Exceptions.cs" />
-    <Compile Include="Common\INIFile.cs" />
-    <Compile Include="Common\ProviderInstanceControl.cs" />
-    <Compile Include="Common\Connection.cs" />
-    <Compile Include="Common\RingBuffer.cs" />
-    <Compile Include="CustomUI\GPSWindow.cs">
+    <Compile Include="IBuffered.cs" />
+    <Compile Include="IDataChannel.cs" />
+    <Compile Include="ColorCodes.cs" />
+    <Compile Include="IConfigurable.cs" />
+    <Compile Include="IFrameBuffer.cs" />
+    <Compile Include="EventHandlers.cs" />
+    <Compile Include="IHasStatus.cs" />
+    <Compile Include="ISendChannel.cs" />
+    <Compile Include="IReceiveChannel.cs" />
+    <Compile Include="RingBuffer.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="ConnectionStatusCodes.cs" />
+    <Compile Include="CRTException.cs" />
+    <Compile Include="IO\IOEventArgs.cs" />
+    <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CustomUI\GPSWindow.Designer.cs">
-      <DependentUpon>GPSWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Terminal\ColorCodes.cs" />
-    <Compile Include="Terminal\ITerminal.cs" />
-    <Compile Include="Common\ICommProvider.cs" />
-    <Compile Include="Modem\NoModem.cs" />
-    <Compile Include="Terminal\TerminalTTY.cs" />
-    <Compile Include="Modem\Hayes.cs" />
-    <Compile Include="Modem\IModem.cs" />
-    <Compile Include="Modem\InitScript.cs" />
-    <Compile Include="Modem\KISSTNC.cs" />
-    <Compile Include="Transport\ITransport.cs" />
-    <Compile Include="Transport\FlowControl.cs" />
-    <Compile Include="Transport\Telnet.cs" />
-    <Compile Include="UI\ButtonPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\ButtonPanel.Designer.cs">
-      <DependentUpon>ButtonPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ConnectionSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ConnectionSettingsDialog.Designer.cs">
-      <DependentUpon>ConnectionSettingsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\FontTestPad.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\FontTestPad.Designer.cs">
-      <DependentUpon>FontTestPad.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\FrameBuffer.cs" />
-    <Compile Include="Transport\Loopback.cs" />
-    <Compile Include="Common\DataEventHandler.cs" />
-    <Compile Include="Transport\SerialPort.cs" />
-    <Compile Include="Transport\TCP.cs" />
-    <Compile Include="Transport\UDP.cs" />
-    <Compile Include="UI\InputPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\InputPanel.Designer.cs">
-      <DependentUpon>InputPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\MainWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\MainWindow.Designer.cs">
+    <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrameBuffer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer.Designer.cs">
+      <DependentUpon>FrameBuffer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IO\ITransport.cs" />
+    <Compile Include="IO\NullIOPort.cs" />
+    <Compile Include="IO\SerialIOPort.cs" />
+    <Compile Include="IO\TestPort.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\ProgramOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ProgramOptions.Designer.cs">
-      <DependentUpon>ProgramOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\PropertyPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\PropertyPanel.Designer.cs">
-      <DependentUpon>PropertyPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\TerminalDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\TerminalDisplay.Designer.cs">
-      <DependentUpon>TerminalDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\TerminalWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\TerminalWindow.Designer.cs">
-      <DependentUpon>TerminalWindow.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="CustomUI\GPSWindow.resx">
-      <DependentUpon>GPSWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ButtonPanel.resx">
-      <DependentUpon>ButtonPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ConnectionSettingsDialog.resx">
-      <DependentUpon>ConnectionSettingsDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\FontTestPad.resx">
-      <DependentUpon>FontTestPad.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\MainWindow.resx">
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Terminals\ANSITerminal.cs" />
+    <Compile Include="Terminals\ITerminal.cs" />
+    <Compile Include="Terminals\BasicTerminal.cs" />
+    <Compile Include="TextConsole.cs" />
+    <Compile Include="Transfer\ITransferDialog.cs" />
+    <Compile Include="Transfer\ITransferProtocol.cs" />
+    <Compile Include="IWindowManager.cs" />
+    <Compile Include="Transfer\XModem.cs" />
+    <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrameBuffer.resx">
+      <DependentUpon>FrameBuffer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -160,16 +109,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\PropertyPanel.resx">
-      <DependentUpon>PropertyPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\TerminalDisplay.resx">
-      <DependentUpon>TerminalDisplay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\TerminalWindow.resx">
-      <DependentUpon>TerminalWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="CRTerm_Classes.cd" />
+    <Content Include="Files\Glass_TTY_VT220.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Files\clacon.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -179,6 +125,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="dir.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bastest.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

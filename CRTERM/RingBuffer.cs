@@ -144,6 +144,14 @@ namespace CRTerm
                 buffer[i] = Read();
         }
 
+        internal byte[] ReadAll()
+        {
+            int len = this.Count;
+            byte[] data = new byte[len];
+            Read(data, len);
+            return data;
+        }
+
         public void Discard(int bytes)
         {
             if (Count < bytes)

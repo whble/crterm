@@ -5,6 +5,7 @@ using System.Text;
 using CRTerm.Terminals;
 using CRTerm.IO;
 using CRTerm.Transfer;
+using CRTerm.Config;
 
 namespace CRTerm
 {
@@ -55,7 +56,7 @@ namespace CRTerm
         private void _terminal_DataSent(IBuffered terminal)
         {
             while (terminal.BytesWaiting > 0)
-                Transport?.SendByte(terminal.ReadByte());
+                Transport?.Send(terminal.ReadByte());
         }
 
         private void FrameBuffer_KeyPressed(IFrameBuffer frameBuffer, TerminalKeyEventArgs e)
@@ -184,12 +185,12 @@ namespace CRTerm
 
         public void SendByte(byte Data)
         {
-            Transport?.SendByte(Data);
+            Transport?.Send(Data);
         }
 
         public void SendBytes(byte[] Data)
         {
-            Transport?.SendBytes(Data);
+            Transport?.Send(Data);
         }
 
         public void DataReceived(IBuffered channel)

@@ -8,6 +8,6 @@
         /// <returns></returns>
         bool ClearToSend { get; }
         // Send a byte to the remote system.
-        void SendByte(byte Data);
+        void Send(byte Data);
     }
 }

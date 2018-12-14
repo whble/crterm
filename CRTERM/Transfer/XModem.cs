@@ -145,12 +145,12 @@ namespace CRTerm.Transfer
 
         protected virtual void SendNAK()
         {
-            Transport.SendByte(NAK);
+            Transport.Send(NAK);
         }
 
         protected virtual void SendACK()
         {
-            Transport.SendByte(ACK);
+            Transport.Send(ACK);
         }
 
         protected virtual void Print(string s)

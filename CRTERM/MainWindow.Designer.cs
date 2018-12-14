@@ -49,6 +49,8 @@
             this.UploadButton = new System.Windows.Forms.ToolStripButton();
             this.DownloadButton = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.aNSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pETSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -118,6 +120,7 @@
             this.frameBuffer1.Name = "frameBuffer1";
             this.frameBuffer1.Size = new System.Drawing.Size(965, 492);
             this.frameBuffer1.TabIndex = 1;
+            this.frameBuffer1.Terminal = null;
             this.frameBuffer1.X = 0;
             this.frameBuffer1.Y = 24;
             // 
@@ -136,24 +139,26 @@
             this.DownloadButton});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(560, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(463, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
             // 
+            this.ConnectButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ConnectButton.Image = ((System.Drawing.Image)(resources.GetObject("ConnectButton.Image")));
             this.ConnectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ConnectButton.Name = "ConnectButton";
-            this.ConnectButton.Size = new System.Drawing.Size(72, 22);
+            this.ConnectButton.Size = new System.Drawing.Size(56, 22);
             this.ConnectButton.Text = "Connect";
             this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
             // DisconnectButton
             // 
+            this.DisconnectButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.DisconnectButton.Image = ((System.Drawing.Image)(resources.GetObject("DisconnectButton.Image")));
             this.DisconnectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DisconnectButton.Name = "DisconnectButton";
-            this.DisconnectButton.Size = new System.Drawing.Size(86, 22);
+            this.DisconnectButton.Size = new System.Drawing.Size(70, 22);
             this.DisconnectButton.Text = "Disconnect";
             this.DisconnectButton.Click += new System.EventHandler(this.DisconnectButton_Click);
             // 
@@ -164,21 +169,25 @@
             // 
             // ClearScreenButton
             // 
+            this.ClearScreenButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ClearScreenButton.Image = ((System.Drawing.Image)(resources.GetObject("ClearScreenButton.Image")));
             this.ClearScreenButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ClearScreenButton.Name = "ClearScreenButton";
-            this.ClearScreenButton.Size = new System.Drawing.Size(54, 22);
+            this.ClearScreenButton.Size = new System.Drawing.Size(38, 22);
             this.ClearScreenButton.Text = "Clear";
             this.ClearScreenButton.Click += new System.EventHandler(this.ClearScreenButton_Click);
             // 
             // TerminalOptionsButton
             // 
+            this.TerminalOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.TerminalOptionsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bSDELToolStripMenuItem});
+            this.bSDELToolStripMenuItem,
+            this.aNSIToolStripMenuItem,
+            this.pETSCIIToolStripMenuItem});
             this.TerminalOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("TerminalOptionsButton.Image")));
             this.TerminalOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.TerminalOptionsButton.Name = "TerminalOptionsButton";
-            this.TerminalOptionsButton.Size = new System.Drawing.Size(63, 22);
+            this.TerminalOptionsButton.Size = new System.Drawing.Size(47, 22);
             this.TerminalOptionsButton.Text = "Term";
             // 
             // bSDELToolStripMenuItem
@@ -191,37 +200,41 @@
             // 
             // PortOptionsButton
             // 
+            this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
             this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PortOptionsButton.Name = "PortOptionsButton";
-            this.PortOptionsButton.Size = new System.Drawing.Size(58, 22);
+            this.PortOptionsButton.Size = new System.Drawing.Size(42, 22);
             this.PortOptionsButton.Text = "Port";
             this.PortOptionsButton.DropDownOpening += new System.EventHandler(this.PortOptionsButton_DropDownOpening);
             // 
             // BaudRateButton
             // 
+            this.BaudRateButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.BaudRateButton.Image = ((System.Drawing.Image)(resources.GetObject("BaudRateButton.Image")));
             this.BaudRateButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BaudRateButton.Name = "BaudRateButton";
-            this.BaudRateButton.Size = new System.Drawing.Size(63, 22);
+            this.BaudRateButton.Size = new System.Drawing.Size(47, 22);
             this.BaudRateButton.Text = "Baud";
             this.BaudRateButton.DropDownOpening += new System.EventHandler(this.BaudRateButton_DropDownOpening);
             // 
             // UploadButton
             // 
+            this.UploadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.UploadButton.Image = ((System.Drawing.Image)(resources.GetObject("UploadButton.Image")));
             this.UploadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.UploadButton.Name = "UploadButton";
-            this.UploadButton.Size = new System.Drawing.Size(65, 22);
+            this.UploadButton.Size = new System.Drawing.Size(49, 22);
             this.UploadButton.Text = "Upload";
             this.UploadButton.Click += new System.EventHandler(this.UploadButton_Click);
             // 
             // DownloadButton
             // 
+            this.DownloadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.DownloadButton.Image = ((System.Drawing.Image)(resources.GetObject("DownloadButton.Image")));
             this.DownloadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DownloadButton.Name = "DownloadButton";
-            this.DownloadButton.Size = new System.Drawing.Size(81, 22);
+            this.DownloadButton.Size = new System.Drawing.Size(65, 22);
             this.DownloadButton.Text = "Download";
             this.DownloadButton.Click += new System.EventHandler(this.DownloadButton_Click);
             // 
@@ -229,6 +242,18 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // aNSIToolStripMenuItem
+            // 
+            this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
+            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.aNSIToolStripMenuItem.Text = "ANSI";
+            // 
+            // pETSCIIToolStripMenuItem
+            // 
+            this.pETSCIIToolStripMenuItem.Name = "pETSCIIToolStripMenuItem";
+            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.pETSCIIToolStripMenuItem.Text = "PETSCII";
             // 
             // MainWindow
             // 
@@ -276,6 +301,8 @@
         private System.Windows.Forms.ToolStripButton UploadButton;
         private System.Windows.Forms.ToolStripButton DownloadButton;
         private System.Windows.Forms.ToolStripDropDownButton BaudRateButton;
+        private System.Windows.Forms.ToolStripMenuItem aNSIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pETSCIIToolStripMenuItem;
     }
 }
 

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using CRTerm.Terminals;
 
-namespace CRTerm
+namespace CRTerm.Config
 {
     public class Configuration
     {

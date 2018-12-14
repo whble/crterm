@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CRTerm.Config;
 
 namespace CRTerm.IO
 {
@@ -79,17 +80,17 @@ namespace CRTerm.IO
             return true;
         }
 
-        public virtual void SendByte(byte Data)
+        public virtual void Send(byte Data)
         {
             receiveBuffer.Add(Data);
             DataReceived?.Invoke(this);
         }
 
-        public virtual void SendBytes(byte[] Data)
+        public virtual void Send(byte[] Data)
         {
             foreach (byte b in Data)
             {
-                SendByte(b);
+                Send(b);
             }
         }
 

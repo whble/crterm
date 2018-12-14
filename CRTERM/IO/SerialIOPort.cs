@@ -213,12 +213,12 @@ namespace CRTerm.IO
             }
         }
 
-        public virtual void SendByte(byte Data)
+        public virtual void Send(byte Data)
         {
-            SendBytes(new byte[] { Data });
+            Send(new byte[] { Data });
         }
 
-        public virtual void SendBytes(byte[] Data)
+        public virtual void Send(byte[] Data)
         {
             if (Port != null && Port.IsOpen)
             {

@@ -56,9 +56,9 @@ namespace CRTerm.IO
             ReceiveData(this);
         }
 
-        public override void SendByte(byte Data)
+        public override void Send(byte Data)
         {
-            base.SendByte(Data);
+            base.Send(Data);
             if (Data == '?')
                 ShowMenu();
         }

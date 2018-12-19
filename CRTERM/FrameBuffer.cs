@@ -37,9 +37,10 @@ namespace CRTerm
         /// <summary>
         /// Screen character data. Data is addressed as Data[Row, Col].
         /// </summary>
-        public char[,] CharacterData = null;
-        public ColorCodes[,] ForegroundColorData = null;
-        public ColorCodes[,] BackgroundColorData = null;
+        public string[,] CharacterData;
+        public ColorCodes[,] ForeColorData;
+        public ColorCodes[,] BackColorData;
+        public AttributeCodes[,] AttributeData;
 
         private Terminals.ITerminal _terminal;
 
@@ -125,9 +126,9 @@ namespace CRTerm
 
             var fonts = new[]
             {
-                "Consolas",
                 "Classic Console",
                 "Glass TTY VT220",
+                "Consolas",
                 "Lucida Console",
             };
 
@@ -201,7 +202,7 @@ namespace CRTerm
             }
         }
 
-        ColorCodes _currentForeground = ColorCodes.Green | ColorCodes.Light;
+        ColorCodes _currentForeground = ColorCodes.Lightgreen;
         public ColorCodes CurrentForeground
         {
             get { return _currentForeground; }
@@ -213,6 +214,20 @@ namespace CRTerm
         {
             get { return _currentBackground; }
             protected set { _currentBackground = value; }
+        }
+
+        AttributeCodes _currentAttribute = AttributeCodes.Normal;
+        public AttributeCodes CurrentAttribute
+        {
+            get
+            {
+                return this._currentAttribute;
+            }
+
+            set
+            {
+                this._currentAttribute = value;
+            }
         }
 
         int _cols = 80;
@@ -255,16 +270,40 @@ namespace CRTerm
         {
             this._cols = Cols;
             this._rows = Rows;
-            CharacterData = new char[Rows, Cols];
-            ForegroundColorData = new ColorCodes[Rows, Cols];
-            BackgroundColorData = new ColorCodes[Rows, Cols];
-
+            CharacterData = new string[Rows, Cols];
+            ForeColorData = new ColorCodes[Rows, Cols];
+            BackColorData = new ColorCodes[Rows, Cols];
+            AttributeData = new AttributeCodes[Rows, Cols];
             TextFont = GetBestFont();
+        }
+
+        public virtual void SetCell(int Row, int Col, char c, ColorCodes ForeColor, ColorCodes BackColor, AttributeCodes Attribute)
+        {
+            CharacterData[Row, Col] = c.ToString();
+            ForeColorData[Row, Col] = ForeColor;
+            BackColorData[Row, Col] = BackColor;
+            AttributeData[Row, Col] = Attribute;
+        }
+
+        public virtual void SetCell(int Row, int Col, char c)
+        {
+            CharacterData[Row, Col] = c.ToString();
+            ForeColorData[Row, Col] = CurrentForeground;
+            BackColorData[Row, Col] = CurrentBackground;
+            AttributeData[Row, Col] = CurrentAttribute;
+        }
+
+        public virtual void SetCell(char c)
+        {
+            CharacterData[Y, X] = c.ToString();
+            ForeColorData[Y, X] = CurrentForeground;
+            BackColorData[Y, X] = CurrentBackground;
+            AttributeData[Y, X] = CurrentAttribute;
         }
 
         public virtual void PrintChar(char c)
         {
-            CharacterData[Y, X] = c;
+            SetCell(c);
             AdvanceCursor();
             ResetDrawTimer();
         }
@@ -279,19 +318,25 @@ namespace CRTerm
         {
             for (int row = 0; row < Rows - 1; row++)
             {
-                for (int col = 0; col < Cols; col++)
-                {
-                    CharacterData[row, col] = CharacterData[row + 1, col];
-                    ForegroundColorData[row, col] = ForegroundColorData[row + 1, col];
-                    BackgroundColorData[row, col] = BackgroundColorData[row + 1, col];
-                }
+                Array.Copy(CharacterData, (row + 1) * Cols, CharacterData, row * Cols, Cols);
+                Array.Copy(ForeColorData, (row + 1) * Cols, ForeColorData, row * Cols, Cols);
+                Array.Copy(BackColorData, (row + 1) * Cols, BackColorData, row * Cols, Cols);
+                Array.Copy(AttributeData, (row + 1) * Cols, AttributeData, row * Cols, Cols);
+                //for (int col = 0; col < Cols; col++)
+                //{
+                //    CharacterData[row, col] = CharacterData[row + 1, col];
+                //    ForeColorData[row, col] = ForeColorData[row + 1, col];
+                //    BackColorData[row, col] = BackColorData[row + 1, col];
+                //    AttributeData[row,col] = AttributeData[row + 1, col];
+                //}
             }
 
             for (int col = 0; col < Cols; col++)
             {
-                CharacterData[Rows - 1, col] = ' ';
-                ForegroundColorData[Rows - 1, col] = _currentForeground;
-                BackgroundColorData[Rows - 1, col] = _currentBackground;
+                CharacterData[Rows - 1, col] = " ";
+                ForeColorData[Rows - 1, col] = CurrentForeground;
+                BackColorData[Rows - 1, col] = CurrentBackground;
+                AttributeData[Rows - 1, col] = CurrentAttribute;
             }
         }
 
@@ -375,9 +420,7 @@ namespace CRTerm
             {
                 for (int col = 0; col < Cols; col++)
                 {
-                    CharacterData[row, col] = c;
-                    ForegroundColorData[row, col] = _currentForeground;
-                    BackgroundColorData[row, col] = _currentBackground;
+                    SetCell(row, col, c);
                 }
             }
         }
@@ -418,7 +461,7 @@ namespace CRTerm
                 x = X * charWidth;
                 y = Y * charHeight;
                 g.FillRectangle(CursorBrush, x, y, charWidth, charHeight);
-                g.DrawString(CharacterData[Y, X].ToString(),
+                g.DrawString(CharacterData[Y, X],
                     TextFont,
                     InvertedBrush,
                     x, y,

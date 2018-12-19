@@ -97,13 +97,20 @@ namespace CRTerm.Config
 
         private void CreateTerminal(Session session)
         {
+            ITerminal term;
             switch (Get<string>("Session.Terminal"))
             {
                 case "CRTerm.Terminals.ANSITerminal":
-                    Terminals.ANSITerminal term = new Terminals.ANSITerminal();
+                    term = new Terminals.ANSITerminal();
                     PopulateObject(term);
                     session.Terminal = term;
                     break;
+                default:
+                    term = new Terminals.ANSITerminal();
+                    PopulateObject(term);
+                    session.Terminal = term;
+                    break;
+
             }
         }
 
@@ -117,12 +124,16 @@ namespace CRTerm.Config
                     session.Transport = port;
                     break;
                 case "CRTerm.IO.TestPort":
+                case "":
                     IO.TestPort testPort = new IO.TestPort();
                     PopulateObject(testPort);
                     session.Transport = testPort;
                     break;
                 default:
                     System.Windows.Forms.MessageBox.Show("Session not implemented: " + Get<string>("Session.Transport"));
+                    IO.TestPort defaultPort = new IO.TestPort();
+                    PopulateObject(defaultPort);
+                    session.Transport = defaultPort;
                     break;
             }
         }

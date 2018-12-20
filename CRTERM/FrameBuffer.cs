@@ -31,7 +31,13 @@ namespace CRTerm
         static string MEASURE_STRING = new string('W', 80);
 
         Timer timer = new Timer();
+        /// <summary>
+        /// Turns the cursor on and off. Cursor will never be drawn if CursorEnabled=false.
+        /// </summary>
         bool CursorEnabled = true;
+        /// <summary>
+        /// Blinks the cursor. true when cursor should be drawn on next refresh. False when it should not.
+        /// </summary>
         bool CursorState = true;
 
         /// <summary>
@@ -58,7 +64,7 @@ namespace CRTerm
                     _cursorCol = 0;
                 if (_cursorCol >= Cols)
                     _cursorCol = Cols - 1;
-                ResetDrawTimer();
+                Redraw();
             }
         }
 
@@ -178,7 +184,7 @@ namespace CRTerm
             return useFont;
         }
 
-        private void ResetDrawTimer()
+        private void Redraw()
         {
             refreshTimer = 0;
             CursorState = true;
@@ -198,7 +204,7 @@ namespace CRTerm
                     _cursorRow = 0;
                 if (_cursorRow >= Rows)
                     _cursorRow = Rows - 1;
-                ResetDrawTimer();
+                Redraw();
             }
         }
 
@@ -305,7 +311,7 @@ namespace CRTerm
         {
             SetCell(c);
             AdvanceCursor();
-            ResetDrawTimer();
+            Redraw();
         }
 
         public virtual void PrintChars(char[] Chars)
@@ -338,10 +344,14 @@ namespace CRTerm
                 BackColorData[Rows - 1, col] = CurrentBackground;
                 AttributeData[Rows - 1, col] = CurrentAttribute;
             }
+
+            // force redraw on next refresh interval
+            Redraw();
         }
 
         public void AdvanceCursor()
         {
+            CursorState = true;
             if (X < Cols - 1)
                 X += 1;
             else
@@ -406,6 +416,8 @@ namespace CRTerm
                 Col = 0;
             if (Col >= Cols)
                 Col = Cols - 1;
+
+            CursorState = true;
         }
 
         public virtual void Clear()
@@ -460,19 +472,14 @@ namespace CRTerm
             {
                 x = X * charWidth;
                 y = Y * charHeight;
-                g.FillRectangle(CursorBrush, x, y, charWidth, charHeight);
-                g.DrawString(CharacterData[Y, X],
-                    TextFont,
-                    InvertedBrush,
-                    x, y,
-                    StringFormat.GenericTypographic);
+                float h = charHeight / 4;
+                g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
+                //g.DrawString(CharacterData[Y, X],
+                //    TextFont,
+                //    InvertedBrush,
+                //    x, y,
+                //    StringFormat.GenericTypographic);
             }
-
-            //string s = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-            //SizeF timeSize = g.MeasureString(s, TextFont, this.ClientRectangle.Width, StringFormat.GenericTypographic);
-            //x = Cols * charWidth - timeSize.Width;
-            //y = Rows * charHeight;
-            //g.DrawString(s, TextFont, TextBrush, x, y, StringFormat.GenericTypographic);
         }
 
         private SizeF MeasureFont(Font font, Graphics g)
@@ -512,5 +519,34 @@ namespace CRTerm
             return 0;
         }
 
+        public void ClearTopToCursor()
+        {
+            for (int r = 0; r < Y - 1; r++)
+            {
+                for (int c = 0; c < Cols; c++)
+                {
+                    SetCell(r, c, ' ');
+                }
+            }
+            for (int c = 0; c < X; c++)
+            {
+                SetCell(Y, c, ' ');
+            }
+        }
+
+        public void ClearCursorToEnd()
+        {
+            for (int c = X; c < Cols; c++)
+            {
+                SetCell(Y, c, ' ');
+            }
+            for (int r = Y+1; r < Rows; r++)
+            {
+                for (int c = 0; c < Cols; c++)
+                {
+                    SetCell(r, c, ' ');
+                }
+            }
+        }
     }
 }

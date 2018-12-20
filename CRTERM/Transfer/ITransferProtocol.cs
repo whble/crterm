@@ -7,11 +7,10 @@ namespace CRTerm.Transfer
 {
     public interface ITransferProtocol 
     {
-        IO.ITransport Transport { get; set; }
-        ITransferDialog Dialog { get; set; }
-        void SendFile(string Filename);
-        void ReceiveFile(string Filename);
+        Session CurrentSession { get; set; }
+        void Send();
+        void Receive();
         void Cancel();
-        void ReceiveData(IBuffered transport);
+        void ReceiveData(IBuffered receiver);
     }
 }

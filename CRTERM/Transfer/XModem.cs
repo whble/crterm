@@ -301,6 +301,7 @@ namespace CRTerm.Transfer
         }
 
         public bool ClearToSend { get; }
+        public Session CurrentSession { get; set; }
 
         public virtual byte ReadByte()
         {
@@ -471,6 +472,16 @@ namespace CRTerm.Transfer
         }
 
         public int ReadData(byte[] Data, int Count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Send()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Receive()
         {
             throw new NotImplementedException();
         }

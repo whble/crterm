@@ -63,7 +63,7 @@ namespace CRTerm.Config
             {
                 //if (p.PropertyType.Name == "String"
                 //    || p.PropertyType.Name == "Int32")
-                if (p.GetCustomAttributes(typeof(ConfigItem), true).Length > 0)
+                if (p.GetCustomAttributes(typeof(CRTerm.ConfigItem), true).Length > 0)
                     Set(typeName + "." + p.Name, p.GetValue(obj, null)?.ToString());
             }
         }

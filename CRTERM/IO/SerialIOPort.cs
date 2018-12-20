@@ -241,7 +241,12 @@ namespace CRTerm.IO
 
         public byte ReadByte()
         {
-            return (byte)port.ReadByte();
+            int b = port.ReadByte();
+            //if (b >= 32)
+            //    System.Diagnostics.Debug.Write((char)b);
+            //else
+            //    System.Diagnostics.Debug.Write("^" + (char) (b+64));
+            return (byte)b;
         }
 
         public void UpdateStatus()

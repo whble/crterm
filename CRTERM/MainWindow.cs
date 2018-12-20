@@ -245,5 +245,28 @@ namespace CRTerm
             BaudRateButton.DropDownItems.Add(item);
         }
 
+        private void Upload_Paste_Click(object sender, EventArgs e)
+        {
+            Transfer.ITransferProtocol t = new Transfer.TextTransfer();
+            t.CurrentSession = this.CurrentSession;
+            t.Send();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Transfer.TextTransfer t = new Transfer.TextTransfer();
+            t.CurrentSession = this.CurrentSession;
+            if (Clipboard.ContainsText())
+            {
+                t.Text = Clipboard.GetText();
+                t.Send();
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (CurrentSession.Transfer != null)
+                CurrentSession.Transfer.Cancel();
+        }
     }
 }

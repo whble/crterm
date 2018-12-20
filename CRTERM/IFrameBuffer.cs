@@ -22,5 +22,7 @@
 
         event KeyPressEventHandler KeyPressed;
 
+        void ClearTopToCursor();
+        void ClearCursorToEnd();
     }
 }

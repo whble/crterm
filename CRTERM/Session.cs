@@ -36,7 +36,10 @@ namespace CRTerm
 
         private void _transport_DataReceived(IBuffered receiver)
         {
-            Terminal.ReceiveData(receiver);
+            if (Transfer != null)
+                Transfer.ReceiveData(receiver);
+            else 
+                Terminal.ReceiveData(receiver);
         }
 
         [ConfigItem]
@@ -193,12 +196,12 @@ namespace CRTerm
             Transport?.Send(Data);
         }
 
-        public void DataReceived(IBuffered channel)
-        {
-            if (Transfer != null)
-                Transfer.ReceiveData(channel);
-            else
-                Terminal.ReceiveData(channel);
-        }
+        //public void DataReceived(IBuffered channel)
+        //{
+        //    if (Transfer != null)
+        //        Transfer.ReceiveData(channel);
+        //    else
+        //        Terminal.ReceiveData(channel);
+        //}
     }
 }

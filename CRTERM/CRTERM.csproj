@@ -60,7 +60,6 @@
     <Compile Include="Config\ConfigDialog.Designer.cs">
       <DependentUpon>ConfigDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Config\ConfigItem.cs" />
     <Compile Include="Config\ConfigItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -110,6 +109,7 @@
     <Compile Include="Transfer\ITransferDialog.cs" />
     <Compile Include="Transfer\ITransferProtocol.cs" />
     <Compile Include="IWindowManager.cs" />
+    <Compile Include="Transfer\TextTransfer.cs" />
     <Compile Include="Transfer\XModem.cs" />
     <EmbeddedResource Include="Config\ConfigDialog.resx">
       <DependentUpon>ConfigDialog.cs</DependentUpon>

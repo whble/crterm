@@ -42,15 +42,19 @@
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ClearScreenButton = new System.Windows.Forms.ToolStripButton();
-            this.TerminalOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.bSDELToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PortOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.BaudRateButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.UploadButton = new System.Windows.Forms.ToolStripButton();
-            this.DownloadButton = new System.Windows.Forms.ToolStripButton();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.TerminalOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.bSDELToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aNSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pETSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UploadButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xMODEMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DownloadButton = new System.Windows.Forms.ToolStripButton();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -115,6 +119,7 @@
             // 
             // frameBuffer1
             // 
+            this.frameBuffer1.CurrentAttribute = CRTerm.AttributeCodes.Normal;
             this.frameBuffer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.frameBuffer1.Location = new System.Drawing.Point(0, 0);
             this.frameBuffer1.Name = "frameBuffer1";
@@ -132,14 +137,15 @@
             this.DisconnectButton,
             this.toolStripSeparator1,
             this.ClearScreenButton,
-            this.TerminalOptionsButton,
             this.PortOptionsButton,
             this.BaudRateButton,
+            this.TerminalOptionsButton,
             this.UploadButton,
-            this.DownloadButton});
+            this.DownloadButton,
+            this.CancelTransferButton});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(463, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(519, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -177,6 +183,26 @@
             this.ClearScreenButton.Text = "Clear";
             this.ClearScreenButton.Click += new System.EventHandler(this.ClearScreenButton_Click);
             // 
+            // PortOptionsButton
+            // 
+            this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
+            this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PortOptionsButton.Name = "PortOptionsButton";
+            this.PortOptionsButton.Size = new System.Drawing.Size(42, 22);
+            this.PortOptionsButton.Text = "Port";
+            this.PortOptionsButton.DropDownOpening += new System.EventHandler(this.PortOptionsButton_DropDownOpening);
+            // 
+            // BaudRateButton
+            // 
+            this.BaudRateButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.BaudRateButton.Image = ((System.Drawing.Image)(resources.GetObject("BaudRateButton.Image")));
+            this.BaudRateButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BaudRateButton.Name = "BaudRateButton";
+            this.BaudRateButton.Size = new System.Drawing.Size(47, 22);
+            this.BaudRateButton.Text = "Baud";
+            this.BaudRateButton.DropDownOpening += new System.EventHandler(this.BaudRateButton_DropDownOpening);
+            // 
             // TerminalOptionsButton
             // 
             this.TerminalOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -198,35 +224,49 @@
             this.bSDELToolStripMenuItem.Text = "BS/DEL";
             this.bSDELToolStripMenuItem.Click += new System.EventHandler(this.bSDELToolStripMenuItem_Click);
             // 
-            // PortOptionsButton
+            // aNSIToolStripMenuItem
             // 
-            this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
-            this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.PortOptionsButton.Name = "PortOptionsButton";
-            this.PortOptionsButton.Size = new System.Drawing.Size(42, 22);
-            this.PortOptionsButton.Text = "Port";
-            this.PortOptionsButton.DropDownOpening += new System.EventHandler(this.PortOptionsButton_DropDownOpening);
+            this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
+            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.aNSIToolStripMenuItem.Text = "ANSI";
             // 
-            // BaudRateButton
+            // pETSCIIToolStripMenuItem
             // 
-            this.BaudRateButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.BaudRateButton.Image = ((System.Drawing.Image)(resources.GetObject("BaudRateButton.Image")));
-            this.BaudRateButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.BaudRateButton.Name = "BaudRateButton";
-            this.BaudRateButton.Size = new System.Drawing.Size(47, 22);
-            this.BaudRateButton.Text = "Baud";
-            this.BaudRateButton.DropDownOpening += new System.EventHandler(this.BaudRateButton_DropDownOpening);
+            this.pETSCIIToolStripMenuItem.Name = "pETSCIIToolStripMenuItem";
+            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.pETSCIIToolStripMenuItem.Text = "PETSCII";
             // 
             // UploadButton
             // 
             this.UploadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.UploadButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pasteToolStripMenuItem,
+            this.aSCIIToolStripMenuItem,
+            this.xMODEMToolStripMenuItem});
             this.UploadButton.Image = ((System.Drawing.Image)(resources.GetObject("UploadButton.Image")));
             this.UploadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.UploadButton.Name = "UploadButton";
-            this.UploadButton.Size = new System.Drawing.Size(49, 22);
+            this.UploadButton.Size = new System.Drawing.Size(58, 22);
             this.UploadButton.Text = "Upload";
-            this.UploadButton.Click += new System.EventHandler(this.UploadButton_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // aSCIIToolStripMenuItem
+            // 
+            this.aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
+            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aSCIIToolStripMenuItem.Text = "ASCII";
+            // 
+            // xMODEMToolStripMenuItem
+            // 
+            this.xMODEMToolStripMenuItem.Name = "xMODEMToolStripMenuItem";
+            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.xMODEMToolStripMenuItem.Text = "XMODEM";
             // 
             // DownloadButton
             // 
@@ -243,17 +283,15 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // aNSIToolStripMenuItem
+            // CancelTransferButton
             // 
-            this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
-            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.aNSIToolStripMenuItem.Text = "ANSI";
-            // 
-            // pETSCIIToolStripMenuItem
-            // 
-            this.pETSCIIToolStripMenuItem.Name = "pETSCIIToolStripMenuItem";
-            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.pETSCIIToolStripMenuItem.Text = "PETSCII";
+            this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.CancelTransferButton.Image = ((System.Drawing.Image)(resources.GetObject("CancelTransferButton.Image")));
+            this.CancelTransferButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CancelTransferButton.Name = "CancelTransferButton";
+            this.CancelTransferButton.Size = new System.Drawing.Size(47, 22);
+            this.CancelTransferButton.Text = "Cancel";
+            this.CancelTransferButton.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // MainWindow
             // 
@@ -298,11 +336,15 @@
         private System.Windows.Forms.ToolStripMenuItem bSDELToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton PortOptionsButton;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripButton UploadButton;
         private System.Windows.Forms.ToolStripButton DownloadButton;
         private System.Windows.Forms.ToolStripDropDownButton BaudRateButton;
         private System.Windows.Forms.ToolStripMenuItem aNSIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pETSCIIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton UploadButton;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aSCIIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xMODEMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton CancelTransferButton;
     }
 }
 

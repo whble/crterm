@@ -179,5 +179,15 @@ namespace CRTerm
         {
             throw new NotImplementedException();
         }
+
+        public void ClearTopToCursor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearCursorToEnd()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -117,8 +117,12 @@ namespace CRTerm.Terminals
                             break;
                         case 'J':
                             inCmd = false;
-                            if (operands[0] == 2)
+                            if (operands[0] == 1)
+                                FrameBuffer.ClearTopToCursor();
+                            else if (operands[0] == 2)
                                 FrameBuffer.Clear();
+                            else
+                                FrameBuffer.ClearCursorToEnd();
                             break;
                         case 'n':
                             if (operands[0] == 6)

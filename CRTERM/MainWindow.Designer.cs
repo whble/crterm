@@ -36,7 +36,6 @@
             this.PortStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.TerminalNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.frameBuffer1 = new CRTerm.FrameBuffer();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ConnectButton = new System.Windows.Forms.ToolStripButton();
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
@@ -53,8 +52,12 @@
             this.aSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xMODEMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DownloadButton = new System.Windows.Forms.ToolStripButton();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.BasicButton = new System.Windows.Forms.ToolStripButton();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.frameBuffer1 = new CRTerm.FrameBuffer();
+            this.EntryText = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -105,6 +108,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.frameBuffer1);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.EntryText);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(965, 492);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -116,18 +120,6 @@
             // toolStripContainer1.TopToolStripPanel
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
-            // 
-            // frameBuffer1
-            // 
-            this.frameBuffer1.CurrentAttribute = CRTerm.AttributeCodes.Normal;
-            this.frameBuffer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.frameBuffer1.Location = new System.Drawing.Point(0, 0);
-            this.frameBuffer1.Name = "frameBuffer1";
-            this.frameBuffer1.Size = new System.Drawing.Size(965, 492);
-            this.frameBuffer1.TabIndex = 1;
-            this.frameBuffer1.Terminal = null;
-            this.frameBuffer1.X = 0;
-            this.frameBuffer1.Y = 24;
             // 
             // toolStrip1
             // 
@@ -142,10 +134,12 @@
             this.TerminalOptionsButton,
             this.UploadButton,
             this.DownloadButton,
-            this.CancelTransferButton});
+            this.CancelTransferButton,
+            this.toolStripSeparator2,
+            this.BasicButton});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(519, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(537, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -252,20 +246,20 @@
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // aSCIIToolStripMenuItem
             // 
             this.aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
-            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.aSCIIToolStripMenuItem.Text = "ASCII";
             // 
             // xMODEMToolStripMenuItem
             // 
             this.xMODEMToolStripMenuItem.Name = "xMODEMToolStripMenuItem";
-            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.xMODEMToolStripMenuItem.Text = "XMODEM";
             // 
             // DownloadButton
@@ -278,11 +272,6 @@
             this.DownloadButton.Text = "Download";
             this.DownloadButton.Click += new System.EventHandler(this.DownloadButton_Click);
             // 
-            // timer1
-            // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // CancelTransferButton
             // 
             this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -292,6 +281,52 @@
             this.CancelTransferButton.Size = new System.Drawing.Size(47, 22);
             this.CancelTransferButton.Text = "Cancel";
             this.CancelTransferButton.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // BasicButton
+            // 
+            this.BasicButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.BasicButton.Image = ((System.Drawing.Image)(resources.GetObject("BasicButton.Image")));
+            this.BasicButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BasicButton.Name = "BasicButton";
+            this.BasicButton.Size = new System.Drawing.Size(43, 22);
+            this.BasicButton.Text = "BASIC";
+            this.BasicButton.Click += new System.EventHandler(this.BasicButton_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // frameBuffer1
+            // 
+            this.frameBuffer1.CurrentAttribute = CRTerm.AttributeCodes.Normal;
+            this.frameBuffer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.frameBuffer1.Location = new System.Drawing.Point(0, 0);
+            this.frameBuffer1.Name = "frameBuffer1";
+            this.frameBuffer1.Size = new System.Drawing.Size(965, 479);
+            this.frameBuffer1.TabIndex = 1;
+            this.frameBuffer1.Terminal = null;
+            this.frameBuffer1.X = 0;
+            this.frameBuffer1.Y = 24;
+            // 
+            // EntryText
+            // 
+            this.EntryText.AcceptsReturn = true;
+            this.EntryText.BackColor = System.Drawing.Color.Black;
+            this.EntryText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.EntryText.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.EntryText.Location = new System.Drawing.Point(0, 479);
+            this.EntryText.Name = "EntryText";
+            this.EntryText.Size = new System.Drawing.Size(965, 13);
+            this.EntryText.TabIndex = 3;
+            this.EntryText.Enter += new System.EventHandler(this.EntryText_Enter);
+            this.EntryText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EntryText_KeyDown);
+            this.EntryText.Leave += new System.EventHandler(this.EntryText_Leave);
             // 
             // MainWindow
             // 
@@ -304,9 +339,11 @@
             this.Text = "CR Term";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.SizeChanged += new System.EventHandler(this.MainWindow_SizeChanged);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ContentPanel.PerformLayout();
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
@@ -345,6 +382,9 @@
         private System.Windows.Forms.ToolStripMenuItem aSCIIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xMODEMToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton CancelTransferButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton BasicButton;
+        private System.Windows.Forms.TextBox EntryText;
     }
 }
 

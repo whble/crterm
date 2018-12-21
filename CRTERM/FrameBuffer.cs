@@ -23,10 +23,11 @@ namespace CRTerm
         private int refreshTimer = 0;
         public int BlinkRate = 20;
 
-        Font TextFont = SystemFonts.DefaultFont;
+        //Font Font = SystemFonts.DefaultFont;
         Brush TextBrush = new SolidBrush(Color.LightGreen);
         Brush InvertedBrush = new SolidBrush(Color.Black);
         Brush CursorBrush = new SolidBrush(Color.FromArgb(192, 192, 192));
+        float rowHeight = 16;
 
         static string MEASURE_STRING = new string('W', 80);
 
@@ -34,7 +35,7 @@ namespace CRTerm
         /// <summary>
         /// Turns the cursor on and off. Cursor will never be drawn if CursorEnabled=false.
         /// </summary>
-        bool CursorEnabled = true;
+        public bool CursorEnabled = true;
         /// <summary>
         /// Blinks the cursor. true when cursor should be drawn on next refresh. False when it should not.
         /// </summary>
@@ -49,6 +50,14 @@ namespace CRTerm
         public AttributeCodes[,] AttributeData;
 
         private Terminals.ITerminal _terminal;
+
+        public int PixelsPerRow
+        {
+            get
+            {
+                return (int)rowHeight;
+            }
+        }
 
         /// <summary>
         /// Column of the cursor position. 0 is left edge
@@ -126,7 +135,7 @@ namespace CRTerm
         private Font GetBestFont()
         {
             Font useFont = null;
-            float rowHeight = this.ClientRectangle.Height / (float)Rows;
+            rowHeight = this.ClientRectangle.Height / (float)Rows;
             if (rowHeight < 8)
                 rowHeight = 8;
 
@@ -280,7 +289,7 @@ namespace CRTerm
             ForeColorData = new ColorCodes[Rows, Cols];
             BackColorData = new ColorCodes[Rows, Cols];
             AttributeData = new AttributeCodes[Rows, Cols];
-            TextFont = GetBestFont();
+            Font = GetBestFont();
         }
 
         public virtual void SetCell(int Row, int Col, char c, ColorCodes ForeColor, ColorCodes BackColor, AttributeCodes Attribute)
@@ -448,14 +457,15 @@ namespace CRTerm
             float x;
             float y;
 
-            if (TextFont == null)
-                TextFont = GetBestFont();
-            SizeF charSize = MeasureFont(TextFont, g);
+            if (Font == null)
+                Font = GetBestFont();
+            SizeF charSize = MeasureFont(Font, g);
             float charWidth = charSize.Width / MEASURE_STRING.Length;
             float charHeight = charSize.Height;
             float Col80 = charWidth * 80;
             //float scaleFactor = this.ClientRectangle.Width / Col80;
             //g.ScaleTransform(scaleFactor, scaleFactor);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             g.Clear(Color.Black);
             for (int row = 0; row < Rows; row++)
@@ -464,7 +474,7 @@ namespace CRTerm
                 {
                     x = col * charWidth;
                     y = row * charHeight;
-                    g.DrawString(CharacterData[row, col].ToString(), TextFont, TextBrush, x, y, StringFormat.GenericTypographic);
+                    g.DrawString(CharacterData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
                 }
             }
 
@@ -475,7 +485,7 @@ namespace CRTerm
                 float h = charHeight / 4;
                 g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
                 //g.DrawString(CharacterData[Y, X],
-                //    TextFont,
+                //    Font,
                 //    InvertedBrush,
                 //    x, y,
                 //    StringFormat.GenericTypographic);
@@ -505,7 +515,7 @@ namespace CRTerm
 
         private void FrameBuffer_SizeChanged(object sender, System.EventArgs e)
         {
-            TextFont = GetBestFont();
+            Font = GetBestFont();
         }
 
         private void FrameBuffer_KeyPress(object sender, KeyPressEventArgs e)
@@ -540,7 +550,7 @@ namespace CRTerm
             {
                 SetCell(Y, c, ' ');
             }
-            for (int r = Y+1; r < Rows; r++)
+            for (int r = Y + 1; r < Rows; r++)
             {
                 for (int c = 0; c < Cols; c++)
                 {

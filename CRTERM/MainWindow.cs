@@ -27,7 +27,7 @@ namespace CRTerm
                 FrameBuffer = this.frameBuffer1
             };
             CurrentSession.Init();
-
+            MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
         }
 
@@ -267,6 +267,73 @@ namespace CRTerm
         {
             if (CurrentSession.Transfer != null)
                 CurrentSession.Transfer.Cancel();
+        }
+
+        private void BasicButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton b = sender as ToolStripButton;
+            if (b == null)
+                return;
+
+            b.Checked = !b.Checked;
+
+            if (b.Checked)
+            {
+                EntryText.Enabled = true;
+                EntryText.Focus();
+            }
+            else
+            {
+                EntryText.Enabled = false;
+                frameBuffer1.Focus();
+            }
+        }
+
+        private void MainWindow_SizeChanged(object sender, EventArgs e)
+        {
+            EntryText.Height = frameBuffer1.PixelsPerRow + 4;
+            EntryText.BackColor = Color.Black;
+            EntryText.ForeColor = Color.LightGreen;
+            EntryText.Font = frameBuffer1.Font;
+        }
+
+        private void EntryText_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Return:
+                    SendText(EntryText.Text + "\r");
+                    EntryText.Text = "";
+                    e.Handled = true;
+                    break;
+                case Keys.Escape:
+                    EntryText.Text = "";
+                    break;
+            }
+        }
+
+        private void SendText(string Data)
+        {
+            if (string.IsNullOrEmpty(Data))
+                return;
+
+            Transfer.TextTransfer t = new Transfer.TextTransfer();
+            t.CurrentSession = this.CurrentSession;
+            if (Clipboard.ContainsText())
+            {
+                t.Text = Data;
+                t.Send();
+            }
+        }
+
+        private void EntryText_Enter(object sender, EventArgs e)
+        {
+            frameBuffer1.CursorEnabled = false;
+        }
+
+        private void EntryText_Leave(object sender, EventArgs e)
+        {
+            frameBuffer1.CursorEnabled = true;
         }
     }
 }

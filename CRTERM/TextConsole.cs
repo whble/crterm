@@ -16,6 +16,8 @@ namespace CRTerm
 
         public event KeyPressEventHandler KeyPressed;
 
+        public CursorTypes CursorType { get; set; }
+
         public int X
         {
             get

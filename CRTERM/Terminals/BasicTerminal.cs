@@ -23,6 +23,21 @@ namespace CRTerm.Terminals
         private ConnectionStatusCodes status;
         private string statusDetails;
 
+        private bool _basicMode = false;
+        public bool BasicMode
+        {
+            get
+            {
+                return _basicMode;
+            }
+            set
+            {
+                _basicMode = value;
+                if (value)
+                    FrameBuffer.CursorType = CursorTypes.Block;
+            }
+        }
+
         private IFrameBuffer _frameBuffer = null;
         public IFrameBuffer FrameBuffer
         {
@@ -231,6 +246,7 @@ namespace CRTerm.Terminals
                 this.statusDetails = value;
             }
         }
+
 
         public virtual void Print(string s)
         {

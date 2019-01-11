@@ -277,39 +277,11 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
 
-            if (b.Checked)
-            {
-                EntryText.Enabled = true;
-                EntryText.Focus();
-            }
-            else
-            {
-                EntryText.Enabled = false;
-                frameBuffer1.Focus();
-            }
+            CurrentSession.Terminal.BasicMode = b.Checked;
         }
 
         private void MainWindow_SizeChanged(object sender, EventArgs e)
         {
-            EntryText.Height = frameBuffer1.PixelsPerRow + 4;
-            EntryText.BackColor = Color.Black;
-            EntryText.ForeColor = Color.LightGreen;
-            EntryText.Font = frameBuffer1.Font;
-        }
-
-        private void EntryText_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Return:
-                    SendText(EntryText.Text + "\r");
-                    EntryText.Text = "";
-                    e.Handled = true;
-                    break;
-                case Keys.Escape:
-                    EntryText.Text = "";
-                    break;
-            }
         }
 
         private void SendText(string Data)

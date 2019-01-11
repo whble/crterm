@@ -5,6 +5,8 @@ namespace CRTerm.Terminals
     {
         event DataReadyEventHandler DataSent;
         IFrameBuffer FrameBuffer { get; set; }
+        bool BasicMode { get; set; }
+
         /// <summary>
         /// Sends a character from the keyboard. This should be converted to ASCII and sent straight through.
         /// </summary>

@@ -1,4 +1,6 @@
-﻿namespace CRTerm
+﻿using CRTerm.Terminals;
+
+namespace CRTerm
 {
     public interface IFrameBuffer
     {
@@ -8,6 +10,7 @@
         int Rows { get; }
         int X { get; set; }
         int Y { get; set; }
+        CursorTypes CursorType { get; set; }
 
         void Clear();
         void Fill(char c);

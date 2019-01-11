@@ -31,6 +31,8 @@ namespace CRTerm
 
         static string MEASURE_STRING = new string('W', 80);
 
+        public CursorTypes CursorType { get; set; }
+
         Timer timer = new Timer();
         /// <summary>
         /// Turns the cursor on and off. Cursor will never be drawn if CursorEnabled=false.
@@ -73,7 +75,7 @@ namespace CRTerm
                     _cursorCol = 0;
                 if (_cursorCol >= Cols)
                     _cursorCol = Cols - 1;
-                Redraw();
+                //Redraw();
             }
         }
 
@@ -81,6 +83,7 @@ namespace CRTerm
         {
             InitializeComponent();
             this.Load += new EventHandler(FrameBuffer_Load);
+            CursorType = CursorTypes.Underline;
         }
 
         void FrameBuffer_Load(object sender, EventArgs e)
@@ -130,6 +133,8 @@ namespace CRTerm
                 ParentForm.Height = htarget + topmargin;
                 ParentForm.Width = (int)Math.Ceiling(htarget * 1.6) + sidemargin;
             }
+
+            pictureBox1.Image = new Bitmap(1920,1080);
         }
 
         private Font GetBestFont()
@@ -195,8 +200,10 @@ namespace CRTerm
 
         private void Redraw()
         {
-            refreshTimer = 0;
+            Dirty = true;
             CursorState = true;
+            if(refreshTimer > 1)
+                refreshTimer = 1;
         }
 
         /// <summary>
@@ -213,7 +220,7 @@ namespace CRTerm
                     _cursorRow = 0;
                 if (_cursorRow >= Rows)
                     _cursorRow = Rows - 1;
-                Redraw();
+                //Redraw();
             }
         }
 
@@ -253,6 +260,7 @@ namespace CRTerm
         }
 
         int _rows = 25;
+        private bool Dirty;
 
         public event DataReadyEventHandler DataReceivedEvent;
         public event StatusChangeEventHandler StatusChangedEvent;
@@ -433,6 +441,7 @@ namespace CRTerm
         {
             Fill(' ');
             Locate(0, 0);
+            Redraw();
         }
 
         public virtual void Fill(char c)
@@ -446,14 +455,12 @@ namespace CRTerm
             }
         }
 
-        /// <summary>
-        /// Draw the frame buffer to the screen.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void FrameBufferControl_Paint(object sender, PaintEventArgs e)
+        void DrawText()
         {
-            Graphics g = e.Graphics;
+            if (!Dirty)
+                return;
+
+            Graphics g = Graphics.FromImage(pictureBox1.Image);
             float x;
             float y;
 
@@ -477,19 +484,69 @@ namespace CRTerm
                     g.DrawString(CharacterData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
                 }
             }
+            pictureBox1.Refresh();
+            Dirty = false;
+        }
 
-            if (CursorState && CursorEnabled)
-            {
-                x = X * charWidth;
-                y = Y * charHeight;
-                float h = charHeight / 4;
-                g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
-                //g.DrawString(CharacterData[Y, X],
-                //    Font,
-                //    InvertedBrush,
-                //    x, y,
-                //    StringFormat.GenericTypographic);
-            }
+        /// <summary>
+        /// Draw the frame buffer to the screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void FrameBufferControl_Paint(object sender, PaintEventArgs e)
+        {
+            //Graphics g = e.Graphics;
+            //float x;
+            //float y;
+
+            //if (Font == null)
+            //    Font = GetBestFont();
+            //SizeF charSize = MeasureFont(Font, g);
+            //float charWidth = charSize.Width / MEASURE_STRING.Length;
+            //float charHeight = charSize.Height;
+            //float Col80 = charWidth * 80;
+            ////float scaleFactor = this.ClientRectangle.Width / Col80;
+            ////g.ScaleTransform(scaleFactor, scaleFactor);
+            //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            //g.Clear(Color.Black);
+            //for (int row = 0; row < Rows; row++)
+            //{
+            //    for (int col = 0; col < Cols; col++)
+            //    {
+            //        x = col * charWidth;
+            //        y = row * charHeight;
+            //        g.DrawString(CharacterData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
+            //    }
+            //}
+
+            //if (CursorState && CursorEnabled)
+            //{
+            //    x = X * charWidth;
+            //    y = Y * charHeight;
+            //    float h = charHeight / 4;
+            //    switch (CursorType)
+            //    {
+            //        case CursorTypes.None:
+            //            break;
+            //        case CursorTypes.Underline:
+            //            g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
+            //            break;
+            //        case CursorTypes.Block:
+            //            g.FillRectangle(CursorBrush, x, y, charWidth, charHeight);
+            //            break;
+            //        case CursorTypes.Insert:
+            //            g.FillRectangle(CursorBrush, x, y, charWidth/4, charHeight);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    //g.DrawString(CharacterData[Y, X],
+            //    //    Font,
+            //    //    InvertedBrush,
+            //    //    x, y,
+            //    //    StringFormat.GenericTypographic);
+            //}
         }
 
         private SizeF MeasureFont(Font font, Graphics g)
@@ -502,7 +559,9 @@ namespace CRTerm
             if (refreshTimer-- > 0)
                 return;
 
-            this.Refresh();
+            //this.Refresh();
+            if (Dirty)
+                DrawText();
 
             CursorState = !CursorState;
             refreshTimer = BlinkRate;
@@ -516,6 +575,17 @@ namespace CRTerm
         private void FrameBuffer_SizeChanged(object sender, System.EventArgs e)
         {
             Font = GetBestFont();
+        }
+
+        private void FrameBuffer_KeyDown(object sender, KeyEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("key code:" + e.KeyCode.ToString());
+            //TerminalKeyEventArgs args = new TerminalKeyEventArgs(e.KeyChar);
+        }
+
+        private void FrameBuffer_KeyUp(object sender, KeyEventArgs e)
+        {
+
         }
 
         private void FrameBuffer_KeyPress(object sender, KeyPressEventArgs e)
@@ -558,5 +628,6 @@ namespace CRTerm
                 }
             }
         }
+
     }
 }

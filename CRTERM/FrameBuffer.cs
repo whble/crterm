@@ -14,13 +14,13 @@ namespace CRTerm
     public partial class FrameBuffer : UserControl, IFrameBuffer
     {
 
-        public event KeyPressEventHandler KeyPressed;
+        public event TerminalKeyHandler KeyPressed;
 
         /// <summary>
         /// number of frames to wait to refresh the screen.
         /// One frame = 1/60 second.
         /// </summary>
-        private int refreshTimer = 0;
+        private int refreshWait = 0;
         public int BlinkRate = 20;
 
         //Font Font = SystemFonts.DefaultFont;
@@ -31,9 +31,21 @@ namespace CRTerm
 
         static string MEASURE_STRING = new string('W', 80);
 
-        public CursorTypes CursorType { get; set; }
+        private CursorStyles cursorStyle;
+        public CursorStyles CursorStyle
+        {
+            get
+            {
+                return this.cursorStyle;
+            }
 
-        Timer timer = new Timer();
+            set
+            {
+                cursorStyle = value;
+            }
+        }
+
+        Timer refreshTimer = new Timer();
         /// <summary>
         /// Turns the cursor on and off. Cursor will never be drawn if CursorEnabled=false.
         /// </summary>
@@ -46,7 +58,8 @@ namespace CRTerm
         /// <summary>
         /// Screen character data. Data is addressed as Data[Row, Col].
         /// </summary>
-        public string[,] CharacterData;
+        public string[,] TextData;
+        public StringBuilder CurrentLine = new StringBuilder();
         public ColorCodes[,] ForeColorData;
         public ColorCodes[,] BackColorData;
         public AttributeCodes[,] AttributeData;
@@ -75,7 +88,7 @@ namespace CRTerm
                     _cursorCol = 0;
                 if (_cursorCol >= Cols)
                     _cursorCol = Cols - 1;
-                //Redraw();
+                Redraw();
             }
         }
 
@@ -83,19 +96,20 @@ namespace CRTerm
         {
             InitializeComponent();
             this.Load += new EventHandler(FrameBuffer_Load);
-            CursorType = CursorTypes.Underline;
+            CursorStyle = CursorStyles.Underline;
         }
 
         void FrameBuffer_Load(object sender, EventArgs e)
         {
             //TextFont = GetBestFont();
 
+            this.BackgroundImage = null;
             this.SetBufferSize(25, 80);
-            this.Paint += new PaintEventHandler(FrameBufferControl_Paint);
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 1000 / 60;
+            refreshTimer.Tick += new EventHandler(RefreshTimer_Tick);
+            refreshTimer.Interval = 1000 / 60;
             this.VisibleChanged += new EventHandler(FrameBufferControl_VisibleChanged);
             this.DoubleBuffered = true;
+            this.CursorStyle = CursorStyles.Underline;
 
             this.Clear();
             if (DesignMode)
@@ -134,7 +148,6 @@ namespace CRTerm
                 ParentForm.Width = (int)Math.Ceiling(htarget * 1.6) + sidemargin;
             }
 
-            pictureBox1.Image = new Bitmap(1920,1080);
         }
 
         private Font GetBestFont()
@@ -200,10 +213,9 @@ namespace CRTerm
 
         private void Redraw()
         {
-            Dirty = true;
             CursorState = true;
-            if(refreshTimer > 1)
-                refreshTimer = 1;
+            if (refreshWait > 1)
+                refreshWait = 1;
         }
 
         /// <summary>
@@ -220,7 +232,7 @@ namespace CRTerm
                     _cursorRow = 0;
                 if (_cursorRow >= Rows)
                     _cursorRow = Rows - 1;
-                //Redraw();
+                Redraw();
             }
         }
 
@@ -260,16 +272,18 @@ namespace CRTerm
         }
 
         int _rows = 25;
-        private bool Dirty;
-
-        public event DataReadyEventHandler DataReceivedEvent;
-        public event StatusChangeEventHandler StatusChangedEvent;
-
         public int Rows
         {
             get { return _rows; }
             protected set { _rows = value; }
         }
+
+        float charWidth = 8;
+        float charHeight = 16;
+        float xOffset = 0;
+
+        public event DataReadyEventHandler DataReceivedEvent;
+        public event StatusChangeEventHandler StatusChangedEvent;
 
         public ITerminal Terminal
         {
@@ -293,7 +307,7 @@ namespace CRTerm
         {
             this._cols = Cols;
             this._rows = Rows;
-            CharacterData = new string[Rows, Cols];
+            TextData = new string[Rows, Cols];
             ForeColorData = new ColorCodes[Rows, Cols];
             BackColorData = new ColorCodes[Rows, Cols];
             AttributeData = new AttributeCodes[Rows, Cols];
@@ -302,7 +316,9 @@ namespace CRTerm
 
         public virtual void SetCell(int Row, int Col, char c, ColorCodes ForeColor, ColorCodes BackColor, AttributeCodes Attribute)
         {
-            CharacterData[Row, Col] = c.ToString();
+            if (Row < 0 || Row >= Rows || Col < 0 || Col >= Cols)
+                return;
+            TextData[Row, Col] = c.ToString();
             ForeColorData[Row, Col] = ForeColor;
             BackColorData[Row, Col] = BackColor;
             AttributeData[Row, Col] = Attribute;
@@ -310,18 +326,13 @@ namespace CRTerm
 
         public virtual void SetCell(int Row, int Col, char c)
         {
-            CharacterData[Row, Col] = c.ToString();
-            ForeColorData[Row, Col] = CurrentForeground;
-            BackColorData[Row, Col] = CurrentBackground;
-            AttributeData[Row, Col] = CurrentAttribute;
+            SetCell(Row, Col, c, CurrentForeground, CurrentBackground, CurrentAttribute);
         }
 
         public virtual void SetCell(char c)
         {
-            CharacterData[Y, X] = c.ToString();
-            ForeColorData[Y, X] = CurrentForeground;
-            BackColorData[Y, X] = CurrentBackground;
-            AttributeData[Y, X] = CurrentAttribute;
+            //SetCell(X, Y, c, CurrentForeground, CurrentBackground, CurrentAttribute);
+            SetCell(Y, X, c, CurrentForeground, CurrentBackground, CurrentAttribute);
         }
 
         public virtual void PrintChar(char c)
@@ -331,17 +342,17 @@ namespace CRTerm
             Redraw();
         }
 
-        public virtual void PrintChars(char[] Chars)
+        public virtual void PrintText(char[] c)
         {
-            for (int i = 0; i < Chars.Length; i++)
-                PrintChar(Chars[i]);
+            for (int i = 0; i < c.Length; i++)
+                PrintChar(c[i]);
         }
 
         private void Scroll1()
         {
             for (int row = 0; row < Rows - 1; row++)
             {
-                Array.Copy(CharacterData, (row + 1) * Cols, CharacterData, row * Cols, Cols);
+                Array.Copy(TextData, (row + 1) * Cols, TextData, row * Cols, Cols);
                 Array.Copy(ForeColorData, (row + 1) * Cols, ForeColorData, row * Cols, Cols);
                 Array.Copy(BackColorData, (row + 1) * Cols, BackColorData, row * Cols, Cols);
                 Array.Copy(AttributeData, (row + 1) * Cols, AttributeData, row * Cols, Cols);
@@ -356,7 +367,7 @@ namespace CRTerm
 
             for (int col = 0; col < Cols; col++)
             {
-                CharacterData[Rows - 1, col] = " ";
+                TextData[Rows - 1, col] = " ";
                 ForeColorData[Rows - 1, col] = CurrentForeground;
                 BackColorData[Rows - 1, col] = CurrentBackground;
                 AttributeData[Rows - 1, col] = CurrentAttribute;
@@ -455,23 +466,37 @@ namespace CRTerm
             }
         }
 
+        void CreateImage()
+        {
+            if (Font == null)
+                Font = GetBestFont();
+            this.BackgroundImage = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
+
+            Graphics g = Graphics.FromImage(this.BackgroundImage);
+            SizeF charSize = MeasureFont(Font, g);
+
+            charWidth = charSize.Width / MEASURE_STRING.Length;
+            charHeight = charSize.Height;
+
+            int w = (int)(charWidth * this.Cols);
+            int h = (int)(charHeight * this.Rows);
+            this.BackgroundImage = new Bitmap(w, h);
+        }
+
         void DrawText()
         {
-            if (!Dirty)
-                return;
+            if (this.BackgroundImage == null)
+                CreateImage();
 
-            Graphics g = Graphics.FromImage(pictureBox1.Image);
+            Graphics g = Graphics.FromImage(this.BackgroundImage);
             float x;
             float y;
 
-            if (Font == null)
-                Font = GetBestFont();
-            SizeF charSize = MeasureFont(Font, g);
-            float charWidth = charSize.Width / MEASURE_STRING.Length;
-            float charHeight = charSize.Height;
-            float Col80 = charWidth * 80;
+            float RightCol = charWidth * this.Cols;
+
             //float scaleFactor = this.ClientRectangle.Width / Col80;
             //g.ScaleTransform(scaleFactor, scaleFactor);
+
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             g.Clear(Color.Black);
@@ -481,72 +506,32 @@ namespace CRTerm
                 {
                     x = col * charWidth;
                     y = row * charHeight;
-                    g.DrawString(CharacterData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
+                    g.DrawString(TextData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
                 }
             }
-            pictureBox1.Refresh();
-            Dirty = false;
-        }
-
-        /// <summary>
-        /// Draw the frame buffer to the screen.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void FrameBufferControl_Paint(object sender, PaintEventArgs e)
-        {
-            //Graphics g = e.Graphics;
-            //float x;
-            //float y;
-
-            //if (Font == null)
-            //    Font = GetBestFont();
-            //SizeF charSize = MeasureFont(Font, g);
-            //float charWidth = charSize.Width / MEASURE_STRING.Length;
-            //float charHeight = charSize.Height;
-            //float Col80 = charWidth * 80;
-            ////float scaleFactor = this.ClientRectangle.Width / Col80;
-            ////g.ScaleTransform(scaleFactor, scaleFactor);
-            //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            //g.Clear(Color.Black);
-            //for (int row = 0; row < Rows; row++)
-            //{
-            //    for (int col = 0; col < Cols; col++)
-            //    {
-            //        x = col * charWidth;
-            //        y = row * charHeight;
-            //        g.DrawString(CharacterData[row, col].ToString(), Font, TextBrush, x, y, StringFormat.GenericTypographic);
-            //    }
-            //}
-
-            //if (CursorState && CursorEnabled)
-            //{
-            //    x = X * charWidth;
-            //    y = Y * charHeight;
-            //    float h = charHeight / 4;
-            //    switch (CursorType)
-            //    {
-            //        case CursorTypes.None:
-            //            break;
-            //        case CursorTypes.Underline:
-            //            g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
-            //            break;
-            //        case CursorTypes.Block:
-            //            g.FillRectangle(CursorBrush, x, y, charWidth, charHeight);
-            //            break;
-            //        case CursorTypes.Insert:
-            //            g.FillRectangle(CursorBrush, x, y, charWidth/4, charHeight);
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //    //g.DrawString(CharacterData[Y, X],
-            //    //    Font,
-            //    //    InvertedBrush,
-            //    //    x, y,
-            //    //    StringFormat.GenericTypographic);
-            //}
+            if (CursorEnabled && CursorState)
+            {
+                x = X * charWidth;
+                y = Y * charHeight;
+                float h = charHeight / 4;
+                switch (CursorStyle)
+                {
+                    case CursorStyles.None:
+                        break;
+                    case CursorStyles.Underline:
+                        g.FillRectangle(CursorBrush, x, y + charHeight - h, charWidth, h);
+                        break;
+                    case CursorStyles.Block:
+                        g.FillRectangle(CursorBrush, x, y, charWidth, charHeight);
+                        break;
+                    case CursorStyles.Insert:
+                        g.FillRectangle(CursorBrush, x, y, charWidth / 4, charHeight);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            this.Invalidate();
         }
 
         private SizeF MeasureFont(Font font, Graphics g)
@@ -554,27 +539,26 @@ namespace CRTerm
             return g.MeasureString(MEASURE_STRING, font, int.MaxValue, StringFormat.GenericTypographic);
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        void RefreshTimer_Tick(object sender, EventArgs e)
         {
-            if (refreshTimer-- > 0)
+            if (refreshWait-- > 0)
                 return;
 
-            //this.Refresh();
-            if (Dirty)
-                DrawText();
-
+            DrawText();
             CursorState = !CursorState;
-            refreshTimer = BlinkRate;
+            refreshWait = BlinkRate;
         }
 
         void FrameBufferControl_VisibleChanged(object sender, EventArgs e)
         {
-            timer.Enabled = this.Visible;
+            refreshTimer.Enabled = this.Visible;
         }
 
         private void FrameBuffer_SizeChanged(object sender, System.EventArgs e)
         {
+            BackgroundImage = null;
             Font = GetBestFont();
+            Redraw();
         }
 
         private void FrameBuffer_KeyDown(object sender, KeyEventArgs e)

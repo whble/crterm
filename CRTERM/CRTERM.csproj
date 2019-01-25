@@ -104,6 +104,7 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Terminals\ANSITerminal.cs" />
     <Compile Include="CursorTypes.cs" />
+    <Compile Include="Terminals\TerminalKeyMap.cs" />
     <Compile Include="Terminals\ITerminal.cs" />
     <Compile Include="Terminals\BasicTerminal.cs" />
     <Compile Include="TextConsole.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="IWindowManager.cs" />
     <Compile Include="Transfer\TextTransfer.cs" />
     <Compile Include="Transfer\XModem.cs" />
+    <None Include="Resources\Cursor_Underline.png" />
     <None Include="Resources\TermSamle.bmp" />
     <EmbeddedResource Include="Config\ConfigDialog.resx">
       <DependentUpon>ConfigDialog.cs</DependentUpon>

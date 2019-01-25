@@ -10,20 +10,20 @@ namespace CRTerm
         int Rows { get; }
         int X { get; set; }
         int Y { get; set; }
-        CursorTypes CursorType { get; set; }
+        CursorStyles CursorStyle { get; set; }
 
         void Clear();
         void Fill(char c);
         void Locate(int Row, int Col);
         void PrintChar(char c);
-        void PrintChars(char[] Chars);
+        void PrintText(char[] c);
         void PrintLine(string s);
         void PrintLineFeed();
         void PrintNewLine();
         void PrintReturn();
         void PrintString(string s);
 
-        event KeyPressEventHandler KeyPressed;
+        event TerminalKeyHandler KeyPressed;
 
         void ClearTopToCursor();
         void ClearCursorToEnd();

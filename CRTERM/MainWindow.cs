@@ -277,7 +277,7 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
 
-            CurrentSession.Terminal.BasicMode = b.Checked;
+            CurrentSession.Terminal.SendKey(CurrentSession.Terminal.KeyMap.BASIC_ModeToggle);
         }
 
         private void MainWindow_SizeChanged(object sender, EventArgs e)

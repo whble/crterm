@@ -1,0 +1,8 @@
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csprojResolveAssemblyReference.cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csproj.GenerateResource.Cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csproj.CoreCompileInputs.cache
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalControl.dll
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalControl.pdb
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.dll
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.pdb
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.FrameBuffer.resources

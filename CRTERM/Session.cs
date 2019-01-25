@@ -64,6 +64,7 @@ namespace CRTerm
 
         private void FrameBuffer_KeyPressed(IFrameBuffer frameBuffer, TerminalKeyEventArgs e)
         {
+
             Terminal.SendKey(e);
         }
 

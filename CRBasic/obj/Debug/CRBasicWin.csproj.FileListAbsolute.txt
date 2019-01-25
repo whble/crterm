@@ -1,0 +1,12 @@
+D:\Github\crterm\CRBasic\bin\Debug\CRBasic.exe.config
+D:\Github\crterm\CRBasic\bin\Debug\CRBasic.exe
+D:\Github\crterm\CRBasic\bin\Debug\CRBasic.pdb
+D:\Github\crterm\CRBasic\bin\Debug\TerminalControl.dll
+D:\Github\crterm\CRBasic\bin\Debug\TerminalControl.pdb
+D:\Github\crterm\CRBasic\obj\Debug\CRBasicWin.csprojResolveAssemblyReference.cache
+D:\Github\crterm\CRBasic\obj\Debug\CRBasic.CRBasicMain.resources
+D:\Github\crterm\CRBasic\obj\Debug\CRBasic.Properties.Resources.resources
+D:\Github\crterm\CRBasic\obj\Debug\CRBasicWin.csproj.GenerateResource.Cache
+D:\Github\crterm\CRBasic\obj\Debug\CRBasicWin.csproj.CoreCompileInputs.cache
+D:\Github\crterm\CRBasic\obj\Debug\CRBasic.exe
+D:\Github\crterm\CRBasic\obj\Debug\CRBasic.pdb

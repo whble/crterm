@@ -1,18 +1,9 @@
 ﻿using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace CRTerm
 {
-    public class TerminalKeyEventArgs : System.Windows.Forms.KeyPressEventArgs
-    {
-        public Keys Modifiers;
-        public TerminalKeyEventArgs(char KeyChar, Keys Modifiers = Keys.None) : base(KeyChar)
-        {
-            this.Modifiers = Modifiers;
-        }
-    }
-    public delegate void KeyPressEventHandler(IFrameBuffer frameBuffer, TerminalKeyEventArgs e);
-
     public class StatusEventArgs : EventArgs
     {
         public StatusEventArgs(ConnectionStatusCodes newStatus)

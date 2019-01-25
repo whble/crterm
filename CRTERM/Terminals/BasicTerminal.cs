@@ -34,7 +34,18 @@ namespace CRTerm.Terminals
             {
                 _basicMode = value;
                 if (value)
-                    FrameBuffer.CursorType = CursorTypes.Block;
+                    FrameBuffer.CursorStyle = CursorStyles.Block;
+                else
+                    FrameBuffer.CursorStyle = CursorStyles.Underline;
+            }
+        }
+
+        private TerminalKeyMap _keyMap = new TerminalKeyMap();
+        public TerminalKeyMap KeyMap
+        {
+            get
+            {
+                return this._keyMap;
             }
         }
 
@@ -247,7 +258,6 @@ namespace CRTerm.Terminals
             }
         }
 
-
         public virtual void Print(string s)
         {
             for (int i = 0; i < s.Length; i++)
@@ -266,6 +276,10 @@ namespace CRTerm.Terminals
         public int ReadData(byte[] Data, int Count)
         {
             return SendBuffer.Read(Data, Count);
+        }
+
+        public virtual void InitKeymap()
+        {
         }
     }
 }

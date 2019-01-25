@@ -5,8 +5,11 @@ namespace CRTerm.Terminals
     {
         event DataReadyEventHandler DataSent;
         IFrameBuffer FrameBuffer { get; set; }
-        bool BasicMode { get; set; }
 
+        /// <summary>
+        /// Keyboard map and translation map for this terminal. (ie: Up key sends ^[[A)
+        /// </summary>
+        TerminalKeyMap KeyMap { get; }
         /// <summary>
         /// Sends a character from the keyboard. This should be converted to ASCII and sent straight through.
         /// </summary>
@@ -24,7 +27,7 @@ namespace CRTerm.Terminals
         /// F-keys and arrow keys should be translated to escape sequences or control codes. 
         /// </summary>
         /// <param name="KeyArgs"></param>
-        void SendKey(TerminalKeyEventArgs KeyArgs);
+        void SendKey(TerminalKeyEventArgs key);
         /// <summary>
         /// Handle incoming text, converting escape codes to display actions. 
         /// </summary>

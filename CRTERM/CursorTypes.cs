@@ -1,6 +1,6 @@
 ﻿namespace CRTerm
 {
-    public enum CursorTypes
+    public enum CursorStyles
     {
         None,
         Underline,

@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalControl", "TerminalControl\TerminalControl.csproj", "{DD17F5E9-D267-4F04-84FD-8C14B407D42D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalUITest", "TerminalUITest\TerminalUITest.csproj", "{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,21 +37,36 @@ Global
 		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|Mixed Platforms.Build.0 = Release|x86
 		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|x86.ActiveCfg = Release|x86
 		{85434C9C-64DE-48DB-BEE9-80C82F44B754}.Release|x86.Build.0 = Release|x86
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD17F5E9-D267-4F04-84FD-8C14B407D42D}.Release|x86.Build.0 = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Debug|x86.Build.0 = Debug|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{F5FE6F80-EA6D-4935-80EB-FC887B1372D5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6BD4E5A-9733-4E49-8875-0F88AC20F034}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://wilsontp.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CRTerm\\CRTerm.csproj
-		SccProjectName1 = CRTerm
-		SccLocalPath1 = CRTerm
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CRTerm.vsmdi

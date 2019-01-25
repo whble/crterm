@@ -1,0 +1,12 @@
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csprojResolveAssemblyReference.cache
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.Properties.Resources.resources
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.GenerateResource.Cache
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.CoreCompileInputs.cache
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe.config
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.pdb
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalControl.dll
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalControl.pdb
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.exe
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.pdb
+D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.TestWindow.resources

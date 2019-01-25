@@ -14,9 +14,9 @@ namespace CRTerm
         int _cols = 80;
         int _rows = 25;
 
-        public event KeyPressEventHandler KeyPressed;
+        public event TerminalKeyHandler KeyPressed;
 
-        public CursorTypes CursorType { get; set; }
+        public CursorStyles CursorStyle { get; set; }
 
         public int X
         {
@@ -142,7 +142,7 @@ namespace CRTerm
             throw new NotImplementedException();
         }
 
-        public void PrintChars(char[] Chars)
+        public void PrintText(char[] c)
         {
             throw new NotImplementedException();
         }

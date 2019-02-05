@@ -1,0 +1,17 @@
+D:\Github\crterm\TerminalTest\bin\Debug\TerminalTest.exe.config
+D:\Github\crterm\TerminalTest\bin\Debug\TerminalTest.exe
+D:\Github\crterm\TerminalTest\bin\Debug\TerminalTest.pdb
+D:\Github\crterm\TerminalTest\bin\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalTest\bin\Debug\TerminalUI.pdb
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.csprojResolveAssemblyReference.cache
+D:\Github\crterm\TerminalTest\obj\Debug\MainWindow.g.cs
+D:\Github\crterm\TerminalTest\obj\Debug\App.g.cs
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest_MarkupCompile.cache
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest_MarkupCompile.lref
+D:\Github\crterm\TerminalTest\obj\Debug\MainWindow.baml
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.g.resources
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.Properties.Resources.resources
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.csproj.GenerateResource.Cache
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.csproj.CoreCompileInputs.cache
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.exe
+D:\Github\crterm\TerminalTest\obj\Debug\TerminalTest.pdb

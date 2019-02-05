@@ -1,0 +1,8 @@
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csprojAssemblyReference.cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.DisplayControl.resources
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateResource.cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb

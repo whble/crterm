@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TerminalControl.Terminals
+namespace TerminalUI.Terminals
 {
-    class ANSITerminal : BasicTerminal
+    public class ANSITerminal : BasicTerminal
     {
         private const char CONTROL_E = '\x05';
         private const char ESCAPE = '\x1B';
@@ -29,13 +29,13 @@ namespace TerminalControl.Terminals
                         SendString("CRTerm");
                         break;
                     case '\x09':
-                        int x = FrameBuffer.X % 8;
+                        int x = Display.CurrentColumn % 8;
                         x += 8 - x;
-                        FrameBuffer.X = x;
+                        Display.CurrentColumn = x;
                         break;
                     case '\x0C':
-                        FrameBuffer.Clear();
-                        FrameBuffer.Locate(0, 0);
+                        Display.Clear();
+                        Display.Locate(0, 0);
                         break;
                     case ESCAPE:
                         inCmd = true;
@@ -70,20 +70,20 @@ namespace TerminalControl.Terminals
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0],1); i++)
                             {
-                                FrameBuffer.Y -= 1;
+                                Display.CurrentRow -= 1;
                             }
                             break;
                         case 'B':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
                             {
-                                FrameBuffer.Y += 1;
+                                Display.CurrentRow += 1;
                             }
                             break;
                         case 'C':
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
                             {
-                                FrameBuffer.X += 1;
+                                Display.CurrentColumn += 1;
                             }
                             inCmd = false;
                             break;
@@ -91,38 +91,38 @@ namespace TerminalControl.Terminals
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
                             {
-                                FrameBuffer.X -= 1;
+                                Display.CurrentColumn -= 1;
                             }
                             break;
                         case 'c':
-                            FrameBuffer.Clear();
-                            FrameBuffer.Locate(0,0);
+                            Display.Clear();
+                            Display.Locate(0,0);
                             inCmd = false;
                             break;
                         case 'H':
                             inCmd = false;
                             if (operands.Count > 0)
-                                FrameBuffer.Y = Math.Max(operands[0] - 1, 0);
+                                Display.CurrentRow = Math.Max(operands[0] - 1, 0);
                             else
-                                FrameBuffer.Y = 0;
+                                Display.CurrentRow = 0;
 
                             if (operands.Count > 1)
-                                FrameBuffer.X = Math.Max(operands[1] - 1, 0);
+                                Display.CurrentColumn = Math.Max(operands[1] - 1, 0);
                             else
-                                FrameBuffer.X = 0;
+                                Display.CurrentColumn = 0;
                             break;
                         case 'J':
                             inCmd = false;
                             if (operands[0] == 1)
-                                FrameBuffer.ClearTopToCursor();
+                                Display.ClearTopToCursor();
                             else if (operands[0] == 2)
-                                FrameBuffer.Clear();
+                                Display.Clear();
                             else
-                                FrameBuffer.ClearCursorToEnd();
+                                Display.ClearCursorToEnd();
                             break;
                         case 'n':
                             if (operands[0] == 6)
-                                SendString(ESCAPE + "[" + (FrameBuffer.Y+1).ToString() + ";" + (FrameBuffer.X+1).ToString() + "R");
+                                SendString(ESCAPE + "[" + (Display.CurrentRow+1).ToString() + ";" + (Display.CurrentColumn+1).ToString() + "R");
                             break;
                         default:
                             inCmd = false;

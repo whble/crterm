@@ -20,36 +20,38 @@ namespace TerminalUITest
         private void TestWindow_Load(object sender, EventArgs e)
         {
             PrintTestText();
+            ActiveControl = terminalControl1;
         }
 
         private void PrintTestText()
         {
-            frameBuffer1.Clear();
-            frameBuffer1.Locate(0, 0);
-            for (int i = 1; i <= 8; i += 1)
+            terminalControl1.Clear();
+            terminalControl1.Locate(0, 0);
+            for (int i = 1; i <= terminalControl1.Rows; i++)
             {
-                frameBuffer1.Print("         ");
-                string s = i.ToString("0");
-                frameBuffer1.PrintChar(s[0]);
+                if (i > 1)
+                    terminalControl1.PrintNewLine();
+                string s = i.ToString("00 ");
+                terminalControl1.Print(s);
             }
 
-            frameBuffer1.Locate(1, 0);
-            for (int i=1; i<=80; i++)
+            terminalControl1.Locate(0, 0);
+            for (int i = 1; i <= terminalControl1.Columns / 10; i += 1)
+            {
+                terminalControl1.Print("         ");
+                string s = i.ToString("0");
+                terminalControl1.Print(s[0]);
+            }
+
+            terminalControl1.Locate(1, 0);
+            for (int i = 1; i <= terminalControl1.Columns; i++)
             {
                 string s = i.ToString("00");
-                frameBuffer1.PrintChar(s[1]);
+                terminalControl1.Print(s[1]);
             }
 
-            frameBuffer1.Locate(0, 0);
-            for (int i=1; i<=25; i++)
-            {
-                string s = i.ToString("00 ");
-                frameBuffer1.Print(s);
-                if (i < 25)
-                    frameBuffer1.PrintNewLine();
-            }
-
-            frameBuffer1.Locate(2, 3);
+            terminalControl1.Locate(2, 3);
         }
+
     }
 }

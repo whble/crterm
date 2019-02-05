@@ -5,8 +5,8 @@ D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.CoreCompileInput
 D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe.config
 D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe
 D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUITest.pdb
-D:\Github\crterm\TerminalUITest\bin\Debug\TerminalControl.dll
-D:\Github\crterm\TerminalUITest\bin\Debug\TerminalControl.pdb
 D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.exe
 D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.pdb
 D:\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.TestWindow.resources
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalUITest\bin\Debug\TerminalUI.pdb

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace TerminalControl.Terminals
+namespace TerminalUI.Terminals
 {
     public class TerminalKeyEventArgs : System.Windows.Forms.KeyPressEventArgs
     {
@@ -15,6 +15,15 @@ namespace TerminalControl.Terminals
 
         public TerminalKeyEventArgs() : base(CHAR_NONE)
         {
+        }
+
+        public TerminalKeyEventArgs(KeyEventArgs e) : base(CHAR_NONE)
+        {
+            Modifier = e.Modifiers;
+            KeyCode = e.KeyCode;
+            this.KeyChar = CHAR_NONE;
+
+            System.Diagnostics.Debug.WriteLine("Modifiers: " + Modifier.ToString());
         }
 
         public TerminalKeyEventArgs(Keys KeyCode, Keys Modifiers = Keys.None) : base(CHAR_NONE)
@@ -70,7 +79,7 @@ namespace TerminalControl.Terminals
         }
 
     }
-    public delegate void TerminalKeyHandler(IFrameBuffer frameBuffer, TerminalKeyEventArgs e);
+    public delegate void TerminalKeyHandler(DisplayControl frameBuffer, TerminalKeyEventArgs e);
 
     /// <summary>
     /// Special keys for CRTerm: mode switching, menu, etc. Terminal specific keys (Up/Down/Left/Right, etc) will be

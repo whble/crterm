@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TerminalControl
+namespace TerminalUI
 {
     public class RingBuffer<T>
     {

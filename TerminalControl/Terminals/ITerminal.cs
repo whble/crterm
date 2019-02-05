@@ -1,9 +1,9 @@
 ﻿using System;
-namespace TerminalControl.Terminals
+namespace TerminalUI.Terminals
 {
     public interface ITerminal
     {
-        IFrameBuffer FrameBuffer { get; set; }
+        DisplayControl Display { get; set; }
 
         /// <summary>
         /// Keyboard map and translation map for this terminal. (ie: Up key sends ^[[A)
@@ -42,11 +42,21 @@ namespace TerminalControl.Terminals
         /// </summary>
         /// <param name="v"></param>
         void Print(string v);
+        /// <summary>
+        /// Print a blank line (or end the current line)
+        /// </summary>
+        /// <param name="v"></param>
+        void PrintLine();
+        /// <summary>
+        /// Prints the received string on the console with a Newline at the end. This should interpret control sequences.
+        /// </summary>
+        /// <param name="v"></param>
+        void PrintLine(string v);
 
         /// <summary>
         /// Local edit mode
         /// </summary>
-        EditModes EditMode { get; set; }
+        EchoModes EchoMode { get; set; }
 
         /// <summary>
         /// Buffer for outgoing text. The terminal does not send text directly. Instead, the frame

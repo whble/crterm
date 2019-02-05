@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRBasic", "CRBasic\CRBasic.csproj", "{E1936E4B-2B25-4A8B-8883-8016C6925CBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalControl", "TerminalControl\TerminalControl.csproj", "{DD17F5E9-D267-4F04-84FD-8C14B407D42D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalUI", "TerminalControl\TerminalUI.csproj", "{DD17F5E9-D267-4F04-84FD-8C14B407D42D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

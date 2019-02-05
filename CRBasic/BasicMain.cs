@@ -1,20 +1,31 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalUI;
 
 namespace CRBasic
 {
-    public class BasicMain
+    public class BasicMain : IInterpreter
     {
-        public TerminalControl.IFrameBuffer Display;
+        List<string> _programText = new List<string>();
+        public DisplayControl Display { get; set; }
+
+        public List<string> ProgramText
+        {
+            get
+            {
+                return _programText;
+            }
+        }
 
         public void Init()
         {
             Cls();
             Print("CR BASIC by Compiled Reality");
-            Print("(C)2019 Thomas Wilson");
+            Print("(C)2019 Tom P. Wilson");
             Print(Free().ToString(), true);
             Print(" bytes free");
             Ok();
@@ -46,6 +57,16 @@ namespace CRBasic
                 return;
 
             Display.Clear();
+        }
+
+        public void Execute(string Line)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Run()
+        {
+            throw new NotImplementedException();
         }
     }
 }

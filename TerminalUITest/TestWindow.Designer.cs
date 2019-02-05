@@ -28,33 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.frameBuffer1 = new TerminalControl.FrameBuffer();
+            TerminalUI.Terminals.ANSITerminal ansiTerminal1 = new TerminalUI.Terminals.ANSITerminal();
+            this.terminalControl1 = new TerminalUI.DisplayControl();
             this.SuspendLayout();
             // 
-            // frameBuffer1
+            // terminalControl1
             // 
-            this.frameBuffer1.BackColor = System.Drawing.Color.DimGray;
-            this.frameBuffer1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.frameBuffer1.CurrentAttribute = TerminalControl.AttributeCodes.Normal;
-            this.frameBuffer1.CursorStyle = TerminalControl.CursorStyles.Underline;
-            this.frameBuffer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.frameBuffer1.Enabled = false;
-            this.frameBuffer1.Font = new System.Drawing.Font("Classic Console", 28.8256F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.frameBuffer1.Location = new System.Drawing.Point(0, 0);
-            this.frameBuffer1.Margin = new System.Windows.Forms.Padding(774801, 465530, 774801, 465530);
-            this.frameBuffer1.Name = "frameBuffer1";
-            this.frameBuffer1.Size = new System.Drawing.Size(788, 563);
-            this.frameBuffer1.TabIndex = 0;
-            this.frameBuffer1.Terminal = null;
-            this.frameBuffer1.X = 0;
-            this.frameBuffer1.Y = 24;
+            this.terminalControl1.AddLinefeed = false;
+            this.terminalControl1.BackColor = System.Drawing.Color.DimGray;
+            this.terminalControl1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.terminalControl1.BackspaceDelete = false;
+            this.terminalControl1.BackspaceOverwrite = false;
+            this.terminalControl1.BackspacePull = false;
+            this.terminalControl1.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
+            this.terminalControl1.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
+            this.terminalControl1.CurrentColumn = 0;
+            this.terminalControl1.CurrentRow = 0;
+            this.terminalControl1.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Green;
+            this.terminalControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.terminalControl1.EchoMode = TerminalUI.Terminals.EchoModes.None;
+            this.terminalControl1.Font = new System.Drawing.Font("Consolas", 15.227F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.terminalControl1.LineWrap = false;
+            this.terminalControl1.Location = new System.Drawing.Point(0, 0);
+            this.terminalControl1.Name = "terminalControl1";
+            this.terminalControl1.Size = new System.Drawing.Size(1386, 731);
+            this.terminalControl1.TabIndex = 0;
+            ansiTerminal1.BackspaceDeleteMode = false;
+            ansiTerminal1.Display = null;
+            ansiTerminal1.EchoMode = TerminalUI.Terminals.EchoModes.None;
+            this.terminalControl1.Terminal = ansiTerminal1;
+            this.terminalControl1.TextCursor = TerminalUI.TextCursorStyles.Underline;
             // 
             // TestWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(788, 563);
-            this.Controls.Add(this.frameBuffer1);
+            this.ClientSize = new System.Drawing.Size(1386, 731);
+            this.Controls.Add(this.terminalControl1);
             this.Name = "TestWindow";
             this.Text = "Terminal Test";
             this.Load += new System.EventHandler(this.TestWindow_Load);
@@ -64,7 +74,7 @@
 
         #endregion
 
-        private TerminalControl.FrameBuffer frameBuffer1;
+        private TerminalUI.DisplayControl terminalControl1;
     }
 }
 

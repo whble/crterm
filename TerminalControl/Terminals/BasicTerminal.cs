@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TerminalControl.Terminals
+namespace TerminalUI.Terminals
 {
     /// <summary>
     /// The terminal acts as the translation layer between the data port and the display.
@@ -16,9 +16,9 @@ namespace TerminalControl.Terminals
         /// </summary>
         private bool backspaceDeleteMode;
 
-        private EditModes _editMode = EditModes.None;
+        private EchoModes _editMode = EchoModes.None;
         [ConfigItem]
-        public EditModes EditMode
+        public EchoModes EchoMode
         {
             get
             {
@@ -27,20 +27,6 @@ namespace TerminalControl.Terminals
             set
             {
                 _editMode = value;
-                switch (value)
-                {
-                    case EditModes.LineEdit:
-                        FrameBuffer.CursorStyle = CursorStyles.Block;
-                        break;
-                    case EditModes.FullScreen:
-                        FrameBuffer.CursorStyle = CursorStyles.Block;
-                        break;
-                    case EditModes.None:
-                    case EditModes.LocalEcho:
-                    default:
-                        FrameBuffer.CursorStyle = CursorStyles.Underline;
-                        break;
-                }
             }
         }
 
@@ -53,8 +39,8 @@ namespace TerminalControl.Terminals
             }
         }
 
-        private IFrameBuffer _frameBuffer = null;
-        public IFrameBuffer FrameBuffer
+        private DisplayControl _frameBuffer = null;
+        public DisplayControl Display
         {
             get { return _frameBuffer; }
             set
@@ -165,17 +151,17 @@ namespace TerminalControl.Terminals
             switch (c)
             {
                 case '\r':
-                    FrameBuffer.PrintReturn();
+                    Display.PrintReturn();
                     break;
                 case '\n':
-                    FrameBuffer.PrintNewLine();
+                    Display.PrintLineFeed();
                     break;
                 case '\x8':
-                    FrameBuffer.X -= 1;
+                    Display.CurrentColumn -= 1;
                     break;
                 default:
                     if (c >= ' ')
-                        FrameBuffer.PrintChar(c);
+                        Display.Print(c);
                     //else
                     //    System.Diagnostics.Debug.WriteLine("ProcessCharacter: " + (int)c);
                     break;
@@ -191,8 +177,21 @@ namespace TerminalControl.Terminals
             }
         }
 
+        public virtual void PrintLine()
+        {
+            Display.PrintNewLine();
+        }
+
+        public virtual void PrintLine(string s)
+        {
+            Print(s);
+            Display.PrintNewLine();
+        }
+
         public virtual void InitKeymap()
         {
         }
+
+        
     }
 }

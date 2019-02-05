@@ -20,6 +20,7 @@ namespace CRBasic
 
         private TerminalUI.Terminals.TerminalKeyEventArgs KeyFlags = new TerminalKeyEventArgs();
         private Keys Modifiers = Keys.None;
+        private Keys LastKey = Keys.None;
 
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
@@ -55,8 +56,12 @@ namespace CRBasic
                     if (Display.CharUnderCursor > ' ')
                         Display.MoveRight();
                     break;
+                case Keys.Insert:
+                     
                 default:
-                    //System.Diagnostics.Debug.WriteLine("Key Down " + e.KeyCode.ToString());
+                    if(e.KeyCode != LastKey)
+                        System.Diagnostics.Debug.WriteLine("Key Down " + e.KeyCode.ToString());
+                    LastKey = e.KeyCode;
                     break;
             }
         }

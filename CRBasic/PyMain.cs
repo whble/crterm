@@ -38,7 +38,8 @@ namespace CRBasic
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
 
-            var engine = Python.CreateEngine();
+            if (engine == null)
+                engine = Python.CreateEngine();
             engine.Runtime.IO.SetOutput(stream, writer);
             engine.Execute(Line);
 

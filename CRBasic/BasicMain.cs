@@ -24,10 +24,10 @@ namespace CRBasic
         public void Init()
         {
             Cls();
-            Print("CR BASIC by Compiled Reality");
+            Print("CR BASIC " + System.Windows.Forms.Application.ProductVersion.ToString());
             Print("(C)2019 Tom P. Wilson");
-            Print(Free().ToString(), true);
-            Print(" bytes free");
+            Print(GetUnits(TotalBytes()) + "byte system");
+            Print(GetUnits(FreeBytes()) + "bytes free");
             Ok();
         }
 
@@ -36,9 +36,46 @@ namespace CRBasic
             Print("Ok");
         }
 
-        public int Free()
+        public string GetUnits(ulong Value)
         {
-            return 65536;
+            if (Value < 1)
+                return ((int)Value).ToString();
+
+            ulong[] magnitude = {
+                1,
+                (ulong) Math.Pow(2, 10),
+                (ulong) Math.Pow(2, 20),
+                (ulong) Math.Pow(2, 30),
+                (ulong) Math.Pow(2, 40),
+                (ulong) Math.Pow(2, 50),
+            };
+            string[] units = { "", "bytes", "kilo", "giga", "tera"};
+            ulong v = Value;
+            string u = "";
+
+            for (int i = 1; i < magnitude.Length; i++)
+            {
+                if (Value < magnitude[i])
+                {
+                    v = ((ulong)(Value / magnitude[i-1]));
+                    u = units[i-1];
+                    break;
+                }
+            }
+
+            return v.ToString() + " " + u;
+        }
+
+        public ulong FreeBytes()
+        {
+            ulong f = new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory;
+            return f;
+        }
+
+        public ulong TotalBytes()
+        {
+            ulong f = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+            return f;
         }
 
         public void Print(string s, bool SuppressNewline = false)

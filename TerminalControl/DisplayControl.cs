@@ -17,15 +17,16 @@ namespace TerminalUI
         private int x;
         private int y;
         public TextCursorStyles TextCursor { get; set; }
+        private InsertKeyMode _insertMode = InsertKeyMode.Overwrite;
 
-        private EchoModes echoMode;
+        private EchoModes _echoMode;
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public EchoModes EchoMode
         {
-            get { return echoMode; }
+            get { return _echoMode; }
             set
             {
-                echoMode = value;
+                _echoMode = value;
                 if (Terminal != null)
                 {
                     Terminal.EchoMode = value;
@@ -199,6 +200,20 @@ namespace TerminalUI
             set
             {
                 SetCharacter(value);
+            }
+        }
+
+        public InsertKeyMode InsertMode
+        {
+            get
+            {
+                return this._insertMode;
+            }
+
+            set
+            {
+                this._insertMode = value;
+                UpdateTextCursorMode();
             }
         }
 
@@ -512,7 +527,7 @@ namespace TerminalUI
 
         private void DisplayControl_Paint(object sender, PaintEventArgs e)
         {
-            SetEditCursor();
+            UpdateTextCursorMode();
 
             if (!FontValid)
             {
@@ -576,15 +591,20 @@ namespace TerminalUI
             }
         }
 
-        private void SetEditCursor()
+        private void UpdateTextCursorMode()
         {
-            switch (Terminal?.EchoMode)
+            if (Terminal != null)
+                Terminal.EchoMode = this.EchoMode;
+            switch (EchoMode)
             {
                 case EchoModes.LineEdit:
                     TextCursor = TextCursorStyles.Left;
                     break;
                 case EchoModes.FullScreen:
-                    TextCursor = TextCursorStyles.Block;
+                    if (InsertMode == InsertKeyMode.Insert)
+                        TextCursor = TextCursorStyles.Left;
+                    else
+                        TextCursor = TextCursorStyles.Block;
                     break;
                 case EchoModes.None:
                 case EchoModes.LocalEcho:

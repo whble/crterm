@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CRBasic")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("BASIC Interpreter for Windows")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Compiled Reality")]
 [assembly: AssemblyProduct("CRBasic")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright ©  2019 Compiled Reality")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

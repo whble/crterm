@@ -1,0 +1,31 @@
+Expression Parsing
+
+Expressions are parsed from left to right and are progressively evaluated by simplifying the expression until it has been reduced to a single term. 
+
+OOP:
+Function call
+()
+^
+*, /
++, -
+AND
+OR
+NOT
+
+function calls are tokenized; values >= 81h are BASIC tokens. 
+
+read next symbol in list
+  if the symbol is a function call or (, evaluate substring to next ) and replace sequence with result of function call
+  reduce all ^ (exponent) operations
+  reduce * and / operations, left to right
+  reduce + and - operations, left to right
+  reduce AND operations, left to right
+  reduce OR  operations, left to right
+  reduce NOT operations, left to right
+
+for each level of OOP
+read value 1
+read operator
+read value 2
+peform the operation and replace with the result
+

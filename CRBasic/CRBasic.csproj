@@ -49,7 +49,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicMain.cs" />
+    <Compile Include="Basic\ArgumentList.cs" />
+    <Compile Include="Basic\BasicArray.cs" />
+    <Compile Include="Basic\BasicException.cs" />
+    <Compile Include="Basic\BasicExpression.cs" />
+    <Compile Include="Basic\BasicMain.cs" />
+    <Compile Include="Basic\BasicProgram.cs" />
+    <Compile Include="Basic\BasicSymbol.cs" />
+    <Compile Include="Basic\BasicVariable.cs" />
+    <Compile Include="Basic\BasicTokens.cs" />
+    <Compile Include="Basic\DataTypes.cs" />
+    <Compile Include="Basic\Labels.cs" />
+    <Compile Include="Basic\ProgramLine.cs" />
+    <Compile Include="Basic\BasicToken.cs" />
+    <Compile Include="Basic\BasicParser.cs" />
     <Compile Include="CRBasicMain.cs">
       <SubType>Form</SubType>
     </Compile>

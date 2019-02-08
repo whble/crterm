@@ -179,13 +179,13 @@ namespace TerminalUI.Terminals
 
         public virtual void PrintLine()
         {
-            Display.PrintNewLine();
+            Display.PrintLine();
         }
 
         public virtual void PrintLine(string s)
         {
             Print(s);
-            Display.PrintNewLine();
+            Display.PrintLine();
         }
 
         public virtual void InitKeymap()

@@ -72,12 +72,12 @@ namespace CRBasic
             {
                 case CR:
                     if (Modifiers.HasFlag(Keys.Shift))
-                        Display.PrintNewLine();
+                        Display.PrintLine();
                     else
                         ParseLine();
                     break;
                 case LF:
-                    Display.PrintNewLine();
+                    Display.PrintLine();
                     break;
                 default:
                     Terminal.Print(e.KeyChar.ToString());
@@ -107,10 +107,9 @@ namespace CRBasic
             }
             string line = s.ToString().Trim();
 
-            System.Diagnostics.Debug.WriteLine(line);
-
-            Display.MoveToSOL();
-            Display.PrintLineFeed();
+            //System.Diagnostics.Debug.WriteLine(line);
+            Display.PrintLine();
+            Interpreter.Execute(line);
         }
     }
 }

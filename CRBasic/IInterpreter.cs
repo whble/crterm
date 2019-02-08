@@ -10,7 +10,7 @@ namespace CRBasic
     {
         void Init();
         TerminalUI.DisplayControl Display { get; set; }
-        List<String> ProgramText { get; }
+        void AddLine(string ProgramLine);
         void Execute(string Line);
         void Run();
     }

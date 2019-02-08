@@ -244,7 +244,7 @@ namespace TerminalUI
             InitializeComponent();
 
             CurrentTextColor = CharacterCell.ColorCodes.Green;
-            InitCharacterData(45, 160);
+            InitCharacterData(25, 80);
             DoubleBuffered = true;
 
             drawTimer.Interval = 1000 / 60;
@@ -431,7 +431,7 @@ namespace TerminalUI
         public void PrintLine(string s)
         {
             Print(s);
-            PrintNewLine();
+            PrintLine();
         }
 
         public void PrintLineFeed()
@@ -448,7 +448,7 @@ namespace TerminalUI
             CurrentColumn = 0;
         }
 
-        public void PrintNewLine()
+        public void PrintLine()
         {
             PrintReturn();
             PrintLineFeed();

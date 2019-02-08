@@ -12,14 +12,6 @@ namespace CRBasic
         ScriptEngine engine = null;
         TerminalUI.DisplayControl display = null;
 
-        public List<string> ProgramText
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public DisplayControl Display
         {
             get
@@ -41,7 +33,14 @@ namespace CRBasic
             if (engine == null)
                 engine = Python.CreateEngine();
             engine.Runtime.IO.SetOutput(stream, writer);
-            engine.Execute(Line);
+            try
+            {
+                engine.Execute(Line);
+            }
+            catch (Exception ex)
+            {
+                Display.PrintLine(ex.Message);
+            }
 
             stream.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(stream);
@@ -60,11 +59,52 @@ namespace CRBasic
             //Print(BasicMain.StartupMessage);
             Execute(@"print('CR Python with IronPython')");
             Execute("print('(C) 2019 Tom P. Wilson and Compiled Reality')");
-            Print(Free().ToString(), true);
-            Print("MB free");
+            Print(GetUnits(TotalMemory()) + "byte system");
+            Print(GetUnits(FreeMemory()) + "bytes free");
             Ok();
         }
 
+        public ulong FreeMemory()
+        {
+            ulong f = new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory;
+            return f;
+        }
+
+        public ulong TotalMemory()
+        {
+            ulong f = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+            return f;
+        }
+
+        public string GetUnits(ulong Value)
+        {
+            if (Value < 1)
+                return ((int)Value).ToString();
+
+            ulong[] magnitude = {
+                1,
+                (ulong) Math.Pow(2, 10),
+                (ulong) Math.Pow(2, 20),
+                (ulong) Math.Pow(2, 30),
+                (ulong) Math.Pow(2, 40),
+                (ulong) Math.Pow(2, 50),
+            };
+            string[] units = { "", "bytes", "kilo", "giga", "tera" };
+            ulong v = Value;
+            string u = "";
+
+            for (int i = 1; i < magnitude.Length; i++)
+            {
+                if (Value < magnitude[i])
+                {
+                    v = ((ulong)(Value / magnitude[i - 1]));
+                    u = units[i - 1];
+                    break;
+                }
+            }
+
+            return v.ToString() + " " + u;
+        }
         public void Run()
         {
             throw new NotImplementedException();
@@ -92,7 +132,7 @@ namespace CRBasic
             Display.Terminal.Print(s);
             if (!SuppressNewline)
             {
-                Display.PrintNewLine();
+                Display.PrintLine();
             }
         }
 
@@ -106,5 +146,9 @@ namespace CRBasic
             Display.Clear();
         }
 
+        public void AddLine(string ProgramLine)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

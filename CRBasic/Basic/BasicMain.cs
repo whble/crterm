@@ -231,6 +231,7 @@ namespace CRBasic.Basic
                         case DataTypes.Text:
                             break;
                         case DataTypes.Variable:
+
                             break;
                         case DataTypes.Token:
                             BasicToken t = b.Value as BasicToken;

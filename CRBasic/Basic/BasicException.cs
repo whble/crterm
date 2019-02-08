@@ -8,19 +8,32 @@ namespace CRBasic.Basic
 {
     public class BasicException : Exception
     {
-        public BasicException(string Message)
-            : base(Message)
-        { }
-        public BasicException(string Message, int LineNumber)
-            : base(Message + " in " + LineNumber)
-        { }
-        public BasicException(string Message, int LineNumber, int ErrorPos)
-            : base(Message + " in " + LineNumber + "/" + ErrorPos)
+        string Details = "";
+        int LineNumber = -1;
+        int ErrorPos = -1;
+
+        public BasicException(Exception ex, string Message)
+            : base(ex.Message, ex)
         {
+            this.Details = Message;
+        }
+        public BasicException(string Message, int LineNumber)
+            : base(Message)
+        {
+            this.LineNumber = LineNumber;
+        }
+        public BasicException(string Message, int LineNumber, int ErrorPos)
+            : base(Message)
+        {
+            this.LineNumber = LineNumber;
+            this.ErrorPos = ErrorPos;
         }
         public BasicException(string Message, int LineNumber, int ErrorPos, string Details)
-            : base(Message + " in " + LineNumber + "/" + ErrorPos + "\r\n" + Details)
+            : base(Message)
         {
+            this.LineNumber = LineNumber;
+            this.ErrorPos = ErrorPos;
+            this.Details = Details;
         }
     }
 }

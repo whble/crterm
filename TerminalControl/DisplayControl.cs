@@ -539,11 +539,18 @@ namespace TerminalUI
 
             float right = (Columns + 1) * ColWidth;
             float bottom = (Rows + 1) * RowHeight;
-            float x = 0, y = 0;
-            float xo = ColWidth / 2;
-            float yo = RowHeight / 2;
+            float x = 0;
+            float y = 0;
 
-            g.FillRectangle(Brushes[(int)CurrentBackground], 0, 0, right + xo, bottom);
+            float xo = 0;
+            if (right < ClientRectangle.Width)
+                xo = (ClientRectangle.Width - right) / 2;
+
+            float yo = 0;
+
+            g.TranslateTransform(xo, yo);
+
+            g.FillRectangle(Brushes[(int)CurrentBackground], 0, 0, right, bottom);
             for (int row = 0; row < Rows; row++)
             {
                 for (int col = 0; col < Columns; col++)
@@ -589,6 +596,8 @@ namespace TerminalUI
                         break;
                 }
             }
+
+            g.ResetTransform();
         }
 
         private void UpdateTextCursorMode()

@@ -8,17 +8,17 @@ namespace CRBasic.Basic
 {
     public class BasicSymbol
     {
-        public DataTypes Type;
+        public DataTypes DataType;
         public object Value = "";
 
         public override string ToString()
         {
-            switch (Type)
+            switch (DataType)
             {
                 case DataTypes.EndOfStatement:
                     return ":";
                 case DataTypes.String:
-                    return "\"" + Value.ToString() + "\"";
+                    return Value.ToString();
                 case DataTypes.Integer:
                 case DataTypes.Single:
                 case DataTypes.Double:

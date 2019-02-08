@@ -37,10 +37,6 @@ namespace CRBasic.Basic
             return Line;
         }
 
-        public void Parse(List<string> Lines)
-        {
-        }
-
         public bool EndOfLine
         {
             get
@@ -81,7 +77,9 @@ namespace CRBasic.Basic
         {
             get
             {
-                return Text[Pos];
+                if (Pos < Text.Length)
+                    return Text[Pos];
+                return '\0';
             }
         }
 
@@ -147,6 +145,39 @@ namespace CRBasic.Basic
             return false;
         }
 
+        string ReadSymbol()
+        {
+            DiscardWhiteSpace();
+            if (EndOfStatement)
+                return "";
+
+            if (ThisChar == '"')
+                return ReadString();
+            else if (IsWord(ThisChar))
+                return ReadWord();
+            else
+                return ReadNonWord();
+        }
+
+        //string ReadString()
+        //{
+        //    StringBuilder s = new StringBuilder();
+
+        //    DiscardWhiteSpace();
+        //    if (EndOfStatement)
+        //        return "";
+
+        //    if (ThisChar == '"')
+        //    {
+        //        while (ThisChar == '"' || InQuote)
+        //        {
+        //            c = Read();
+        //            s.Append(c);
+        //        }
+        //    }
+        //    return s.ToString();
+        //}
+
         /// <summary>
         /// Reads the next word which may be an identifier, a number, or a string.
         /// Pos will be at the space immediately following the word.
@@ -155,15 +186,13 @@ namespace CRBasic.Basic
         string ReadWord()
         {
             StringBuilder s = new StringBuilder();
-
             DiscardWhiteSpace();
             if (EndOfStatement)
                 return "";
 
             while (!EndOfStatement && IsWord(ThisChar))
             {
-                s.Append(ThisChar);
-                Read();
+                s.Append(Read());
             }
             return s.ToString();
         }
@@ -176,7 +205,7 @@ namespace CRBasic.Basic
             if (EndOfStatement)
                 return "";
 
-            while (!EndOfStatement 
+            while (!EndOfStatement
                 && !IsWord(ThisChar)
                 && !IsWhitespace(ThisChar))
             {
@@ -209,18 +238,21 @@ namespace CRBasic.Basic
         private string ReadString()
         {
             StringBuilder s = new StringBuilder();
-            while (Pos < Text.Length)
+            DiscardWhiteSpace();
+            if (EndOfStatement)
+                return "";
+
+            char c = Read();
+            if (c == '"')
             {
-                char c = Read();
-                if (c == '"')
+                s.Append(c);
+                while (!EndOfStatement)
                 {
-                    // two quotes ("") are inserted into the string as a one quote (")
-                    if (NextChar == '"')
-                        s.Append('"');
-                    else
+                    c = Read();
+                    s.Append(c);
+                    if (c == '"' && (NextChar != '"' || EndOfStatement))
                         break;
                 }
-                s.Append(c);
             }
             return s.ToString();
         }
@@ -266,33 +298,21 @@ namespace CRBasic.Basic
             if (EndOfLine)
                 return;
 
-            string word = ReadWord().ToUpper();
-            if (BasicTokens.Commands.ContainsKey(word))
+            string s = ReadSymbol();
+            string su = s.ToUpper();
+            if (BasicTokens.Commands.ContainsKey(su))
             {
-                BasicToken cmd = BasicTokens.Commands[word];
+                BasicToken cmd = BasicTokens.Commands[su];
                 Line.Add(cmd, DataTypes.Token);
             }
-            else
+            else if (BasicTokens.Operators.Contains(s))
             {
-                DiscardWhiteSpace();
-                char c = Read();
-                if (c == '=')
-                {
-                    BasicToken cmd = BasicTokens.Commands["LET"];
-                    Line.Add(cmd, DataTypes.Token);
-                    Line.Add(word, DataTypes.Variable);
-                }
-                else if (c == ':')
-                {
-                    BasicToken cmd = BasicTokens.Commands["LET"];
-                    Line.Add(cmd, DataTypes.Token);
-                    Line.Add(word, DataTypes.Variable);
-                    Line.Add(Line.LineNumber, DataTypes.Integer);
-                }
-                else
-                {
-                    throw new BasicException("Syntax Error",Line.LineNumber, Pos,"\"" + word + "\" is not a statement or assignment");
-                }
+                BasicToken op = BasicTokens.Commands[s];
+                Line.Add(op, DataTypes.Token);
+            }
+            else if (s.StartsWith("\"") && s.EndsWith("\""))
+            {
+                Line.Add(s, DataTypes.String);
             }
         }
 

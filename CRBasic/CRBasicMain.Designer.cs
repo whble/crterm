@@ -55,7 +55,7 @@
             this.Display.Location = new System.Drawing.Point(0, 0);
             this.Display.Margin = new System.Windows.Forms.Padding(774801, 465530, 774801, 465530);
             this.Display.Name = "Display";
-            this.Display.Size = new System.Drawing.Size(1411, 709);
+            this.Display.Size = new System.Drawing.Size(1192, 709);
             this.Display.TabIndex = 0;
             this.Display.Terminal = null;
             this.Display.TextCursor = TerminalUI.TextCursorStyles.Underline;
@@ -64,7 +64,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1411, 709);
+            this.ClientSize = new System.Drawing.Size(1192, 709);
             this.Controls.Add(this.Display);
             this.Name = "CRBasicMain";
             this.Text = "CR BASIC";

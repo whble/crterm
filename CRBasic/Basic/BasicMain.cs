@@ -36,7 +36,10 @@ namespace CRBasic.Basic
             Print("CR BASIC " + System.Windows.Forms.Application.ProductVersion.ToString());
             Print("(C)2019 Tom P. Wilson");
             Print(GetUnits(TotalBytes()) + "byte system");
-            Print(GetUnits(FreeBytes()) + "bytes free");
+            Display.CurrentTextColor = CharacterCell.ColorCodes.White;
+            Print(GetUnits(FreeBytes()) + "bytes",true);
+            Display.CurrentTextColor = CharacterCell.ColorCodes.Gray;
+            Print(" free");
             Ok();
 
             //debug 
@@ -209,7 +212,37 @@ namespace CRBasic.Basic
         {
             try
             {
-                
+                foreach (BasicSymbol b in pl.Symbols)
+                {
+                    switch (b.DataType)
+                    {
+                        case DataTypes.EndOfLine:
+                            break;
+                        case DataTypes.EndOfStatement:
+                            break;
+                        case DataTypes.String:
+                            break;
+                        case DataTypes.Integer:
+                            break;
+                        case DataTypes.Single:
+                            break;
+                        case DataTypes.Double:
+                            break;
+                        case DataTypes.Text:
+                            break;
+                        case DataTypes.Variable:
+                            break;
+                        case DataTypes.Token:
+                            BasicToken t = b.Value as BasicToken;
+                            BasicVariable result = new BasicVariable();
+                            t.ExecuteCommand(Program, result, pl);
+                            break;
+                        case DataTypes.Delimiter:
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
             catch (Exception ex)
             {

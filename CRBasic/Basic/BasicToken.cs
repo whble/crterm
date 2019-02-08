@@ -10,7 +10,7 @@ namespace CRBasic.Basic
     {
         public string Name;
         public UInt16 Code;
-        public delegate void CommandDelegate(BasicProgram Program, BasicVariable Result, ArgumentList Arguments);
+        public delegate void CommandDelegate(BasicProgram Program, BasicVariable Result, ProgramLine Arguments);
         public event CommandDelegate RunDelegate;
 
         public BasicToken(string Name, UInt16 Code)
@@ -24,7 +24,7 @@ namespace CRBasic.Basic
             this.RunDelegate += Command;
         }
 
-        public void ExecuteCommand(BasicProgram ProgramState, BasicVariable Result, ArgumentList Arguments)
+        public void ExecuteCommand(BasicProgram ProgramState, BasicVariable Result, ProgramLine Arguments)
         {
             RunDelegate?.Invoke(ProgramState, Result, Arguments);
         }

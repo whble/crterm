@@ -31,7 +31,7 @@ namespace CRBasic.Basic
         public void Add(object Value, DataTypes Type)
         {
             BasicSymbol sym = new BasicSymbol();
-            sym.Type = Type;
+            sym.DataType = Type;
             sym.Value = Value;
             Symbols.Add(sym);
         }

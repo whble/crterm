@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
-using CRBasic.Basic;
 
 namespace CRBasic
 {
     public partial class CRBasicMain : Form
     {
-        //private IInterpreter engine = new PyMain();
-        private IInterpreter engine = new BasicMain();
+        // private IInterpreter engine = new PyMain();
+        // private IInterpreter engine = new BasicMain();
+        private IInterpreter engine = new CRBasic.PyBasic.BasicMain();
 
         public CRBasicMain()
         {

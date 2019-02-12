@@ -72,6 +72,20 @@
     <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PyBasic\ArgumentList.cs" />
+    <Compile Include="PyBasic\BasicArray.cs" />
+    <Compile Include="PyBasic\BasicException.cs" />
+    <Compile Include="PyBasic\BasicExpression.cs" />
+    <Compile Include="PyBasic\BasicMain.cs" />
+    <Compile Include="PyBasic\BasicParser.cs" />
+    <Compile Include="PyBasic\BasicProgram.cs" />
+    <Compile Include="PyBasic\BasicSymbol.cs" />
+    <Compile Include="PyBasic\BasicToken.cs" />
+    <Compile Include="PyBasic\BasicTokens.cs" />
+    <Compile Include="PyBasic\BasicVariable.cs" />
+    <Compile Include="PyBasic\DataTypes.cs" />
+    <Compile Include="PyBasic\Labels.cs" />
+    <Compile Include="PyBasic\BasicLine.cs" />
     <Compile Include="PyMain.cs" />
     <EmbeddedResource Include="CRBasicMain.resx">
       <DependentUpon>CRBasicMain.cs</DependentUpon>
@@ -95,6 +109,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="PyBasic\PyBasic.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

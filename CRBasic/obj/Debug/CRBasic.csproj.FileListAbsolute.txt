@@ -41,3 +41,4 @@ E:\Projects\Github\crterm\CRBasic\bin\Debug\TerminalUI.dll
 E:\Projects\Github\crterm\CRBasic\bin\Debug\Microsoft.Dynamic.dll
 E:\Projects\Github\crterm\CRBasic\bin\Debug\TerminalUI.pdb
 E:\Projects\Github\crterm\CRBasic\obj\Debug\CRBasic.csproj.CopyComplete
+D:\Github\crterm\CRBasic\bin\Debug\PyBasic\PyBasic.md

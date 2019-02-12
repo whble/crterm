@@ -1,19 +1,22 @@
 ﻿using System;
-
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerminalUI;
+using System.IO;
 
-namespace CRBasic.Basic
+namespace CRBasic.PyBasic
 {
     public class BasicMain : IInterpreter
     {
         public DisplayControl Display { get; set; }
-
+        ScriptEngine engine = null;
         BasicProgram Program = new BasicProgram();
         BasicParser Parser = new BasicParser();
+        string PythonText = null;
 
         public enum RunStates
         {
@@ -23,8 +26,8 @@ namespace CRBasic.Basic
 
         public int Pos = 0;
 
-        public ProgramLine CurrentLine = null;
-        public ProgramLine NextLine = null;
+        public BasicLine CurrentLine = null;
+        public BasicLine NextLine = null;
         public RunStates RunState = RunStates.Stopped;
         private BasicException _errorState = null;
 
@@ -112,39 +115,6 @@ namespace CRBasic.Basic
             Display.Clear();
         }
 
-        public void Execute(string Line)
-        {
-            //Print("Executing \"" + Line + "\"");
-            try
-            {
-                ErrorState = null;
-                ProgramLine pl = Parser.Parse(Line);
-                if (pl.IsImmediate)
-                {
-                    CurrentLine = null;
-                    NextLine = null;
-                    Execute(pl);
-                    if (ErrorState != null)
-                    {
-                        PrintErrorState();
-                    }
-                }
-                else if (Program.Lines.ContainsKey(pl.LineNumber) && pl.Symbols.Count > 0)
-                {
-                    Program.Lines[pl.LineNumber] = pl;
-                }
-                else if (Program.Lines.ContainsKey(pl.LineNumber) && pl.Symbols.Count == 0)
-                {
-                    Program.Lines.Remove(pl.LineNumber);
-                }
-                else
-                    Program.Add(pl);
-            }
-            catch (Exception ex)
-            {
-                Display.PrintLine(ex.Message);
-            }
-        }
 
         private void PrintErrorState()
         {
@@ -160,10 +130,8 @@ namespace CRBasic.Basic
 
         public void Run()
         {
-            ErrorState = null;
-            RunState = RunStates.Running;
-            int lineNo = Program.Lines.Keys[0];
-            Continue();
+            string pyText = Program.Translate();
+            ExecPython(pyText);
         }
 
         void Continue()
@@ -202,47 +170,63 @@ namespace CRBasic.Basic
             }
         }
 
+
         public void AddLine(string ProgramText)
         {
+            string s = ProgramText.Trim();
+            if (s.Length <= 0)
+                return;
+            if (s[0] < '0' || s[0] > '9')
+                throw new BasicException("Immediate statement encountered in AddLine", ProgramText);
+
             Execute(ProgramText);
         }
 
-        private void Execute(ProgramLine pl)
+        public void Execute(string Line)
+        {
+            //Print("Executing \"" + Line + "\"");
+            try
+            {
+                ErrorState = null;
+                BasicLine pl = Parser.Parse(Line);
+                if (pl.IsImmediate)
+                {
+                    CurrentLine = null;
+                    NextLine = null;
+                    Execute(pl);
+                    if (ErrorState != null)
+                    {
+                        PrintErrorState();
+                    }
+                }
+                else if (Program.Lines.ContainsKey(pl.LineNumber) && pl.Symbols.Count > 0)
+                {
+                    Program.Lines[pl.LineNumber] = pl;
+                }
+                else if (Program.Lines.ContainsKey(pl.LineNumber) && pl.Symbols.Count == 0)
+                {
+                    Program.Lines.Remove(pl.LineNumber);
+                }
+                else
+                    Program.Add(pl);
+            }
+            catch (Exception ex)
+            {
+                Display.PrintLine(ex.Message);
+            }
+        }
+
+        private void Execute(BasicLine pl)
         {
             try
             {
-                foreach (BasicSymbol b in pl.Symbols)
-                {
-                    switch (b.DataType)
-                    {
-                        case DataTypes.EndOfLine:
-                            break;
-                        case DataTypes.EndOfStatement:
-                            break;
-                        case DataTypes.String:
-                            break;
-                        case DataTypes.Integer:
-                            break;
-                        case DataTypes.Single:
-                            break;
-                        case DataTypes.Double:
-                            break;
-                        case DataTypes.Text:
-                            break;
-                        case DataTypes.Variable:
-
-                            break;
-                        case DataTypes.Token:
-                            BasicToken t = b.Value as BasicToken;
-                            BasicVariable result = new BasicVariable();
-                            t.ExecuteCommand(Program, result, pl);
-                            break;
-                        case DataTypes.Delimiter:
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                string s = pl.Translate().Trim();
+                if (s.ToUpper().StartsWith("$PLIST"))
+                    Program.PList();
+                else if (s.ToUpper().StartsWith("$LIST"))
+                    Program.List();
+                if (s.ToUpper().StartsWith("$RUN"))
+                    Run();
             }
             catch (Exception ex)
             {
@@ -255,6 +239,33 @@ namespace CRBasic.Basic
                 Stop();
             }
         }
+
+        public void ExecPython(string PythonText)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+
+            if (engine == null)
+                engine = Python.CreateEngine();
+            engine.Runtime.IO.SetOutput(stream, writer);
+            try
+            {
+                engine.Execute(PythonText);
+            }
+            catch (Exception ex)
+            {
+                Display.PrintLine(ex.Message);
+            }
+
+            stream.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(stream);
+            while (!reader.EndOfStream)
+            {
+                string s = reader.ReadLine();
+                Display.Terminal.PrintLine(s);
+            }
+        }
+
     }
 }
 

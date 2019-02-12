@@ -19,17 +19,17 @@ namespace CRBasic.Basic
             Lines.Add(pl.LineNumber, pl);
         }
 
-        internal void List(int Start = 0, int End = int.MaxValue)
+        public void List(int Start = 0, int End = int.MaxValue)
         {
             foreach (int ln in Lines.Keys)
             {
                 ProgramLine line = Lines[ln];
-                Display.Print(line.LineNumber.ToString());
-                Display.Print(" ");
+                Display.Print(line.LineNumber.ToString().PadLeft(5));
                 for (int i = 0; i < line.Symbols.Count; i++)
                 {
                     BasicSymbol b = line.Symbols[i];
-                    Display.Print(b.ToString() + " ");
+                    Display.Print(" ");
+                    Display.Print(b.ToString());
                 }
                 Display.PrintLine();
             }

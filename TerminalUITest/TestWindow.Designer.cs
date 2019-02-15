@@ -46,7 +46,7 @@
             this.terminalControl1.CurrentRow = 0;
             this.terminalControl1.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Green;
             this.terminalControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.terminalControl1.EchoMode = TerminalUI.Terminals.EchoModes.None;
+            this.terminalControl1.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.terminalControl1.Font = new System.Drawing.Font("Consolas", 15.227F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.terminalControl1.LineWrap = false;
             this.terminalControl1.Location = new System.Drawing.Point(0, 0);
@@ -55,7 +55,7 @@
             this.terminalControl1.TabIndex = 0;
             ansiTerminal1.BackspaceDeleteMode = false;
             ansiTerminal1.Display = null;
-            ansiTerminal1.EchoMode = TerminalUI.Terminals.EchoModes.None;
+            ansiTerminal1.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.terminalControl1.Terminal = ansiTerminal1;
             this.terminalControl1.TextCursor = TerminalUI.TextCursorStyles.Underline;
             // 

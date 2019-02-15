@@ -79,9 +79,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TerminalControl\TerminalControl.csproj">
+    <ProjectReference Include="..\TerminalControl\TerminalUI.csproj">
       <Project>{dd17f5e9-d267-4f04-84fd-8c14b407d42d}</Project>
-      <Name>TerminalControl</Name>
+      <Name>TerminalUI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

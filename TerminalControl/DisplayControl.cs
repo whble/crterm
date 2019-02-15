@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using TerminalUI.Terminals;
 
@@ -44,11 +45,13 @@ namespace TerminalUI
         public bool BackspacePull { get; set; }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool LineWrap { get; set; }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        private string _statusText;
 
         protected bool FontValid = false;
         private Timer drawTimer = new Timer();
 
-        public bool CusorEnabled;
+        public bool CursorEnabled;
         public bool CursorOn;
         public int NextDraw = 0;
         public int BlinkInterval = 20;
@@ -152,6 +155,11 @@ namespace TerminalUI
             {
                 return CurrentRow * Columns + CurrentColumn;
             }
+            set
+            {
+                CurrentRow = value / Columns;
+                CurrentColumn = value % Columns;
+            }
         }
 
         public int CurrentRowStart
@@ -160,6 +168,11 @@ namespace TerminalUI
             {
                 return CurrentRow * Columns;
             }
+        }
+
+        internal void ClearTopToCursor()
+        {
+            throw new NotImplementedException();
         }
 
         public IEditorPlugin Editor
@@ -178,6 +191,16 @@ namespace TerminalUI
                     _editor.Terminal = Terminal;
                 }
             }
+        }
+
+        internal void ClearScreen(bool v1, bool v2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPos(int row, int col)
+        {
+            return row * Columns + col;
         }
 
         public char CharUnderCursor
@@ -214,6 +237,19 @@ namespace TerminalUI
             {
                 this._insertMode = value;
                 UpdateTextCursorMode();
+            }
+        }
+
+        public string StatusText
+        {
+            get
+            {
+                return this._statusText;
+            }
+
+            set
+            {
+                this._statusText = value;
             }
         }
 
@@ -276,14 +312,21 @@ namespace TerminalUI
             Clear();
         }
 
-        public void ClearCursorToEnd()
+        /// <summary>
+        /// Clears the current screen line. To clear the entire line,
+        /// set both parametrs to True. To clear the start of the line up to the cursor,
+        /// set FromStart true. To clear from the cursor to the end, set ToEnd to true.
+        /// </summary>
+        /// <param name="FromStart"></param>
+        /// <param name="ToEnd"></param>
+        internal void ClearCurrentLine(bool FromStart, bool ToEnd)
         {
-            throw new NotImplementedException();
-        }
-
-        public void ClearTopToCursor()
-        {
-            throw new NotImplementedException();
+            int start = FromStart ? 0 : CurrentColumn;
+            int end = ToEnd ? Columns : CurrentColumn + 1;
+            for (int col = start; col < end; col++)
+            {
+                SetCharacter(CurrentRow, col, ' ');
+            }
         }
 
         public void Fill(string c)
@@ -299,20 +342,22 @@ namespace TerminalUI
 
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            bool handled = false;
+            bool handled = true;
             switch (EchoMode)
             {
                 case EchoModes.LineEdit:
                     break;
                 case EchoModes.FullScreen:
+                    handled = HandleFullScreenKey(e);
                     break;
                 case EchoModes.Plugin:
                     handled = true;
                     Editor?.HandleKeyDown(sender, e);
                     break;
-                case EchoModes.None:
+                case EchoModes.EchoOff:
                 case EchoModes.LocalEcho:
                 default:
+                    handled = false;
                     break;
             }
 
@@ -323,25 +368,68 @@ namespace TerminalUI
             }
         }
 
+        private bool HandleFullScreenKey(KeyEventArgs e)
+        {
+            bool handled = true;
+            switch (e.KeyCode)
+            {
+                case Keys.Return:
+                    StringBuilder s = new StringBuilder();
+                    for (int col = 0; col < Columns; col++)
+                        s.Append(GetChar(CurrentRow, col));
+                    string ss = s.ToString().Trim();
+                    CurrentColumn = 0;
+                    ClearCurrentLine(true, true);
+                    Terminal?.SendString(ss);
+                    Terminal?.SendChar('\r');
+                    break;
+                case Keys.Up:
+                    CurrentRow -= 1;
+                    break;
+                case Keys.Down:
+                    CurrentRow += 1;
+                    break;
+                case Keys.Right:
+                    CurrentColumn += 1;
+                    break;
+                case Keys.Left:
+                    CurrentColumn -= 1;
+                    break;
+                default:
+                    handled = false;
+                    break;
+            }
+            return handled;
+        }
+
+        private string GetChar(int Row, int Col)
+        {
+            int pos = GetPos(Row, Col);
+            return CharacterData[pos].Value;
+        }
+
         public void HandleKeyPress(object sender, KeyPressEventArgs e)
         {
-            bool handled = false;
+            bool handled = true;
             switch (EchoMode)
             {
-                case EchoModes.None:
-                    break;
                 case EchoModes.LocalEcho:
+                    handled = false;
                     Terminal.ProcessReceivedCharacter(e.KeyChar);
                     break;
                 case EchoModes.LineEdit:
                     break;
                 case EchoModes.FullScreen:
+                    if (e.KeyChar >= ' ')
+                        Print(e.KeyChar);
                     break;
                 case EchoModes.Plugin:
                     handled = true;
                     Editor?.HandleKeyPress(sender, e);
                     break;
+                case EchoModes.EchoOff:
                 default:
+                    handled = false;
                     break;
             }
 
@@ -363,8 +451,15 @@ namespace TerminalUI
 
         public void Print(char c)
         {
-            SetCharacter(CurrentRow, CurrentColumn, c.ToString(), CurrentTextColor, CurrentBackground, CurrentAttribute);
-            AdvanceCursor();
+            if (c >= ' ')
+            {
+                SetCharacter(CurrentRow, CurrentColumn, c.ToString(), CurrentTextColor, CurrentBackground, CurrentAttribute);
+                AdvanceCursor();
+            }
+            else if (c == '\r')
+                PrintReturn();
+            else if (c == '\n')
+                PrintLineFeed();
         }
 
         public void AdvanceCursor()
@@ -384,6 +479,25 @@ namespace TerminalUI
             {
                 Value = c.ToString()
             };
+        }
+
+        private void SetCharacter(int row, int col, char c)
+        {
+            int pos = row * Columns + col;
+            if (pos < 0 || pos >= CharacterData.Length)
+            {
+                return;
+            }
+
+            if (CharacterData[pos] == null)
+            {
+                CharacterData[pos] = new CharacterCell();
+            }
+
+            CharacterData[pos].Value = c.ToString();
+            CharacterData[pos].TextColor = CurrentTextColor;
+            CharacterData[pos].BackColor = CurrentBackground;
+            CharacterData[pos].Attribute = CurrentAttribute;
         }
 
         public void SetCharacter(
@@ -436,11 +550,13 @@ namespace TerminalUI
 
         public void PrintLineFeed()
         {
-            if (CurrentRow + 1 >= Rows)
+            if (CurrentRow >= Rows - 1)
             {
                 ScrollUp();
+                CurrentRow = Rows - 1;
             }
-            MoveDown();
+            else
+                MoveDown();
         }
 
         public void PrintReturn()
@@ -615,7 +731,7 @@ namespace TerminalUI
                     else
                         TextCursor = TextCursorStyles.Block;
                     break;
-                case EchoModes.None:
+                case EchoModes.EchoOff:
                 case EchoModes.LocalEcho:
                 default:
                     TextCursor = TextCursorStyles.Underline;
@@ -675,17 +791,18 @@ namespace TerminalUI
 
         private void ScrollUp()
         {
-            for (int i = Columns; i < CharacterData.Length; i++)
+            int start = GetPos(1, 0);
+            int end = GetPos(Rows, 0);
+            for (int i = start; i < end; i++)
             {
-                CharacterData[i - Columns] = CharacterData[i];
+                CharacterData[i - Columns] = CharacterData[i].Copy();
             }
-
             FillRow(Rows - 1, " ");
         }
 
         private void FillRow(int Row, string Value)
         {
-            for (int col = CharacterData.Length - Columns + 1; col < CharacterData.Length; col++)
+            for (int col = 0; col < Columns; col++)
             {
                 SetCharacter(Row, col, Value, CurrentTextColor, CurrentBackground, CurrentAttribute);
             }

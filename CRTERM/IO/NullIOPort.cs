@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CRTerm.Config;
+using TerminalUI;
 
 namespace CRTerm.IO
 {

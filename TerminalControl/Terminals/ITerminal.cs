@@ -1,7 +1,7 @@
 ﻿using System;
 namespace TerminalUI.Terminals
 {
-    public interface ITerminal
+    public interface ITerminal: IConfigurable
     {
         DisplayControl Display { get; set; }
 
@@ -63,6 +63,11 @@ namespace TerminalUI.Terminals
         /// buffer raises an event, allowing the host program to read the buffer. 
         /// </summary>
         RingBuffer<char> SendBuffer { get; }
+
+        /// <summary>
+        /// Data is ready to transmit.
+        /// </summary>
+        event EventHandler ReadyToSend;
     }
 
 }

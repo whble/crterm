@@ -3,7 +3,7 @@ using System.Threading;
 using System.IO;
 using System.IO.Ports;
 using CRTerm.IO;
-using CRTerm.Terminals;
+using TerminalUI.Terminals;
 
 namespace CRTerm.Transfer
 {

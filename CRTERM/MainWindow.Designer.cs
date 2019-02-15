@@ -36,7 +36,7 @@
             this.PortStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.TerminalNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.frameBuffer1 = new CRTerm.FrameBuffer();
+            this.frameBuffer1 = new TerminalUI.DisplayControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ConnectButton = new System.Windows.Forms.ToolStripButton();
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
@@ -57,6 +57,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.BasicButton = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.EchoStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -70,10 +71,11 @@
             this.PortStatusLabel,
             this.PortNameLabel,
             this.PortStatus,
-            this.TerminalNameLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 517);
+            this.TerminalNameLabel,
+            this.EchoStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 640);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(965, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(993, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -107,11 +109,11 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.frameBuffer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(965, 492);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(993, 615);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(965, 517);
+            this.toolStripContainer1.Size = new System.Drawing.Size(993, 640);
             this.toolStripContainer1.TabIndex = 1;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -121,17 +123,34 @@
             // 
             // frameBuffer1
             // 
-            this.frameBuffer1.CurrentAttribute = CRTerm.AttributeCodes.Normal;
+            this.frameBuffer1.AddLinefeed = false;
+            this.frameBuffer1.BackColor = System.Drawing.Color.DimGray;
+            this.frameBuffer1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("frameBuffer1.BackgroundImage")));
+            this.frameBuffer1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.frameBuffer1.BackspaceDelete = false;
+            this.frameBuffer1.BackspaceOverwrite = false;
+            this.frameBuffer1.BackspacePull = false;
+            this.frameBuffer1.CharUnderCursor = ' ';
+            this.frameBuffer1.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
+            this.frameBuffer1.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
+            this.frameBuffer1.CurrentColumn = 0;
+            this.frameBuffer1.CurrentRow = 0;
+            this.frameBuffer1.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Green;
+            this.frameBuffer1.CursorPos = 0;
             this.frameBuffer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.frameBuffer1.Font = new System.Drawing.Font("Classic Console", 25.1904F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.frameBuffer1.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
+            this.frameBuffer1.Editor = null;
+            this.frameBuffer1.Font = new System.Drawing.Font("Classic Console", 30.27692F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.frameBuffer1.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.frameBuffer1.LineWrap = false;
             this.frameBuffer1.Location = new System.Drawing.Point(0, 0);
             this.frameBuffer1.Margin = new System.Windows.Forms.Padding(440714, 347787, 440714, 347787);
             this.frameBuffer1.Name = "frameBuffer1";
-            this.frameBuffer1.Size = new System.Drawing.Size(965, 492);
+            this.frameBuffer1.Size = new System.Drawing.Size(993, 615);
+            this.frameBuffer1.StatusText = null;
             this.frameBuffer1.TabIndex = 1;
             this.frameBuffer1.Terminal = null;
-            this.frameBuffer1.X = 0;
-            this.frameBuffer1.Y = 24;
+            this.frameBuffer1.TextCursor = TerminalUI.TextCursorStyles.Underline;
             // 
             // toolStrip1
             // 
@@ -151,7 +170,7 @@
             this.BasicButton});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(568, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(537, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -314,11 +333,17 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // EchoStatus
+            // 
+            this.EchoStatus.Name = "EchoStatus";
+            this.EchoStatus.Size = new System.Drawing.Size(53, 17);
+            this.EchoStatus.Text = "Echo Off";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(965, 539);
+            this.ClientSize = new System.Drawing.Size(993, 662);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainWindow";
@@ -343,7 +368,7 @@
         #endregion
 
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private FrameBuffer frameBuffer1;
+        private TerminalUI.DisplayControl frameBuffer1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton ConnectButton;
         private System.Windows.Forms.ToolStripButton DisconnectButton;
@@ -369,6 +394,7 @@
         private System.Windows.Forms.ToolStripButton CancelTransferButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton BasicButton;
+        private System.Windows.Forms.ToolStripStatusLabel EchoStatus;
     }
 }
 

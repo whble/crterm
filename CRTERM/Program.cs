@@ -22,9 +22,9 @@ namespace CRTerm
             }
             else
             {
-                TextConsole t = new TextConsole();
-                t.Setup();
-                t.Loop();
+                //TextConsole t = new TextConsole();
+                //t.Setup();
+                //t.Loop();
             }
         }
 

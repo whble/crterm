@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using CRTerm.Terminals;
+using TerminalUI;
+using TerminalUI.Terminals;
 
 namespace CRTerm.Config
 {
@@ -63,7 +64,7 @@ namespace CRTerm.Config
             {
                 //if (p.PropertyType.Name == "String"
                 //    || p.PropertyType.Name == "Int32")
-                if (p.GetCustomAttributes(typeof(CRTerm.ConfigItem), true).Length > 0)
+                if (p.GetCustomAttributes(typeof(ConfigItem), true).Length > 0)
                     Set(typeName + "." + p.Name, p.GetValue(obj, null)?.ToString());
             }
         }
@@ -100,13 +101,13 @@ namespace CRTerm.Config
             ITerminal term;
             switch (Get<string>("Session.Terminal"))
             {
-                case "CRTerm.Terminals.ANSITerminal":
-                    term = new Terminals.ANSITerminal();
+                case "TerminalUI.Terminals.ANSITerminal":
+                    term = new ANSITerminal();
                     PopulateObject(term);
                     session.Terminal = term;
                     break;
                 default:
-                    term = new Terminals.ANSITerminal();
+                    term = new ANSITerminal();
                     PopulateObject(term);
                     session.Terminal = term;
                     break;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TerminalUI;
+using TerminalUI.Terminals;
 
 namespace CRTerm.IO
 {
@@ -51,7 +53,7 @@ namespace CRTerm.IO
 
         protected void ReceiveText(string Text)
         {
-            byte[] data = Terminals.BasicTerminal.GetBytes(Text);
+            byte[] data = BasicTerminal.GetBytes(Text);
             receiveBuffer.Add(data);
             ReceiveData(this);
         }

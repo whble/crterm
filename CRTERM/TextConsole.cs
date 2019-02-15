@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CRTerm.Terminals;
+using TerminalUI.Terminals;
 
 namespace CRTerm
 {

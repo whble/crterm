@@ -40,5 +40,16 @@ namespace TerminalUI
         public ColorCodes BackColor = ColorCodes.Black;
         public Attributes Attribute = Attributes.Normal;
         public string Value = " ";
+
+        public CharacterCell Copy()
+        {
+            CharacterCell ret = new CharacterCell();
+            ret.TextColor = TextColor;
+            ret.BackColor = BackColor;
+            ret.Attribute = Attribute;
+            ret.Value = Value;
+
+            return ret;
+        }
     }
 }

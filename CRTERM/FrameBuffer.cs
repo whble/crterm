@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Text;
-using CRTerm.Terminals;
+using TerminalUI.Terminals;
 
 namespace CRTerm
 {

@@ -10,6 +10,7 @@ namespace TerminalUI.Terminals
         int inOperand = 0;
         List<int> operands = new List<int>();
         bool inCmd = false;
+        private int savedPos;
 
         public override string Name
         {
@@ -68,7 +69,7 @@ namespace TerminalUI.Terminals
                             break;
                         case 'A':
                             inCmd = false;
-                            for (int i = 0; i < Math.Max(operands[0],1); i++)
+                            for (int i = 0; i < Math.Max(operands[0], 1); i++)
                             {
                                 Display.CurrentRow -= 1;
                             }
@@ -81,11 +82,11 @@ namespace TerminalUI.Terminals
                             }
                             break;
                         case 'C':
+                            inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
                             {
                                 Display.CurrentColumn += 1;
                             }
-                            inCmd = false;
                             break;
                         case 'D':
                             inCmd = false;
@@ -95,9 +96,9 @@ namespace TerminalUI.Terminals
                             }
                             break;
                         case 'c':
-                            Display.Clear();
-                            Display.Locate(0,0);
                             inCmd = false;
+                            Display.Clear();
+                            Display.Locate(0, 0);
                             break;
                         case 'H':
                             inCmd = false;
@@ -114,15 +115,33 @@ namespace TerminalUI.Terminals
                         case 'J':
                             inCmd = false;
                             if (operands[0] == 1)
-                                Display.ClearTopToCursor();
+                                Display.ClearScreen(true, false);
                             else if (operands[0] == 2)
                                 Display.Clear();
                             else
-                                Display.ClearCursorToEnd();
+                                Display.ClearScreen(false, true);
+                            break;
+                        case 'K':
+                            inCmd = false;
+                            if (operands[0] == 1)
+                                Display.ClearCurrentLine(true,false);
+                            else if (operands[0] == 2)
+                                Display.ClearCurrentLine(true,true);
+                            else
+                                Display.ClearCurrentLine(false,true);
                             break;
                         case 'n':
+                            inCmd = false;
                             if (operands[0] == 6)
-                                SendString(ESCAPE + "[" + (Display.CurrentRow+1).ToString() + ";" + (Display.CurrentColumn+1).ToString() + "R");
+                                SendString(ESCAPE + "[" + (Display.CurrentRow + 1).ToString() + ";" + (Display.CurrentColumn + 1).ToString() + "R");
+                            break;
+                        case 's':
+                            inCmd = false;
+                            savedPos = Display.CursorPos;
+                            break;
+                        case 'u':
+                            inCmd = false;
+                            Display.CursorPos = savedPos;
                             break;
                         default:
                             inCmd = false;

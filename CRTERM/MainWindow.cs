@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using TerminalUI;
+using TerminalUI.Terminals;
+
 
 namespace CRTerm
 {
@@ -22,10 +25,8 @@ namespace CRTerm
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            CurrentSession = new Session
-            {
-                FrameBuffer = this.frameBuffer1
-            };
+            CurrentSession = new Session();
+            CurrentSession.FrameBuffer = this.frameBuffer1;
             CurrentSession.Init();
             MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
@@ -118,7 +119,22 @@ namespace CRTerm
             PortStatusLabel.Text = CurrentSession.Transport.Status.ToString();
             PortNameLabel.Text = CurrentSession.Transport.Name;
             PortStatus.Text = CurrentSession.Transport.StatusDetails;
-            TerminalNameLabel.Text = CurrentSession.Terminal.StatusDetails;
+            TerminalNameLabel.Text = CurrentSession.Terminal_StatusDetails;
+            EchoStatus.Text = CamelToSpace(frameBuffer1.EchoMode.ToString());
+        }
+
+        private string CamelToSpace(string Name)
+        {
+            StringBuilder s = new StringBuilder();
+            for (int i = 0; i < Name.Length; i++)
+            {
+                char c = Name[i];
+                if (i > 0 && c >= 'A' && c <= 'Z')
+                    s.Append(' ');
+                s.Append(c);
+            }
+
+            return s.ToString();
         }
 
         private void ConnectButton_Click(object sender, EventArgs e)
@@ -148,7 +164,7 @@ namespace CRTerm
 
         private void bSDELToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Terminals.BasicTerminal term = CurrentSession.Terminal as Terminals.BasicTerminal;
+            BasicTerminal term = CurrentSession.Terminal as BasicTerminal;
             if (term == null)
                 return;
 
@@ -276,8 +292,12 @@ namespace CRTerm
                 return;
 
             b.Checked = !b.Checked;
+            if (b.Checked)
+                frameBuffer1.EchoMode = EchoModes.FullScreen;
+            else
+                frameBuffer1.EchoMode = EchoModes.EchoOff;
 
-            CurrentSession.Terminal.SendKey(CurrentSession.Terminal.KeyMap.BASIC_ModeToggle);
+            UpdateStatus();
         }
 
         private void MainWindow_SizeChanged(object sender, EventArgs e)

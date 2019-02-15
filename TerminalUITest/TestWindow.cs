@@ -30,7 +30,7 @@ namespace TerminalUITest
             for (int i = 1; i <= terminalControl1.Rows; i++)
             {
                 if (i > 1)
-                    terminalControl1.PrintNewLine();
+                    terminalControl1.PrintLine();
                 string s = i.ToString("00 ");
                 terminalControl1.Print(s);
             }

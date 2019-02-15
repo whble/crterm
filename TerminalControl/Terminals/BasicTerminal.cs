@@ -16,7 +16,7 @@ namespace TerminalUI.Terminals
         /// </summary>
         private bool backspaceDeleteMode;
 
-        private EchoModes _editMode = EchoModes.None;
+        private EchoModes _editMode = EchoModes.EchoOff;
         [ConfigItem]
         public EchoModes EchoMode
         {
@@ -62,6 +62,9 @@ namespace TerminalUI.Terminals
         }
 
         private RingBuffer<char> _sendBuffer = new RingBuffer<char>();
+
+        public event EventHandler ReadyToSend;
+
         public RingBuffer<char> SendBuffer
         {
             get
@@ -111,6 +114,7 @@ namespace TerminalUI.Terminals
                 c = (char)127;
 
             SendBuffer.Add(c);
+            ReadyToSend?.Invoke(this, new EventArgs());
         }
 
         public static byte[] GetBytes(string Text)
@@ -125,8 +129,11 @@ namespace TerminalUI.Terminals
         /// <param name="Text">Text to transmit</param>
         public virtual void SendString(string Text)
         {
-            byte[] data = GetBytes(Text);
-
+            for (int i = 0; i < Text.Length; i++)
+            {
+                SendBuffer.Add(Text[i]);
+            }
+            ReadyToSend?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -137,8 +144,17 @@ namespace TerminalUI.Terminals
         /// <param name="KeyCode"></param>
         public virtual void SendKey(TerminalKeyEventArgs terminalKey)
         {
+            switch (terminalKey.KeyCode)
+            {
+                case System.Windows.Forms.Keys.Home:
+                    if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Control))
+                        Display.Clear();
+                    break;
+                default:
+                    break;
+            }
             //System.Diagnostics.Debug.WriteLine("Keypress: " + KeyCode.ToString());
-            SendChar(terminalKey.KeyChar);
+            //SendChar(terminalKey.KeyChar);
         }
 
         /// <summary>
@@ -192,6 +208,6 @@ namespace TerminalUI.Terminals
         {
         }
 
-        
+
     }
 }

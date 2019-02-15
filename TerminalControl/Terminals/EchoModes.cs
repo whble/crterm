@@ -5,7 +5,7 @@
         /// <summary>
         /// Do not locally edit text. Cursor keys are sent to the host.
         /// </summary>
-        None=0,
+        EchoOff=0,
         /// <summary>
         /// Echo the typed character or cursor command. Keystrokes are also sent to the host.
         /// </summary>

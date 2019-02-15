@@ -17,6 +17,10 @@ namespace TerminalUI.Terminals
         {
         }
 
+        public TerminalKeyEventArgs(System.Windows.Forms.KeyPressEventArgs e) : base(e.KeyChar)
+        {
+        }
+
         public TerminalKeyEventArgs(KeyEventArgs e) : base(CHAR_NONE)
         {
             Modifier = e.Modifiers;

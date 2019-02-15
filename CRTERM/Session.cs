@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CRTerm.Terminals;
+using TerminalUI.Terminals;
 using CRTerm.IO;
 using CRTerm.Transfer;
 using CRTerm.Config;
+using TerminalUI;
 
 namespace CRTerm
 {
@@ -16,7 +17,7 @@ namespace CRTerm
         private ITransport _transport = null;
         private ITerminal _terminal = null;
         private Transfer.ITransferProtocol _transfer;
-        private IFrameBuffer _frameBuffer = null;
+        private DisplayControl _frameBuffer = null;
 
         [ConfigItem]
         public ITransport Transport
@@ -24,7 +25,7 @@ namespace CRTerm
             get { return _transport; }
             set
             {
-                if(_transport != null)
+                if (_transport != null)
                     _transport.DataReceived -= _transport_DataReceived;
 
                 _transport = value;
@@ -38,8 +39,14 @@ namespace CRTerm
         {
             if (Transfer != null)
                 Transfer.ReceiveData(receiver);
-            else 
-                Terminal.ReceiveData(receiver);
+            else
+                Terminal_ReceiveData(receiver);
+        }
+
+        private void Terminal_ReceiveData(IBuffered receiver)
+        {
+            while (receiver.BytesWaiting > 0)
+                Terminal.ProcessReceivedCharacter((char)receiver.ReadByte());
         }
 
         [ConfigItem]
@@ -48,11 +55,7 @@ namespace CRTerm
             get { return _terminal; }
             set
             {
-                if (_terminal != null)
-                    _terminal.DataSent -= _terminal_DataSent;
                 _terminal = value;
-                if(_terminal != null)
-                    _terminal.DataSent += _terminal_DataSent;
             }
         }
 
@@ -62,20 +65,41 @@ namespace CRTerm
                 Transport?.Send(terminal.ReadByte());
         }
 
-        private void FrameBuffer_KeyPressed(IFrameBuffer frameBuffer, TerminalKeyEventArgs e)
-        {
-
-            Terminal.SendKey(e);
-        }
-
-        public IFrameBuffer FrameBuffer
+        public DisplayControl FrameBuffer
         {
             get { return _frameBuffer; }
             set
             {
                 _frameBuffer = value;
-                this.FrameBuffer.KeyPressed += FrameBuffer_KeyPressed;
             }
+        }
+
+        private void FrameBuffer_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            TerminalKeyEventArgs ea = new TerminalKeyEventArgs(e);
+            Terminal.SendKey(ea);
+            DumpBuffer(Terminal);
+        }
+
+        private void DumpBuffer(ITerminal Terminal)
+        {
+            while (!Terminal.SendBuffer.IsEmpty())
+            {
+                char c = Terminal.SendBuffer.Read();
+                SendChar(c);
+                DateTime t = DateTime.Now.AddMilliseconds(20);
+                while (DateTime.Now < t)
+                    System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+        public virtual void SendChar(char c)
+        {
+            //System.Diagnostics.Debug.WriteLine("SendChar: " + (int) c);
+            byte data = (byte)c;
+            if (data == 8 && FrameBuffer.BackspaceDelete)
+                data = 127;
+            SendByte(data);
         }
 
         [ConfigItem]
@@ -105,7 +129,9 @@ namespace CRTerm
             }
         }
 
-        public TextConsole Display { get; internal set; }
+        public string Terminal_StatusDetails { get; internal set; }
+
+        //public TextConsole Display { get; internal set; }
 
         public List<string> GetPortNames()
         {
@@ -127,7 +153,7 @@ namespace CRTerm
         public void Load(string ConnectionDetails)
         {
             this.Transport = new IO.TestPort();
-            this.Terminal = new Terminals.BasicTerminal();
+            this.Terminal = new ANSITerminal();
         }
 
         public void Connect()
@@ -160,7 +186,14 @@ namespace CRTerm
         {
             Configuration config = new Configuration();
             config.LoadConfiguration(this);
-            Terminal.FrameBuffer = this.FrameBuffer;
+
+            Terminal.Display = this.FrameBuffer;
+            Terminal.ReadyToSend += Terminal_DataToSend;
+
+            FrameBuffer.Terminal = Terminal;
+
+            //FrameBuffer.KeyPress -= FrameBuffer_KeyPress;
+            //FrameBuffer.KeyPress += FrameBuffer_KeyPress;
 
             this.FrameBuffer.PrintLine("Port:" + Transport.ToString());
             this.FrameBuffer.PrintLine("Terminal:" + Terminal.ToString());
@@ -175,6 +208,15 @@ namespace CRTerm
             }
 
             Transport?.UpdateStatus();
+        }
+
+        private void Terminal_DataToSend(object sender, EventArgs e)
+        {
+            ITerminal t = sender as ITerminal;
+            if (t == null)
+                return;
+
+            DumpBuffer(t);
         }
 
         public void SaveConfiguration()

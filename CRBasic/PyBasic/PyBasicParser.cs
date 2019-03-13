@@ -6,7 +6,7 @@ namespace CRBasic.PyBasic
     /// <summary>
     /// Read a line of text and tokenize the objects. 
     /// </summary>
-    public class BasicParser
+    public class PyBasicParser
     {
         private enum SymbolModes
         {
@@ -18,7 +18,8 @@ namespace CRBasic.PyBasic
             Whitespace,
             Other,
             String,
-            EndOfStatement
+            EndOfStatement,
+            Separator
         }
 
         public int Pos = 0;
@@ -283,6 +284,8 @@ namespace CRBasic.PyBasic
                 return SymbolModes.String;
             else if (c == '"')
                 return SymbolModes.String;
+            else if (IsSeparator(c))
+                return SymbolModes.Separator;
             else if (IsDigit(c))
                 return SymbolModes.Number;
             else if (IsIdentifier(c, true))
@@ -293,6 +296,19 @@ namespace CRBasic.PyBasic
                 return SymbolModes.Whitespace;
             else
                 return SymbolModes.Other;
+        }
+
+        /// <summary>
+        /// The character is a comma or semicolon.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private bool IsSeparator(char c)
+        {
+            string s = c.ToString();
+            if (BasicTokens.ListSeperators.Contains(s) || BasicTokens.PrintSeperators.Contains(s))
+                return true;
+            return false;
         }
 
         private void AppendSymbol(string s, SymbolModes mode)
@@ -310,6 +326,7 @@ namespace CRBasic.PyBasic
                     ns.Value = s;
                     break;
                 case SymbolModes.Operator:
+                case SymbolModes.Separator:
                 case SymbolModes.Word:
                     if (BasicTokens.Commands.ContainsKey(su))
                         ns.SetToken(su);

@@ -8,8 +8,8 @@ namespace CRBasic.Basic
 {
     public class ProgramLine 
     {
-        public const int LN_IMMEDIATE = -1;
-        public int LineNumber = LN_IMMEDIATE;
+        public const int IMMEDIATE = -1;
+        public int LineNumber = IMMEDIATE;
         public List<BasicSymbol> Symbols = new List<BasicSymbol>();
 
         public ProgramLine()
@@ -24,7 +24,7 @@ namespace CRBasic.Basic
             }
             set
             {
-                LineNumber = LN_IMMEDIATE;
+                LineNumber = IMMEDIATE;
             }
         }
 
@@ -34,6 +34,11 @@ namespace CRBasic.Basic
             sym.DataType = Type;
             sym.Value = Value;
             Symbols.Add(sym);
+        }
+
+        public void Add(BasicSymbol newSymbol)
+        {
+            Symbols.Add(newSymbol);
         }
     }
 }

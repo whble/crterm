@@ -150,5 +150,10 @@ namespace CRBasic
         {
             throw new NotImplementedException();
         }
+
+        public void Run(string autorun)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

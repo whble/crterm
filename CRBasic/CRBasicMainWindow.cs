@@ -3,13 +3,13 @@ using System.Windows.Forms;
 
 namespace CRBasic
 {
-    public partial class CRBasicMain : Form
+    public partial class CRBasicMainWindow : Form
     {
         // private IInterpreter engine = new PyMain();
-        // private IInterpreter engine = new BasicMain();
-        private IInterpreter engine = new CRBasic.PyBasic.BasicMain();
+        // private IInterpreter engine = new CRBasic.PyBasic.BasicMain();
+        private IInterpreter engine = new Basic.BasicMain();
 
-        public CRBasicMain()
+        public CRBasicMainWindow()
         {
             InitializeComponent();
         }
@@ -20,12 +20,16 @@ namespace CRBasic
             Display.Terminal = ansi;
             engine.Display = Display;
             engine.Display.EchoMode = TerminalUI.Terminals.EchoModes.Plugin;
+            engine.Display.SetTextMode(32, 120);
 
             var editor = new Editor();
             Display.Editor = editor;
             editor.Interpreter = engine;
 
             engine.Init();
+
+            string autoexec = "autoexec.bas";
+            // engine.Run(autoexec);
         }
 
         private void CRBasicMain_KeyDown(object sender, KeyEventArgs e)

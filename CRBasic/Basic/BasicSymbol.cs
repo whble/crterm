@@ -1,49 +1,51 @@
-﻿namespace CRBasic.Basic
+﻿using System;
+
+namespace CRBasic.Basic
 {
-    public class BasicSymbol
+    public class BasicSymbol : BasicValue
     {
-        public DataTypes DataType;
-        public object Value = null;
-
-        public override string ToString()
+        public enum Padding
         {
-            switch (DataType)
-            {
-                case DataTypes.EndOfStatement:
-                    return ":";
-                case DataTypes.String:
-                    return Value.ToString();
-                case DataTypes.Integer:
-                case DataTypes.Single:
-                case DataTypes.Double:
-                    return Value.ToString();
-                case DataTypes.Text:
-                    return Value.ToString();
-                case DataTypes.Variable:
-                    BasicVariable v = Value as BasicVariable;
-                    if (v == null)
-                    {
-                        return Value.ToString();
-                    }
+            /// <summary>
+            /// A space is not added before or after this symbol
+            /// </summary>
+            None,
+            /// <summary>
+            /// Always put a space before and after this symbol
+            /// </summary>
+            Required,
+            /// <summary>
+            /// A space is preferred but not necessary. Spaces will be printed
+            /// if this symbol and the one next to it both "Allow".
+            /// </summary>
+            Allowed,
+        }
+        public Padding PadSpace = Padding.Allowed;
+        public bool SpaceAfter = false;
 
-                    return v.Name;
-                case DataTypes.Token:
-                    return Value.ToString();
-                default:
-                    return Value.ToString();
-            }
+        public string ListText()
+        {
+            if (DataType == DataTypes.String)
+                return "\"" + Value.ToString() + "\"";
+            return this.ToString();
         }
 
-        internal void SetText(string Text)
+        public void SetText(string Text)
         {
             DataType = DataTypes.Text;
             Value = Text;
         }
 
-        internal void SetToken(string TokenText)
+        public void SetToken(string TokenText)
         {
-            DataType = DataTypes.Token;
+            DataType = DataTypes.Command;
             Value = BasicTokens.Commands[TokenText];
+        }
+
+        public void SetOperator(string su)
+        {
+            DataType = DataTypes.Operator;
+            Value = BasicTokens.Operators[su];
         }
     }
 }

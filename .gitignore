@@ -3,3 +3,7 @@ obj
 bin
 .vs/CRTERM/v15/Server/sqlite3/storage.ide
 *.dll
+*.ide
+*.cache
+*.dll
+*.pdb

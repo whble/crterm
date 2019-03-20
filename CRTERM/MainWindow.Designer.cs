@@ -127,9 +127,6 @@
             this.frameBuffer1.BackColor = System.Drawing.Color.DimGray;
             this.frameBuffer1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("frameBuffer1.BackgroundImage")));
             this.frameBuffer1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.frameBuffer1.BackspaceDelete = false;
-            this.frameBuffer1.BackspaceOverwrite = false;
-            this.frameBuffer1.BackspacePull = false;
             this.frameBuffer1.CharUnderCursor = ' ';
             this.frameBuffer1.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
             this.frameBuffer1.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;

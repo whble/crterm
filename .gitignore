@@ -1,3 +1,5 @@
 .vs
 obj
 bin
+.vs/CRTERM/v15/Server/sqlite3/storage.ide
+*.dll

@@ -37,9 +37,6 @@
             this.terminalControl1.AddLinefeed = false;
             this.terminalControl1.BackColor = System.Drawing.Color.DimGray;
             this.terminalControl1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.terminalControl1.BackspaceDelete = false;
-            this.terminalControl1.BackspaceOverwrite = false;
-            this.terminalControl1.BackspacePull = false;
             this.terminalControl1.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
             this.terminalControl1.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
             this.terminalControl1.CurrentColumn = 0;

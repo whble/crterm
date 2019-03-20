@@ -97,8 +97,8 @@ namespace CRTerm
         {
             //System.Diagnostics.Debug.WriteLine("SendChar: " + (int) c);
             byte data = (byte)c;
-            if (data == 8 && FrameBuffer.BackspaceDelete)
-                data = 127;
+            //if (data == 8 && FrameBuffer.BackspaceDelete)
+            //    data = 127;
             SendByte(data);
         }
 

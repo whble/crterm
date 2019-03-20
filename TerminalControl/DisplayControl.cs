@@ -104,6 +104,25 @@ namespace TerminalUI
             }
         }
 
+        //
+        // Insert a blank character at the cursor. Character in right column will be lost off right side of the screen. 
+        //
+        private void Insert()
+        {
+            for (int col = Columns - 1; col > CurrentColumn; col--)
+            {
+                int pos = GetPos(CurrentRow, col);
+                CharacterData[pos] = CharacterData[pos - 1].Copy();
+            }
+            SetCharacter(CurrentRow, CurrentColumn, ' ');
+            BlinkCursor();
+        }
+
+        private void InsertLine(int Row)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete()
         {
             for (int col = CurrentColumn + 1; col < Columns - 1; col++)
@@ -371,7 +390,13 @@ namespace TerminalUI
                 case EchoModes.EchoOff:
                 case EchoModes.LocalEcho:
                 default:
-                    handled = false;
+                    if (e.KeyCode == Keys.F12)
+                    {
+                        EchoMode = EchoModes.FullScreen;
+                        BlinkCursor();
+                    }
+                    else
+                        handled = false;
                     break;
             }
 
@@ -387,6 +412,12 @@ namespace TerminalUI
             bool handled = true;
             switch (e.KeyCode)
             {
+                case Keys.F12:
+                    EchoMode = EchoModes.EchoOff;
+                    CurrentColumn = 0;
+                    CurrentRow = Rows - 1;
+                    BlinkCursor();
+                    break;
                 case Keys.Return:
                     StringBuilder s = new StringBuilder();
                     for (int col = 0; col < Columns; col++)
@@ -408,6 +439,16 @@ namespace TerminalUI
                     break;
                 case Keys.Left:
                     CurrentColumn -= 1;
+                    break;
+                case Keys.Back:
+                    CurrentColumn -= 1;
+                    Delete();
+                    break;
+                case Keys.Delete:
+                    Delete();
+                    break;
+                case Keys.Insert:
+                    Insert();
                     break;
                 default:
                     handled = false;

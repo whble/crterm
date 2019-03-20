@@ -244,9 +244,10 @@ namespace CRTerm
             if (CurrentSession.Transport is IO.SerialIOPort p)
                 currentBaud = p.BaudRate;
 
-            for (int i = 300; i <= 115200; i *= 2)
+            int[] baudRates = new int[] { 300, 1200, 2400, 9600, 19200, 38400, 57600, 115200 };
+            for (int i = 0; i<baudRates.Length; i++)
             {
-                AddBaudRate(i, currentBaud);
+                AddBaudRate(baudRates[i], currentBaud);
             }
         }
 

@@ -170,11 +170,6 @@ namespace TerminalUI
             }
         }
 
-        internal void ClearTopToCursor()
-        {
-            throw new NotImplementedException();
-        }
-
         public IEditorPlugin Editor
         {
             get
@@ -193,9 +188,14 @@ namespace TerminalUI
             }
         }
 
-        internal void ClearScreen(bool v1, bool v2)
+        internal void ClearScreen(bool FromStart, bool ToEnd)
         {
-            throw new NotImplementedException();
+            int start = FromStart ? 0 : CursorPos;
+            int end = ToEnd ? CharacterData.Length - 1 : CursorPos;
+            for (int i = start; i <= end; i++)
+            {
+                SetCharacter(i, " ", CurrentTextColor, CurrentBackground, CurrentAttribute);
+            }
         }
 
         public int GetPos(int row, int col)
@@ -498,6 +498,29 @@ namespace TerminalUI
             CharacterData[pos].TextColor = CurrentTextColor;
             CharacterData[pos].BackColor = CurrentBackground;
             CharacterData[pos].Attribute = CurrentAttribute;
+        }
+
+        public void SetCharacter(
+            int pos,
+            string c,
+            CharacterCell.ColorCodes textColor,
+            CharacterCell.ColorCodes backColor,
+            CharacterCell.Attributes attribute)
+        {
+            if (pos < 0 || pos >= CharacterData.Length)
+            {
+                return;
+            }
+
+            if (CharacterData[pos] == null)
+            {
+                CharacterData[pos] = new CharacterCell();
+            }
+
+            CharacterData[pos].Value = c.ToString();
+            CharacterData[pos].TextColor = textColor;
+            CharacterData[pos].BackColor = backColor;
+            CharacterData[pos].Attribute = attribute;
         }
 
         public void SetCharacter(

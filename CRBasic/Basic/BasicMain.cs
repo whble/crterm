@@ -34,17 +34,14 @@ namespace CRBasic.Basic
 
             Cls();
             Print("CR BASIC " + System.Windows.Forms.Application.ProductVersion.ToString());
-            Print("(C)2019 Tom P. Wilson");
+            Print("(C)2019 Tom Wilson aka \"tomxp41\"");
             Print(GetUnits(TotalBytes()) + "byte system");
+            Print("Screen Mode: " + Display.ModeText);
             Display.CurrentTextColor = CharacterCell.ColorCodes.White;
             Print(GetUnits(FreeBytes()) + "bytes",true);
             Display.CurrentTextColor = CharacterCell.ColorCodes.Gray;
             Print(" free");
             Ok();
-
-            //debug 
-            AddLine("10 print \"Hello world\"");
-            AddLine("20 end");
         }
 
         public void Ok()
@@ -94,6 +91,11 @@ namespace CRBasic.Basic
             return f;
         }
 
+        private void Print()
+        {
+            Display.PrintLine();
+        }
+
         public void Print(string s, bool SuppressNewline = false)
         {
             if (Display == null)
@@ -110,6 +112,18 @@ namespace CRBasic.Basic
                 return;
 
             Display.Clear();
+        }
+
+        private void Execute(ProgramLine pl)
+        {
+            try
+            {
+                Program.ExecuteLine(pl);
+            }
+            catch (BasicException ex)
+            {
+                PrintErrorState(ex);
+            }
         }
 
         public void Execute(string Line)
@@ -142,8 +156,14 @@ namespace CRBasic.Basic
             }
             catch (Exception ex)
             {
+                PrintErrorState(ex);
                 Display.PrintLine(ex.Message);
             }
+        }
+
+        private void PrintErrorState(Exception ex)
+        {
+
         }
 
         private void PrintErrorState()
@@ -207,54 +227,50 @@ namespace CRBasic.Basic
             Execute(ProgramText);
         }
 
-        private void Execute(ProgramLine pl)
+
+        public void Run(string Filename)
+        {
+            Load(Filename);
+            if (Program.Lines.Count > 0)
+                Run();
+        }
+
+        public void Load(string Filename)
         {
             try
             {
-                foreach (BasicSymbol b in pl.Symbols)
+                if (!System.IO.File.Exists(Filename))
                 {
-                    switch (b.DataType)
-                    {
-                        case DataTypes.EndOfLine:
-                            break;
-                        case DataTypes.EndOfStatement:
-                            break;
-                        case DataTypes.String:
-                            break;
-                        case DataTypes.Integer:
-                            break;
-                        case DataTypes.Single:
-                            break;
-                        case DataTypes.Double:
-                            break;
-                        case DataTypes.Text:
-                            break;
-                        case DataTypes.Variable:
-
-                            break;
-                        case DataTypes.Token:
-                            BasicToken t = b.Value as BasicToken;
-                            BasicVariable result = new BasicVariable();
-                            t.ExecuteCommand(Program, result, pl);
-                            break;
-                        case DataTypes.Delimiter:
-                            break;
-                        default:
-                            break;
-                    }
+                    PrintErrorState(new BasicException("File Not Found", Filename));
+                    return;
                 }
+
+                var r = System.IO.File.OpenText(Filename);
+                while (!r.EndOfStream)
+                {
+                    string line = r.ReadLine();
+                    Execute(line);
+                }
+                r.Close();
             }
             catch (Exception ex)
             {
-                ErrorState = ex as BasicException;
-                Print(ex.Message, (CurrentLine != null));
-                if (CurrentLine != null)
-                {
-                    Print("in line " + CurrentLine);
-                }
-                Stop();
+                PrintErrorState(new BasicException(ex, "Error loading program"));
             }
         }
+
+        private void PrintErrorState(BasicException ex)
+        {
+            ErrorState = ex as  BasicException;
+            Print(ex.Message, true);
+            if (CurrentLine != null)
+            {
+                Print("in line " + CurrentLine, true);
+            }
+            Print();
+            Stop();
+        }
+
     }
 }
 

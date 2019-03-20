@@ -16,7 +16,7 @@ namespace CRBasic
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CRBasicMain());
+            Application.Run(new CRBasicMainWindow());
         }
     }
 }

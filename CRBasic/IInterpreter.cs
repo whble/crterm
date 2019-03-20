@@ -13,5 +13,6 @@ namespace CRBasic
         void AddLine(string ProgramLine);
         void Execute(string Line);
         void Run();
+        void Run(string autorun);
     }
 }

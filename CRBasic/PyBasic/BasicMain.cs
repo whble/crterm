@@ -40,7 +40,7 @@ namespace CRBasic.PyBasic
             Print("(C)2019 Tom P. Wilson");
             Print(GetUnits(TotalBytes()) + "byte system");
             Display.CurrentTextColor = CharacterCell.ColorCodes.White;
-            Print(GetUnits(FreeBytes()) + "bytes",true);
+            Print(GetUnits(FreeBytes()) + "bytes", true);
             Display.CurrentTextColor = CharacterCell.ColorCodes.Gray;
             Print(" free");
             Ok();
@@ -132,6 +132,43 @@ namespace CRBasic.PyBasic
         {
             string pyText = Program.Translate();
             ExecPython(pyText);
+        }
+
+        public void Run(string Filename)
+        {
+            Load(Filename);
+            if (Program.Lines.Count > 0)
+                Run();
+        }
+
+        public void Load(string Filename)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(Filename))
+                {
+                    PrintErrorState(new BasicException("File Not Found", Filename));
+                    return;
+                }
+
+                var r = System.IO.File.OpenText(Filename);
+                while (!r.EndOfStream)
+                {
+                    string line = r.ReadLine();
+                    Execute(line);
+                }
+                r.Close();
+            }
+            catch (Exception ex)
+            {
+                PrintErrorState(new BasicException(ex, "Error loading program"));
+            }
+        }
+
+        private void PrintErrorState(BasicException basicException)
+        {
+            ErrorState = basicException;
+            PrintErrorState();
         }
 
         void Continue()

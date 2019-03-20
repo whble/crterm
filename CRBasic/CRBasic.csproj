@@ -50,11 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic\BasicArray.cs" />
-    <Compile Include="Basic\BasicException.cs" />
+    <Compile Include="BasicException.cs" />
     <Compile Include="Basic\BasicExpression.cs" />
     <Compile Include="Basic\BasicMain.cs" />
+    <Compile Include="Basic\BasicOperator.cs" />
     <Compile Include="Basic\BasicProgram.cs" />
     <Compile Include="Basic\BasicSymbol.cs" />
+    <Compile Include="Basic\BasicValue.cs" />
     <Compile Include="Basic\BasicVariable.cs" />
     <Compile Include="Basic\BasicTokens.cs" />
     <Compile Include="Basic\DataTypes.cs" />
@@ -62,33 +64,20 @@
     <Compile Include="Basic\ProgramLine.cs" />
     <Compile Include="Basic\BasicToken.cs" />
     <Compile Include="Basic\BasicParser.cs" />
-    <Compile Include="CRBasicMain.cs">
+    <Compile Include="Basic\ProgramStep.cs" />
+    <Compile Include="CRBasicMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CRBasicMain.Designer.cs">
-      <DependentUpon>CRBasicMain.cs</DependentUpon>
+    <Compile Include="CRBasicMainWindow.Designer.cs">
+      <DependentUpon>CRBasicMainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="IInterpreter.cs" />
     <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PyBasic\ArgumentList.cs" />
-    <Compile Include="PyBasic\BasicArray.cs" />
-    <Compile Include="PyBasic\BasicException.cs" />
-    <Compile Include="PyBasic\BasicExpression.cs" />
-    <Compile Include="PyBasic\BasicMain.cs" />
-    <Compile Include="PyBasic\BasicParser.cs" />
-    <Compile Include="PyBasic\BasicProgram.cs" />
-    <Compile Include="PyBasic\BasicSymbol.cs" />
-    <Compile Include="PyBasic\BasicToken.cs" />
-    <Compile Include="PyBasic\BasicTokens.cs" />
-    <Compile Include="PyBasic\BasicVariable.cs" />
-    <Compile Include="PyBasic\DataTypes.cs" />
-    <Compile Include="PyBasic\Labels.cs" />
-    <Compile Include="PyBasic\BasicLine.cs" />
     <Compile Include="PyMain.cs" />
-    <EmbeddedResource Include="CRBasicMain.resx">
-      <DependentUpon>CRBasicMain.cs</DependentUpon>
+    <EmbeddedResource Include="CRBasicMainWindow.resx">
+      <DependentUpon>CRBasicMainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -109,9 +98,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="PyBasic\PyBasic.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -121,6 +107,11 @@
       <Project>{dd17f5e9-d267-4f04-84fd-8c14b407d42d}</Project>
       <Name>TerminalUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="autorun.bas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

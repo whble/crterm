@@ -1,6 +1,6 @@
 ﻿namespace CRBasic
 {
-    partial class CRBasicMain
+    partial class CRBasicMainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -37,9 +37,6 @@
             this.Display.AddLinefeed = false;
             this.Display.BackColor = System.Drawing.Color.DimGray;
             this.Display.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Display.BackspaceDelete = false;
-            this.Display.BackspaceOverwrite = false;
-            this.Display.BackspacePull = false;
             this.Display.CharUnderCursor = ' ';
             this.Display.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
             this.Display.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
@@ -47,7 +44,7 @@
             this.Display.CurrentRow = 0;
             this.Display.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Gray;
             this.Display.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Display.EchoMode = TerminalUI.Terminals.EchoModes.None;
+            this.Display.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.Display.Editor = null;
             this.Display.Font = new System.Drawing.Font("Classic Console", 34.90461F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Display.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;

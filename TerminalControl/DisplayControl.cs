@@ -37,12 +37,7 @@ namespace TerminalUI
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool AddLinefeed { get; set; }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
-        public bool BackspaceDelete { get; set; }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
-        public bool BackspaceOverwrite { get; set; }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
-        public bool BackspacePull { get; set; }
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool LineWrap { get; set; }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -107,6 +102,17 @@ namespace TerminalUI
 
                 BlinkCursor();
             }
+        }
+
+        public void Delete()
+        {
+            for (int col = CurrentColumn + 1; col < Columns - 1; col++)
+            {
+                int pos = GetPos(CurrentRow, col);
+                CharacterData[pos - 1] = CharacterData[pos].Copy();
+            }
+            SetCharacter(CurrentRow, Columns - 1, ' ');
+            BlinkCursor();
         }
 
         public int CurrentRow
@@ -253,6 +259,14 @@ namespace TerminalUI
             }
         }
 
+        public string ModeText
+        {
+            get
+            {
+                return "Text " + Columns.ToString() + "x" + Rows.ToString();
+            }
+        }
+
         public CharacterCell[] CharacterData = new CharacterCell[2000];
 
         public static Brush[] Brushes = new SolidBrush[]
@@ -280,7 +294,7 @@ namespace TerminalUI
             InitializeComponent();
 
             CurrentTextColor = CharacterCell.ColorCodes.Green;
-            InitCharacterData(25, 80);
+            SetTextMode(25, 80);
             DoubleBuffered = true;
 
             drawTimer.Interval = 1000 / 60;
@@ -299,7 +313,7 @@ namespace TerminalUI
             NextDraw = 0;
         }
 
-        private void InitCharacterData(int Rows, int Columns)
+        public void SetTextMode(int Rows, int Columns)
         {
             if (Rows <= 0 || Columns <= 0)
             {

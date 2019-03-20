@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace CRBasic.Basic
 {
-    public class BasicVariable
+    public class BasicVariable : BasicValue
     {
         public string Name;
-        public DataTypes Type;
-        public object Value;
     }
 }

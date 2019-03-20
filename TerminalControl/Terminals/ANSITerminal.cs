@@ -124,11 +124,11 @@ namespace TerminalUI.Terminals
                         case 'K':
                             inCmd = false;
                             if (operands[0] == 1)
-                                Display.ClearCurrentLine(true,false);
+                                Display.ClearCurrentLine(true, false);
                             else if (operands[0] == 2)
-                                Display.ClearCurrentLine(true,true);
+                                Display.ClearCurrentLine(true, true);
                             else
-                                Display.ClearCurrentLine(false,true);
+                                Display.ClearCurrentLine(false, true);
                             break;
                         case 'n':
                             inCmd = false;

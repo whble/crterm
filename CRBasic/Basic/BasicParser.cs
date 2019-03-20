@@ -18,7 +18,8 @@ namespace CRBasic.Basic
             Whitespace,
             Other,
             String,
-            EndOfStatement
+            EndOfStatement,
+            Separator
         }
 
         public int Pos = 0;
@@ -203,9 +204,32 @@ namespace CRBasic.Basic
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        private bool IsOperator(char c)
+        private bool IsOperatorChar(char c)
         {
-            if (BasicTokens.Operators.Contains(c.ToString()))
+            return BasicTokens.OperatorChars.Contains(c);
+        }
+
+        /// <summary>
+        /// The character is a comma or semicolon.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private bool IsSeparator(char c)
+        {
+            string s = c.ToString();
+            if (BasicTokens.ListSeperators.Contains(s) || BasicTokens.PrintSeperators.Contains(s))
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Tests if the character is an operator (+,-,*,/,^)
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private bool IsSigil(char c)
+        {
+            if (BasicTokens.Sigils.Contains(c.ToString()))
             {
                 return true;
             }
@@ -263,34 +287,38 @@ namespace CRBasic.Basic
             c = ThisChar;
             while (!EndOfStatement)
             {
-                mode = CheckMode(c);
+                mode = CheckMode(c, lastMode);
                 lastMode = mode;
                 while (mode == lastMode)
                 {
                     s.Append(c);
                     Read();
                     c = ThisChar;
-                    mode = CheckMode(c);
+                    mode = CheckMode(c, lastMode);
                 }
                 AppendSymbol(s.ToString(), lastMode);
                 s.Clear();
             }
         }
 
-        private SymbolModes CheckMode(char c)
+        private SymbolModes CheckMode(char c, SymbolModes lastMode)
         {
             if (InQuote)
                 return SymbolModes.String;
             else if (c == '"')
                 return SymbolModes.String;
+            else if (lastMode == SymbolModes.Word && IsSigil(c))
+                return SymbolModes.Word;
+            else if (IsIdentifier(c, lastMode != SymbolModes.Word))
+                return SymbolModes.Word;
             else if (IsDigit(c))
                 return SymbolModes.Number;
-            else if (IsIdentifier(c, true))
-                return SymbolModes.Word;
-            else if (IsOperator(c))
+            else if (IsOperatorChar(c))
                 return SymbolModes.Operator;
             else if (IsWhitespace(c))
                 return SymbolModes.Whitespace;
+            else if (IsSeparator(c))
+                return SymbolModes.Separator;
             else
                 return SymbolModes.Other;
         }
@@ -304,17 +332,38 @@ namespace CRBasic.Basic
             {
                 case SymbolModes.None:
                     ns.SetText(s);
+                    ns.PadSpace = BasicSymbol.Padding.Required;
                     break;
                 case SymbolModes.String:
                     ns.DataType = DataTypes.String;
-                    ns.Value = s;
+                    if (s.Length > 2 && s.StartsWith("\"") && s.EndsWith("\""))
+                        ns.Value = s.Substring(1, s.Length - 2);
+                    else
+                        ns.Value = s;
+                    break;
+                case SymbolModes.Separator:
+                    ns.SetText(su);
+                    ns.DataType = DataTypes.Delimiter;
+                    ns.PadSpace = BasicSymbol.Padding.None;
                     break;
                 case SymbolModes.Operator:
+                case SymbolModes.Other:
                 case SymbolModes.Word:
-                    if (BasicTokens.Commands.ContainsKey(su))
+                    if (BasicTokens.Operators.ContainsKey(su))
+                    {
+                        ns.SetOperator(su);
+                        ns.PadSpace = BasicSymbol.Padding.None;
+                    }
+                    else if (BasicTokens.Commands.ContainsKey(su))
+                    {
+                        ns.PadSpace = BasicSymbol.Padding.Allowed;
                         ns.SetToken(su);
+                    }
                     else
-                        ns.SetText(s);
+                    {
+                        ns.SetText(su);
+                        ns.PadSpace = BasicSymbol.Padding.Allowed;
+                    }
                     break;
                 case SymbolModes.Number:
                     int i;
@@ -337,9 +386,11 @@ namespace CRBasic.Basic
                     }
                     else
                         ns.SetText(s);
+                    ns.PadSpace = BasicSymbol.Padding.Allowed;
                     break;
                 case SymbolModes.LineNumber:
                     Line.LineNumber = int.Parse(s);
+                    ns.PadSpace = BasicSymbol.Padding.Required;
                     break;
                 case SymbolModes.Whitespace:
                 default:

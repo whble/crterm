@@ -11,6 +11,7 @@ namespace CRBasic
     /// </summary>
     public class Editor : TerminalUI.IEditorPlugin
     {
+        private const char BS = '\x08';
         private const char CR = '\r';
         private const char LF = '\n';
 
@@ -57,10 +58,17 @@ namespace CRBasic
                         Display.MoveRight();
                     break;
                 case Keys.Insert:
-                     
+                    if (Display.InsertMode == InsertKeyMode.Insert)
+                        Display.InsertMode = InsertKeyMode.Overwrite;
+                    else
+                        Display.InsertMode = InsertKeyMode.Insert;
+                    break;
+                case Keys.Delete:
+                    Display.Delete();
+                    break;
                 default:
-                    if(e.KeyCode != LastKey)
-                        System.Diagnostics.Debug.WriteLine("Key Down " + e.KeyCode.ToString());
+                    //if(e.KeyCode != LastKey)
+                    //    System.Diagnostics.Debug.WriteLine("Key Down " + e.KeyCode.ToString());
                     LastKey = e.KeyCode;
                     break;
             }
@@ -70,6 +78,13 @@ namespace CRBasic
         {
             switch (e.KeyChar)
             {
+                case BS:
+                    if (Display.CurrentColumn > 0)
+                    {
+                        Display.CurrentColumn -= 1;
+                        Display.Delete();
+                    }
+                    break;
                 case CR:
                     if (Modifiers.HasFlag(Keys.Shift))
                         Display.PrintLine();

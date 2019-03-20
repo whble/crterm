@@ -7,3 +7,6 @@ bin
 *.cache
 *.dll
 *.pdb
+*.FileListAbsolute.txt
+TerminalControl/obj/Debug/TerminalUI.csproj.FileListAbsolute.txt
+TerminalUITest/obj/Debug/TerminalUITest.csproj.FileListAbsolute.txt

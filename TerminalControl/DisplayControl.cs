@@ -448,7 +448,11 @@ namespace TerminalUI
                     Delete();
                     break;
                 case Keys.Insert:
-                    Insert();
+                    if (InsertMode == InsertKeyMode.Insert)
+                        InsertMode = InsertKeyMode.Overwrite;
+                    else
+                        InsertMode = InsertKeyMode.Insert;
+                    BlinkCursor();
                     break;
                 default:
                     handled = false;
@@ -475,8 +479,20 @@ namespace TerminalUI
                 case EchoModes.LineEdit:
                     break;
                 case EchoModes.FullScreen:
+                    // break key
+                    // turn off BASIC mode and pass the key through
+                    if(e.KeyChar == 3)
+                    {
+                        EchoMode = EchoModes.EchoOff;
+                        InsertMode = InsertKeyMode.Overwrite;
+                        handled = false;
+                    }
                     if (e.KeyChar >= ' ')
+                    {
+                        if (InsertMode == InsertKeyMode.Insert)
+                            Insert();
                         Print(e.KeyChar);
+                    }
                     break;
                 case EchoModes.Plugin:
                     handled = true;

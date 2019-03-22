@@ -148,7 +148,7 @@ namespace TerminalUI.Terminals
             {
                 case System.Windows.Forms.Keys.Home:
                     if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Control))
-                        Display.Clear();
+                        Display.Clear();    
                     break;
                 default:
                     break;

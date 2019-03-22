@@ -20,6 +20,27 @@ namespace TerminalUI.Terminals
             }
         }
 
+        public override void SendKey(TerminalKeyEventArgs terminalKey)
+        {
+            switch(terminalKey.KeyCode)
+            {
+                case System.Windows.Forms.Keys.Up:
+                    SendString("\x1B[A");
+                    break;
+                case System.Windows.Forms.Keys.Down:
+                    SendString("\x1B[B");
+                    break;
+                case System.Windows.Forms.Keys.Right:
+                    SendString("\x1B[C");
+                    break;
+                case System.Windows.Forms.Keys.Left:
+                    SendString("\x1B[D");
+                    break;
+            }
+
+            base.SendKey(terminalKey);
+        }
+
         public override void ProcessReceivedCharacter(char c)
         {
             if (!inCmd)

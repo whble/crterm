@@ -360,6 +360,7 @@ namespace TerminalUI
             {
                 SetCharacter(CurrentRow, col, ' ');
             }
+            BlinkCursor();
         }
 
         public void Fill(string c)
@@ -393,6 +394,7 @@ namespace TerminalUI
                     if (e.KeyCode == Keys.F12)
                     {
                         EchoMode = EchoModes.FullScreen;
+                        InsertMode = InsertKeyMode.Overwrite;
                         BlinkCursor();
                     }
                     else
@@ -427,6 +429,8 @@ namespace TerminalUI
                     ClearCurrentLine(true, true);
                     Terminal?.SendString(ss);
                     Terminal?.SendChar('\r');
+                    if (ss.Trim().ToLower() == "run")
+                        EchoMode = EchoModes.EchoOff;
                     break;
                 case Keys.Up:
                     CurrentRow -= 1;
@@ -453,6 +457,21 @@ namespace TerminalUI
                     else
                         InsertMode = InsertKeyMode.Insert;
                     BlinkCursor();
+                    break;
+                case Keys.Home:
+                    if (e.Control)
+                        Clear();
+                    CurrentColumn = 0;
+                    break;
+                case Keys.End:
+                    if (e.Control)
+                        ClearCurrentLine(false, true);
+                    else
+                    {
+                        CurrentColumn = Columns - 1;
+                        while (CurrentColumn > 0 && CharacterData[CursorPos-1].Value == " ")
+                            CurrentColumn -= 1;
+                    }
                     break;
                 default:
                     handled = false;

@@ -65,7 +65,7 @@ namespace CRTerm
                 Transport?.Send(terminal.ReadByte());
         }
 
-        public DisplayControl FrameBuffer
+        public DisplayControl Display
         {
             get { return _frameBuffer; }
             set
@@ -187,16 +187,16 @@ namespace CRTerm
             Configuration config = new Configuration();
             config.LoadConfiguration(this);
 
-            Terminal.Display = this.FrameBuffer;
+            Terminal.Display = this.Display;
             Terminal.ReadyToSend += Terminal_DataToSend;
 
-            FrameBuffer.Terminal = Terminal;
+            Display.Terminal = Terminal;
 
             //FrameBuffer.KeyPress -= FrameBuffer_KeyPress;
             //FrameBuffer.KeyPress += FrameBuffer_KeyPress;
 
-            this.FrameBuffer.PrintLine("Port:" + Transport.ToString());
-            this.FrameBuffer.PrintLine("Terminal:" + Terminal.ToString());
+            this.Display.PrintLine("Port:" + Transport.ToString());
+            this.Display.PrintLine("Terminal:" + Terminal.ToString());
 
             try
             {
@@ -204,7 +204,7 @@ namespace CRTerm
             }
             catch (CRTException ex)
             {
-                this.FrameBuffer.PrintLine(ex.Message);
+                this.Display.PrintLine(ex.Message);
             }
 
             Transport?.UpdateStatus();

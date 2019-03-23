@@ -67,6 +67,7 @@ namespace CRTerm.Transfer
         }
         TransferModes Mode = TransferModes.None;
 
+        public TerminalUI.DisplayControl Display;
         #endregion
 
         #region Events
@@ -121,7 +122,9 @@ namespace CRTerm.Transfer
             }
         }
 
+
         #endregion
+
         #region Constructors
         #endregion
 
@@ -155,7 +158,7 @@ namespace CRTerm.Transfer
 
         protected virtual void Print(string s)
         {
-            throw new NotImplementedException();
+            Display.Print(s);
         }
 
         public void Open(ITransport Port)
@@ -170,6 +173,7 @@ namespace CRTerm.Transfer
 
         public void ReceiveFile(Session CurrentSession, string Filename)
         {
+            this.Display = CurrentSession.Display;
             Open(CurrentSession.Transport);
             Print("Receiving file: " + filename + "\r\n");
 

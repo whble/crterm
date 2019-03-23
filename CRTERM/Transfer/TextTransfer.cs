@@ -78,10 +78,10 @@ namespace CRTerm.Transfer
             }
             catch (Exception ex)
             {
-                CurrentSession.FrameBuffer.Clear();
-                CurrentSession.FrameBuffer.PrintLine("Could not send file \"" + Filename + "\"");
-                CurrentSession.FrameBuffer.PrintLine(ex.Message);
-                CurrentSession.FrameBuffer.PrintLine("Transfer Terminated");
+                CurrentSession.Display.Clear();
+                CurrentSession.Display.PrintLine("Could not send file \"" + Filename + "\"");
+                CurrentSession.Display.PrintLine(ex.Message);
+                CurrentSession.Display.PrintLine("Transfer Terminated");
                 Detach();
             }
 

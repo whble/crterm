@@ -26,7 +26,7 @@ namespace CRTerm
         private void MainWindow_Load(object sender, EventArgs e)
         {
             CurrentSession = new Session();
-            CurrentSession.FrameBuffer = this.frameBuffer1;
+            CurrentSession.Display = this.Crt;
             CurrentSession.Init();
             MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
@@ -120,7 +120,7 @@ namespace CRTerm
             PortNameLabel.Text = CurrentSession.Transport.Name;
             PortStatus.Text = CurrentSession.Transport.StatusDetails;
             TerminalNameLabel.Text = CurrentSession.Terminal_StatusDetails;
-            EchoStatus.Text = CamelToSpace(frameBuffer1.EchoMode.ToString());
+            EchoStatus.Text = CamelToSpace(Crt.EchoMode.ToString());
         }
 
         private string CamelToSpace(string Name)
@@ -146,8 +146,8 @@ namespace CRTerm
             }
             catch (CRTException ex)
             {
-                CurrentSession.FrameBuffer.PrintLine("Could not connect");
-                CurrentSession.FrameBuffer.PrintLine(ex.Message);
+                CurrentSession.Display.PrintLine("Could not connect");
+                CurrentSession.Display.PrintLine(ex.Message);
             }
         }
 
@@ -159,7 +159,7 @@ namespace CRTerm
 
         private void ClearScreenButton_Click(object sender, EventArgs e)
         {
-            frameBuffer1.Clear();
+            Crt.Clear();
         }
 
         private void bSDELToolStripMenuItem_Click(object sender, EventArgs e)
@@ -198,7 +198,9 @@ namespace CRTerm
         private void DownloadButton_Click(object sender, EventArgs e)
         {
             Transfer.XModem xModem = new Transfer.XModem();
-            xModem.ReceiveFile(CurrentSession, @"C:\temp\receive.txt");
+            string fn = Path.ChangeExtension(Path.GetTempFileName(), ".xmodem");
+            Crt.PrintLine("Receiving to " + fn);
+            xModem.ReceiveFile(CurrentSession, fn);
         }
 
         private void BaudRate_Clicked(object sender, EventArgs e)
@@ -294,9 +296,9 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
             if (b.Checked)
-                frameBuffer1.EchoMode = EchoModes.FullScreen;
+                Crt.EchoMode = EchoModes.FullScreen;
             else
-                frameBuffer1.EchoMode = EchoModes.EchoOff;
+                Crt.EchoMode = EchoModes.EchoOff;
 
             UpdateStatus();
         }
@@ -321,12 +323,12 @@ namespace CRTerm
 
         private void EntryText_Enter(object sender, EventArgs e)
         {
-            frameBuffer1.CursorEnabled = false;
+            Crt.CursorEnabled = false;
         }
 
         private void EntryText_Leave(object sender, EventArgs e)
         {
-            frameBuffer1.CursorEnabled = true;
+            Crt.CursorEnabled = true;
         }
     }
 }

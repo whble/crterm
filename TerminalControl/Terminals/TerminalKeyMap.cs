@@ -27,7 +27,7 @@ namespace TerminalUI.Terminals
             KeyCode = e.KeyCode;
             this.KeyChar = CHAR_NONE;
 
-            System.Diagnostics.Debug.WriteLine("Modifiers: " + Modifier.ToString());
+            //System.Diagnostics.Debug.WriteLine("Modifiers: " + Modifier.ToString());
         }
 
         public TerminalKeyEventArgs(Keys KeyCode, Keys Modifiers = Keys.None) : base(CHAR_NONE)

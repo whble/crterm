@@ -10,3 +10,5 @@ bin
 *.FileListAbsolute.txt
 TerminalControl/obj/Debug/TerminalUI.csproj.FileListAbsolute.txt
 TerminalUITest/obj/Debug/TerminalUITest.csproj.FileListAbsolute.txt
+.vs/CRTERM/v15/Server/sqlite3/storage.ide
+*.ide

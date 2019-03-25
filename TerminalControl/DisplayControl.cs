@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Text;
@@ -9,6 +10,7 @@ namespace TerminalUI
 {
     public partial class DisplayControl : UserControl
     {
+        #region Private Fields
         private static string MEASURE_STRING = new string('W', 80);
 
         private int _cols;
@@ -22,25 +24,10 @@ namespace TerminalUI
 
         private EchoModes _echoMode;
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
-        public EchoModes EchoMode
-        {
-            get { return _echoMode; }
-            set
-            {
-                _echoMode = value;
-                if (Terminal != null)
-                {
-                    Terminal.EchoMode = value;
-                }
-            }
-        }
-
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool AddLinefeed { get; set; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool LineWrap { get; set; }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         private string _statusText;
 
         protected bool FontValid = false;
@@ -56,8 +43,30 @@ namespace TerminalUI
         public CharacterCell.Attributes CurrentAttribute { get; set; }
 
         private IEditorPlugin _editor = null;
-
         private ITerminal _terminal = new Terminals.ANSITerminal();
+        #endregion
+
+        #region Public Properties
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        public List<string> Buffer = new List<string>();
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        public CharacterCell[] CharacterData = new CharacterCell[2000];
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        public EchoModes EchoMode
+        {
+            get { return _echoMode; }
+            set
+            {
+                _echoMode = value;
+                if (Terminal != null)
+                {
+                    Terminal.EchoMode = value;
+                }
+            }
+        }
+
+
         public ITerminal Terminal
         {
             get
@@ -73,11 +82,6 @@ namespace TerminalUI
                     _terminal.Display = this;
                 }
             }
-        }
-
-        public void MoveToSOL()
-        {
-            CurrentColumn = 0;
         }
 
         public int CurrentColumn
@@ -103,6 +107,73 @@ namespace TerminalUI
                 BlinkCursor();
             }
         }
+
+        public char CharUnderCursor
+        {
+            get
+            {
+                CharacterCell cell = CharacterData[CursorPos];
+                if (cell == null)
+                {
+                    return '\0';
+                }
+
+                if (cell.Value.Length < 1)
+                {
+                    return '\0';
+                }
+
+                return cell.Value[0];
+            }
+            set
+            {
+                SetCharacter(value);
+            }
+        }
+
+        public InsertKeyMode InsertMode
+        {
+            get
+            {
+                return this._insertMode;
+            }
+
+            set
+            {
+                this._insertMode = value;
+                UpdateTextCursorMode();
+            }
+        }
+
+        public string StatusText
+        {
+            get
+            {
+                return this._statusText;
+            }
+
+            set
+            {
+                this._statusText = value;
+            }
+        }
+
+        public string ModeText
+        {
+            get
+            {
+                return "Text " + Columns.ToString() + "x" + Rows.ToString();
+            }
+        }
+        #endregion
+
+        #region Methods
+
+        public void MoveToSOL()
+        {
+            CurrentColumn = 0;
+        }
+
 
         //
         // Insert a blank character at the cursor. Character in right column will be lost off right side of the screen. 
@@ -228,65 +299,6 @@ namespace TerminalUI
             return row * Columns + col;
         }
 
-        public char CharUnderCursor
-        {
-            get
-            {
-                CharacterCell cell = CharacterData[CursorPos];
-                if (cell == null)
-                {
-                    return '\0';
-                }
-
-                if (cell.Value.Length < 1)
-                {
-                    return '\0';
-                }
-
-                return cell.Value[0];
-            }
-            set
-            {
-                SetCharacter(value);
-            }
-        }
-
-        public InsertKeyMode InsertMode
-        {
-            get
-            {
-                return this._insertMode;
-            }
-
-            set
-            {
-                this._insertMode = value;
-                UpdateTextCursorMode();
-            }
-        }
-
-        public string StatusText
-        {
-            get
-            {
-                return this._statusText;
-            }
-
-            set
-            {
-                this._statusText = value;
-            }
-        }
-
-        public string ModeText
-        {
-            get
-            {
-                return "Text " + Columns.ToString() + "x" + Rows.ToString();
-            }
-        }
-
-        public CharacterCell[] CharacterData = new CharacterCell[2000];
 
         public static Brush[] Brushes = new SolidBrush[]
         {
@@ -469,7 +481,7 @@ namespace TerminalUI
                     else
                     {
                         CurrentColumn = Columns - 1;
-                        while (CurrentColumn > 0 && CharacterData[CursorPos-1].Value == " ")
+                        while (CurrentColumn > 0 && CharacterData[CursorPos - 1].Value == " ")
                             CurrentColumn -= 1;
                     }
                     break;
@@ -500,7 +512,7 @@ namespace TerminalUI
                 case EchoModes.FullScreen:
                     // break key
                     // turn off BASIC mode and pass the key through
-                    if(e.KeyChar == 3)
+                    if (e.KeyChar == 3)
                     {
                         EchoMode = EchoModes.EchoOff;
                         InsertMode = InsertKeyMode.Overwrite;
@@ -904,6 +916,8 @@ namespace TerminalUI
 
         private void ScrollUp()
         {
+            AddLineToBuffer(0);
+
             int start = GetPos(1, 0);
             int end = GetPos(Rows, 0);
             for (int i = start; i < end; i++)
@@ -911,6 +925,20 @@ namespace TerminalUI
                 CharacterData[i - Columns] = CharacterData[i].Copy();
             }
             FillRow(Rows - 1, " ");
+        }
+
+        /// <summary>
+        /// adds a line of text to the scroll buffer.
+        /// </summary>
+        /// <param name="v"></param>
+        private void AddLineToBuffer(int Row)
+        {
+            StringBuilder s = new StringBuilder();
+            for (int x = 0; x < Columns; x++)
+            {
+                s.Append(GetChar(Row, x));
+            }
+            Buffer.Add(s.ToString());
         }
 
         private void FillRow(int Row, string Value)
@@ -937,5 +965,7 @@ namespace TerminalUI
             }
             return true;  // used
         }
+
+        #endregion
     }
 }

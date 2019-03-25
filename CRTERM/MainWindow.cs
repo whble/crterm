@@ -330,5 +330,20 @@ namespace CRTerm
         {
             Crt.CursorEnabled = true;
         }
+
+        private void xMODEMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void xModemPCGETToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void echoOnOffToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

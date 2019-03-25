@@ -53,11 +53,16 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xMODEMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DownloadButton = new System.Windows.Forms.ToolStripButton();
             this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.BasicButton = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.xModemPCGETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownloadButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.xMODEMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xmodemPCPUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.echoOnOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bASICModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lineWrapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -127,11 +132,11 @@
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             // 
-            // frameBuffer1
+            // Crt
             // 
             this.Crt.AddLinefeed = false;
             this.Crt.BackColor = System.Drawing.Color.DimGray;
-            this.Crt.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("frameBuffer1.BackgroundImage")));
+            this.Crt.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Crt.BackgroundImage")));
             this.Crt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Crt.CharUnderCursor = ' ';
             this.Crt.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
@@ -148,7 +153,7 @@
             this.Crt.LineWrap = false;
             this.Crt.Location = new System.Drawing.Point(0, 0);
             this.Crt.Margin = new System.Windows.Forms.Padding(440714, 347787, 440714, 347787);
-            this.Crt.Name = "frameBuffer1";
+            this.Crt.Name = "Crt";
             this.Crt.Size = new System.Drawing.Size(1059, 615);
             this.Crt.StatusText = null;
             this.Crt.TabIndex = 1;
@@ -167,13 +172,12 @@
             this.BaudRateButton,
             this.TerminalOptionsButton,
             this.UploadButton,
-            this.DownloadButton,
+            this.toolStripDropDownloadButton,
             this.CancelTransferButton,
-            this.toolStripSeparator2,
-            this.BasicButton});
+            this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(537, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(503, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -235,9 +239,12 @@
             // 
             this.TerminalOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.TerminalOptionsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bASICModeToolStripMenuItem,
+            this.echoOnOffToolStripMenuItem,
             this.bSDELToolStripMenuItem,
             this.aNSIToolStripMenuItem,
-            this.pETSCIIToolStripMenuItem});
+            this.pETSCIIToolStripMenuItem,
+            this.lineWrapToolStripMenuItem});
             this.TerminalOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("TerminalOptionsButton.Image")));
             this.TerminalOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.TerminalOptionsButton.Name = "TerminalOptionsButton";
@@ -270,7 +277,8 @@
             this.UploadButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pasteToolStripMenuItem,
             this.aSCIIToolStripMenuItem,
-            this.xMODEMToolStripMenuItem});
+            this.xMODEMToolStripMenuItem,
+            this.xModemPCGETToolStripMenuItem});
             this.UploadButton.Image = ((System.Drawing.Image)(resources.GetObject("UploadButton.Image")));
             this.UploadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.UploadButton.Name = "UploadButton";
@@ -280,31 +288,25 @@
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // aSCIIToolStripMenuItem
             // 
             this.aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
-            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.aSCIIToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.aSCIIToolStripMenuItem.Text = "ASCII";
             // 
             // xMODEMToolStripMenuItem
             // 
             this.xMODEMToolStripMenuItem.Name = "xMODEMToolStripMenuItem";
-            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.xMODEMToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.U)));
+            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.xMODEMToolStripMenuItem.Text = "XMODEM";
-            // 
-            // DownloadButton
-            // 
-            this.DownloadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.DownloadButton.Image = ((System.Drawing.Image)(resources.GetObject("DownloadButton.Image")));
-            this.DownloadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DownloadButton.Name = "DownloadButton";
-            this.DownloadButton.Size = new System.Drawing.Size(65, 22);
-            this.DownloadButton.Text = "Download";
-            this.DownloadButton.Click += new System.EventHandler(this.DownloadButton_Click);
+            this.xMODEMToolStripMenuItem.Click += new System.EventHandler(this.xMODEMToolStripMenuItem_Click);
             // 
             // CancelTransferButton
             // 
@@ -321,20 +323,63 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // BasicButton
-            // 
-            this.BasicButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.BasicButton.Image = ((System.Drawing.Image)(resources.GetObject("BasicButton.Image")));
-            this.BasicButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.BasicButton.Name = "BasicButton";
-            this.BasicButton.Size = new System.Drawing.Size(43, 22);
-            this.BasicButton.Text = "BASIC";
-            this.BasicButton.Click += new System.EventHandler(this.BasicButton_Click);
-            // 
             // timer1
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // xModemPCGETToolStripMenuItem
+            // 
+            this.xModemPCGETToolStripMenuItem.Name = "xModemPCGETToolStripMenuItem";
+            this.xModemPCGETToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.G)));
+            this.xModemPCGETToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.xModemPCGETToolStripMenuItem.Text = "XModem-PCGET";
+            this.xModemPCGETToolStripMenuItem.Click += new System.EventHandler(this.xModemPCGETToolStripMenuItem_Click);
+            // 
+            // toolStripDropDownloadButton
+            // 
+            this.toolStripDropDownloadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownloadButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xMODEMToolStripMenuItem1,
+            this.xmodemPCPUTToolStripMenuItem});
+            this.toolStripDropDownloadButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownloadButton.Image")));
+            this.toolStripDropDownloadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownloadButton.Name = "toolStripDropDownloadButton";
+            this.toolStripDropDownloadButton.Size = new System.Drawing.Size(74, 22);
+            this.toolStripDropDownloadButton.Text = "Download";
+            // 
+            // xMODEMToolStripMenuItem1
+            // 
+            this.xMODEMToolStripMenuItem1.Name = "xMODEMToolStripMenuItem1";
+            this.xMODEMToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
+            this.xMODEMToolStripMenuItem1.Size = new System.Drawing.Size(202, 22);
+            this.xMODEMToolStripMenuItem1.Text = "XMODEM";
+            // 
+            // xmodemPCPUTToolStripMenuItem
+            // 
+            this.xmodemPCPUTToolStripMenuItem.Name = "xmodemPCPUTToolStripMenuItem";
+            this.xmodemPCPUTToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+            this.xmodemPCPUTToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.xmodemPCPUTToolStripMenuItem.Text = "Xmodem-PCPUT";
+            // 
+            // echoOnOffToolStripMenuItem
+            // 
+            this.echoOnOffToolStripMenuItem.Name = "echoOnOffToolStripMenuItem";
+            this.echoOnOffToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.echoOnOffToolStripMenuItem.Text = "Local Echo";
+            this.echoOnOffToolStripMenuItem.Click += new System.EventHandler(this.echoOnOffToolStripMenuItem_Click);
+            // 
+            // bASICModeToolStripMenuItem
+            // 
+            this.bASICModeToolStripMenuItem.Name = "bASICModeToolStripMenuItem";
+            this.bASICModeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.bASICModeToolStripMenuItem.Text = "BASIC Mode";
+            // 
+            // lineWrapToolStripMenuItem
+            // 
+            this.lineWrapToolStripMenuItem.Name = "lineWrapToolStripMenuItem";
+            this.lineWrapToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.lineWrapToolStripMenuItem.Text = "Line Wrap";
             // 
             // MainWindow
             // 
@@ -380,7 +425,6 @@
         private System.Windows.Forms.ToolStripMenuItem bSDELToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton PortOptionsButton;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripButton DownloadButton;
         private System.Windows.Forms.ToolStripDropDownButton BaudRateButton;
         private System.Windows.Forms.ToolStripMenuItem aNSIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pETSCIIToolStripMenuItem;
@@ -390,8 +434,14 @@
         private System.Windows.Forms.ToolStripMenuItem xMODEMToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton CancelTransferButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton BasicButton;
         private System.Windows.Forms.ToolStripStatusLabel EchoStatus;
+        private System.Windows.Forms.ToolStripMenuItem xModemPCGETToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bASICModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem echoOnOffToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownloadButton;
+        private System.Windows.Forms.ToolStripMenuItem xMODEMToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem xmodemPCPUTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lineWrapToolStripMenuItem;
     }
 }
 

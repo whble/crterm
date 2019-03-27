@@ -48,6 +48,9 @@ namespace CRTerm.Transfer
         public string LastMessage = "";
         public FileStream stream;
 
+        int spinnerIndex = 0;
+        string spinner = @"|/-\";
+
         enum TransferStages
         {
             Waiting,
@@ -141,41 +144,49 @@ namespace CRTerm.Transfer
         {
             if (Data == 3)
             {
-                Print("Canceled by user.");
-                CancelTransfer();
+                Display.PrintSeparater();
+                Display.PrintClear("Canceled by user.", true);
+                Cancel();
             }
         }
 
         protected virtual void SendNAK()
         {
+            Display.Print(" NAK");
             Transport.Send(NAK);
         }
 
         protected virtual void SendACK()
         {
-            Transport.Send(ACK);
+            Transport?.Send(ACK);
         }
 
-        protected virtual void Print(string s)
+        public void Open()
         {
-            Display.Print(s);
-        }
-
-        public void Open(ITransport Port)
-        {
-            this.Transport = Port;
+            if (CurrentSession.Transport != null)
+            {
+                ITransport port = CurrentSession.Transport;
+                CurrentSession.Transport = null;
+                this.Transport = port;
+            }
         }
 
         public void Close()
         {
-            Transport = null;
+            if (this.Transport != null)
+            {
+                CurrentSession.Transport = Transport;
+                Transport = null;
+            }
         }
 
-        public void ReceiveFile(Session CurrentSession, string Filename)
+        public void ReceiveFile(Session Session, string Filename)
         {
-            this.Display = CurrentSession.Display;
-            Open(CurrentSession.Transport);
-            Print("Receiving file: " + filename + "\r\n");
+            this.CurrentSession = Session;
+            this.Display = Session.Display;
+
+            Display.PrintSeparater();
+            Display.PrintFirst("Receiving file: " + filename + "\r\n");
 
             string fn = filename;
             int fc = 0;
@@ -190,11 +201,11 @@ namespace CRTerm.Transfer
 
             CurrentBlock = 1;
             FilePosition = 0;
-            Open(CurrentSession.Transport);
+            Open();
             Mode = TransferModes.Receiving;
             Stage = TransferStages.Waiting;
             ResetNAKTimer();
-            SetTimer();
+            StartTimer();
             SendNAK();
         }
 
@@ -208,7 +219,7 @@ namespace CRTerm.Transfer
             failTimer = DateTime.Now.AddSeconds(30);
         }
 
-        private void SetTimer()
+        private void StartTimer()
         {
             if (Mode == TransferModes.Receiving)
             {
@@ -227,6 +238,8 @@ namespace CRTerm.Transfer
 
         public void ReceiveTimeoutCheck(object stateInfo)
         {
+            
+
             if (!(stateInfo is XModem x))
                 return;
             if (DateTime.Now < nextCheck)
@@ -235,8 +248,8 @@ namespace CRTerm.Transfer
             // if no data is received for 90 seconds, hard fail
             if (FailTimerExpired())
             {
-                Print("Canceled due to timeout.");
-                CancelTransfer();
+                Display.PrintFirst("Canceled due to timeout.");
+                Cancel();
                 return;
             }
 
@@ -277,7 +290,7 @@ namespace CRTerm.Transfer
             return DateTime.Now > failTimer;
         }
 
-        public void CancelTransfer()
+        public void Cancel()
         {
             Stage = TransferStages.Fail;
             Close();
@@ -316,6 +329,9 @@ namespace CRTerm.Transfer
 
         protected void ReadAllData()
         {
+            if (Transport == null)
+                return;
+
             while (Transport.BytesWaiting > 0)
             {
                 dataBuffer.Add(Transport.ReadByte());
@@ -344,6 +360,10 @@ namespace CRTerm.Transfer
 
         protected virtual void AppendData()
         {
+            Display.Print(spinner[spinnerIndex]);
+            spinnerIndex = (spinnerIndex + 1) % spinner.Length;
+            Display.MoveLeft();
+
             byte b = dataBuffer.Peek();
             if (dataBuffer.Count >= BLOCK_LENGTH)
             {
@@ -360,8 +380,8 @@ namespace CRTerm.Transfer
             }
             if (b == ETX) // cancel
             {
-                Print("Canceled by remote host.");
-                CancelTransfer();
+                Display.PrintFirst("Canceled by remote host.");
+                Cancel();
             }
             else if (b == EOT)
             {
@@ -392,7 +412,7 @@ namespace CRTerm.Transfer
         // If block is <last block number>, re-write previous block
         private void ProcessBuffer()
         {
-            Print("Receiving block " + CurrentBlock + " \r");
+            Display.PrintClear("Receiving block " + CurrentBlock,false);
 
             byte b = dataBuffer.Read();
             byte checksum = 0;
@@ -405,9 +425,9 @@ namespace CRTerm.Transfer
             // if they don't match, dump and NAK
             blockNo = dataBuffer.Read();
             blockCheck = dataBuffer.Read();
-            if (blockNo != (255 - blockCheck))
+            if (blockNo != (255 - blockCheck) && blockNo != (127 - blockCheck))
             {
-                Print("\nInvalid block number: " + blockNo.ToString() + " " + blockCheck.ToString() + "\r\n");
+                Display.PrintClear("Invalid block number: " + blockNo.ToString() + "," + blockCheck.ToString(),true);
                 dataBuffer.Clear();
                 SendNAK();
                 return;
@@ -416,7 +436,7 @@ namespace CRTerm.Transfer
             // if the received block number is the NEXT block
             // advance the write pointer. Otherwise, we're getting
             // the previous block again, so re-write the last block
-            if (blockNo == ((CurrentBlock + 1) & 0xff))
+            if (blockNo == ((CurrentBlock + 1) % 256) || blockNo == ((CurrentBlock+1) % 128))
             {
                 CurrentBlock += 1;
                 FilePosition += DATA_LENGTH;
@@ -438,7 +458,7 @@ namespace CRTerm.Transfer
                 SendACK();
             else
             {
-                Print("\nInvalid Checksum. Expected " + checksum + " got " + b.ToString() + "\r\n");
+                Display.PrintFirst("\nInvalid Checksum. Expected " + checksum + " got " + b.ToString(),true);
                 dataBuffer.Clear();
                 SendByte(NAK);
             }
@@ -454,21 +474,6 @@ namespace CRTerm.Transfer
             throw new NotImplementedException();
         }
 
-        public void SendFile(string Filename)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReceiveFile(string Filename)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Cancel()
-        {
-            throw new NotImplementedException();
-        }
-
         public void UpdateStatus()
         {
             //StatusEventArgs eventArgs = new StatusEventArgs(this.Status1, this.StatusDetails);
@@ -480,12 +485,17 @@ namespace CRTerm.Transfer
             throw new NotImplementedException();
         }
 
-        public void Send()
+        public void Send(string Filename)
+        {
+            
+        }
+
+        public void Receive()
         {
             throw new NotImplementedException();
         }
 
-        public void Receive()
+        public void SendFile(Session CurrentSession, string Filename)
         {
             throw new NotImplementedException();
         }

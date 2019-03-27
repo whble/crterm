@@ -78,7 +78,8 @@ namespace CRTerm.Transfer
             }
             catch (Exception ex)
             {
-                CurrentSession.Display.Clear();
+                CurrentSession.Display.PrintSeparater();
+                CurrentSession.Display.PrintLine();
                 CurrentSession.Display.PrintLine("Could not send file \"" + Filename + "\"");
                 CurrentSession.Display.PrintLine(ex.Message);
                 CurrentSession.Display.PrintLine("Transfer Terminated");
@@ -140,6 +141,26 @@ namespace CRTerm.Transfer
 
                 CurrentSession.Terminal.ProcessReceivedCharacter(lastReceived);
             }
+        }
+
+        public void Send(string Filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Receive(string Filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendFile(Session CurrentSession, string Filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReceiveFile(Session CurrentSession, string Filename)
+        {
+            throw new NotImplementedException();
         }
     }
 }

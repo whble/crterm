@@ -8,8 +8,8 @@ namespace CRTerm.Transfer
     public interface ITransferProtocol 
     {
         Session CurrentSession { get; set; }
-        void Send();
-        void Receive();
+        void SendFile(Session CurrentSession, string Filename);
+        void ReceiveFile(Session CurrentSession, string Filename);
         void Cancel();
         void ReceiveData(IBuffered receiver);
     }

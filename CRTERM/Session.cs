@@ -131,6 +131,9 @@ namespace CRTerm
 
         public string Terminal_StatusDetails { get; internal set; }
 
+        [ConfigItem]
+        public string DownloadDirectory { get; internal set; }
+
         //public TextConsole Display { get; internal set; }
 
         public List<string> GetPortNames()

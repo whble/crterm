@@ -21,13 +21,13 @@ namespace CRTerm
             InitializeComponent();
         }
 
-        private Session CurrentSession = null;
+        private Session Session = null;
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            CurrentSession = new Session();
-            CurrentSession.Display = this.Crt;
-            CurrentSession.Init();
+            Session = new Session();
+            Session.Display = this.Crt;
+            Session.Init();
             MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
         }
@@ -35,10 +35,10 @@ namespace CRTerm
         private void LoadPortOptions()
         {
             PortOptionsButton.DropDownItems.Clear();
-            string currentPortName = CurrentSession.Transport?.Address;
+            string currentPortName = Session.Transport?.Address;
 
 
-            List<string> portNames = CurrentSession.GetPortNames();
+            List<string> portNames = Session.GetPortNames();
             foreach (var portName in portNames)
             {
                 AddPortItem(portName, currentPortName);
@@ -74,11 +74,11 @@ namespace CRTerm
                 return;
             }
 
-            IO.SerialIOPort port = CurrentSession.Transport as IO.SerialIOPort;
+            IO.SerialIOPort port = Session.Transport as IO.SerialIOPort;
             if (port == null)
             {
                 int baudRate = 9600;
-                IO.SerialIOPort p = CurrentSession.Transport as IO.SerialIOPort;
+                IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
                 if (p != null)
                     baudRate = p.BaudRate;
                 port = new IO.SerialIOPort();
@@ -88,7 +88,7 @@ namespace CRTerm
             port.Address = item.Text;
             if (port.Status == ConnectionStatusCodes.Connected)
                 port.Disconnect();
-            CurrentSession.Transport = port;
+            Session.Transport = port;
             port.Connect();
             UpdateStatus();
         }
@@ -100,7 +100,7 @@ namespace CRTerm
 
         private void InitTestPort()
         {
-            CurrentSession.Transport = new IO.TestPort();
+            Session.Transport = new IO.TestPort();
         }
 
         void Session_StatusChanged(object Sender, ConnectionStatusCodes NewStatus)
@@ -110,16 +110,16 @@ namespace CRTerm
 
         public void UpdateStatus()
         {
-            if (CurrentSession == null)
+            if (Session == null)
                 return;
 
-            if (CurrentSession.Transport == null)
+            if (Session.Transport == null)
                 return;
 
-            PortStatusLabel.Text = CurrentSession.Transport.Status.ToString();
-            PortNameLabel.Text = CurrentSession.Transport.Name;
-            PortStatus.Text = CurrentSession.Transport.StatusDetails;
-            TerminalNameLabel.Text = CurrentSession.Terminal_StatusDetails;
+            PortStatusLabel.Text = Session.Transport.Status.ToString();
+            PortNameLabel.Text = Session.Transport.Name;
+            PortStatus.Text = Session.Transport.StatusDetails;
+            TerminalNameLabel.Text = Session.Terminal_StatusDetails;
             EchoStatus.Text = CamelToSpace(Crt.EchoMode.ToString());
         }
 
@@ -141,19 +141,19 @@ namespace CRTerm
         {
             try
             {
-                CurrentSession.Connect();
+                Session.Connect();
                 UpdateStatus();
             }
             catch (CRTException ex)
             {
-                CurrentSession.Display.PrintLine("Could not connect");
-                CurrentSession.Display.PrintLine(ex.Message);
+                Session.Display.PrintLine("Could not connect");
+                Session.Display.PrintLine(ex.Message);
             }
         }
 
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
-            CurrentSession.Disconnect();
+            Session.Disconnect();
             UpdateStatus();
         }
 
@@ -164,7 +164,7 @@ namespace CRTerm
 
         private void bSDELToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BasicTerminal term = CurrentSession.Terminal as BasicTerminal;
+            BasicTerminal term = Session.Terminal as BasicTerminal;
             if (term == null)
                 return;
 
@@ -173,14 +173,9 @@ namespace CRTerm
             UpdateStatus();
         }
 
-        private void portToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
-            IO.SerialIOPort p = CurrentSession.Transport as IO.SerialIOPort;
+            IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
             if (p == null)
                 return;
             UpdateStatus();
@@ -188,11 +183,6 @@ namespace CRTerm
 
         private void UploadButton_Click(object sender, EventArgs e)
         {
-            string s = "";
-            //string test = System.IO.File.ReadAllText("bastest.txt");
-            if (Clipboard.ContainsText())
-                s = Clipboard.GetText();
-            CurrentSession.Terminal.SendString(s);
         }
 
         private void DownloadButton_Click(object sender, EventArgs e)
@@ -200,7 +190,7 @@ namespace CRTerm
             Transfer.XModem xModem = new Transfer.XModem();
             string fn = Path.ChangeExtension(Path.GetTempFileName(), ".xmodem");
             Crt.PrintLine("Receiving to " + fn);
-            xModem.ReceiveFile(CurrentSession, fn);
+            xModem.ReceiveFile(Session, fn);
         }
 
         private void BaudRate_Clicked(object sender, EventArgs e)
@@ -208,7 +198,7 @@ namespace CRTerm
             ToolStripMenuItem button = sender as ToolStripMenuItem;
             if (button == null)
                 return;
-            IO.SerialIOPort port = CurrentSession.Transport as IO.SerialIOPort;
+            IO.SerialIOPort port = Session.Transport as IO.SerialIOPort;
             if (port == null)
                 return;
 
@@ -222,9 +212,9 @@ namespace CRTerm
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Configuration config = new Configuration();
-            config.ConfigurableObjects.Add(CurrentSession);
-            config.ConfigurableObjects.Add(CurrentSession.Transport);
-            config.ConfigurableObjects.Add(CurrentSession.Terminal);
+            config.ConfigurableObjects.Add(Session);
+            config.ConfigurableObjects.Add(Session.Transport);
+            config.ConfigurableObjects.Add(Session.Terminal);
             config.SaveConfiguration();
         }
 
@@ -243,7 +233,7 @@ namespace CRTerm
             BaudRateButton.DropDownItems.Clear();
 
             int currentBaud = 0;
-            if (CurrentSession.Transport is IO.SerialIOPort p)
+            if (Session.Transport is IO.SerialIOPort p)
                 currentBaud = p.BaudRate;
 
             int[] baudRates = new int[] { 300, 1200, 2400, 9600, 19200, 38400, 57600, 115200 };
@@ -264,28 +254,19 @@ namespace CRTerm
             BaudRateButton.DropDownItems.Add(item);
         }
 
-        private void Upload_Paste_Click(object sender, EventArgs e)
-        {
-            Transfer.ITransferProtocol t = new Transfer.TextTransfer();
-            t.CurrentSession = this.CurrentSession;
-            t.Send();
-        }
-
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Transfer.TextTransfer t = new Transfer.TextTransfer();
-            t.CurrentSession = this.CurrentSession;
+            string s = "";
             if (Clipboard.ContainsText())
-            {
-                t.Text = Clipboard.GetText();
-                t.Send();
-            }
+                s = Clipboard.GetText();
+            Session.Terminal.SendString(s);
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            if (CurrentSession.Transfer != null)
-                CurrentSession.Transfer.Cancel();
+            if (Session.Transfer != null)
+                Session.Transfer.Cancel();
+            Session.Transfer = null;
         }
 
         private void BasicButton_Click(object sender, EventArgs e)
@@ -313,7 +294,7 @@ namespace CRTerm
                 return;
 
             Transfer.TextTransfer t = new Transfer.TextTransfer();
-            t.CurrentSession = this.CurrentSession;
+            t.CurrentSession = this.Session;
             if (Clipboard.ContainsText())
             {
                 t.Text = Data;
@@ -344,6 +325,28 @@ namespace CRTerm
         private void echoOnOffToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void aSCIIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void xMODEMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog f = new SaveFileDialog();
+
+            f.InitialDirectory = Session.DownloadDirectory;
+            if(f.ShowDialog() == DialogResult.OK)
+            {
+                Session.DownloadDirectory = System.IO.Path.GetDirectoryName(f.FileName);
+
+                Crt.PrintSeparater();
+                Crt.PrintLine("\r  Downloading " + f.FileName);
+
+                Transfer.ITransferProtocol t = new Transfer.XModem();
+                Session.Transfer = t;
+                t.ReceiveFile(Session, f.FileName);
+            }
         }
     }
 }

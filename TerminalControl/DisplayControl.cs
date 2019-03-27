@@ -66,6 +66,12 @@ namespace TerminalUI
             }
         }
 
+        public void PrintSeparater()
+        {
+            if (CurrentColumn > 0)
+                PrintLine();
+            PrintLine(new string('─', 72));
+        }
 
         public ITerminal Terminal
         {
@@ -364,7 +370,7 @@ namespace TerminalUI
         /// </summary>
         /// <param name="FromStart"></param>
         /// <param name="ToEnd"></param>
-        internal void ClearCurrentLine(bool FromStart, bool ToEnd)
+        public void ClearCurrentLine(bool FromStart, bool ToEnd)
         {
             int start = FromStart ? 0 : CurrentColumn;
             int end = ToEnd ? Columns : CurrentColumn + 1;
@@ -657,6 +663,24 @@ namespace TerminalUI
         //        Print(c[i]);
         //    }
         //}
+
+        public void PrintFirst(string s, bool NewLine = true)
+        {
+            if (CurrentColumn > 0)
+                PrintLine();
+            Print(s);
+            if (NewLine)
+                PrintLine();
+        }
+
+        public void PrintClear(string s, bool NewLine = true)
+        {
+            CurrentColumn = 0;
+            ClearCurrentLine(true, true);
+            Print(s);
+            if (NewLine)
+                PrintLine();
+        }
 
         public void Print(string s)
         {

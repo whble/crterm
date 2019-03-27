@@ -101,7 +101,25 @@
     <Compile Include="Transfer\ITransferProtocol.cs" />
     <Compile Include="IWindowManager.cs" />
     <Compile Include="Transfer\TextTransfer.cs" />
+    <Compile Include="Transfer\TransferControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Transfer\TransferControl.Designer.cs">
+      <DependentUpon>TransferControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Transfer\TransferDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transfer\TransferDialog.Designer.cs">
+      <DependentUpon>TransferDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Transfer\XModem.cs" />
+    <EmbeddedResource Include="Transfer\TransferControl.resx">
+      <DependentUpon>TransferControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Transfer\TransferDialog.resx">
+      <DependentUpon>TransferDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Resources\Cursor_Underline.png" />
     <None Include="Resources\TermSamle.bmp" />

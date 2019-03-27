@@ -1,10 +1,3 @@
-D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.dll
-D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.DisplayControl.resources
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateResource.cache
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb
 F:\Projects\Git\crterm\TerminalControl\bin\Debug\TerminalUI.dll
 F:\Projects\Git\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
 F:\Projects\Git\crterm\TerminalControl\obj\Debug\TerminalUI.csprojResolveAssemblyReference.cache
@@ -21,4 +14,10 @@ E:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateRe
 E:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
 E:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
 E:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csprojResolveAssemblyReference.cache
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.DisplayControl.resources
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateResource.Cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb

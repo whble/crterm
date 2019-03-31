@@ -331,7 +331,7 @@ namespace TerminalUI
             InitializeComponent();
 
             CurrentTextColor = CharacterCell.ColorCodes.Green;
-            SetTextMode(25, 80);
+            SetTextMode(36, 80);
             DoubleBuffered = true;
 
             drawTimer.Interval = 1000 / 60;

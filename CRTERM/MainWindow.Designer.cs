@@ -38,6 +38,7 @@
             this.EchoStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.Crt = new TerminalUI.DisplayControl();
+            this.transferControl1 = new CRTerm.Transfer.TransferControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ConnectButton = new System.Windows.Forms.ToolStripButton();
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
@@ -63,7 +64,6 @@
             this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.transferControl1 = new CRTerm.Transfer.TransferControl();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -79,9 +79,9 @@
             this.PortStatus,
             this.TerminalNameLabel,
             this.EchoStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 640);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 939);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1059, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -122,11 +122,11 @@
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.Crt);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.transferControl1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1059, 615);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1084, 914);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1059, 640);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1084, 939);
             this.toolStripContainer1.TabIndex = 1;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -138,7 +138,6 @@
             // 
             this.Crt.AddLinefeed = false;
             this.Crt.BackColor = System.Drawing.Color.DimGray;
-            this.Crt.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Crt.BackgroundImage")));
             this.Crt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Crt.CharUnderCursor = ' ';
             this.Crt.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
@@ -150,17 +149,31 @@
             this.Crt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Crt.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.Crt.Editor = null;
-            this.Crt.Font = new System.Drawing.Font("Classic Console", 30.27692F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Crt.Font = new System.Drawing.Font("Classic Console", 31.61946F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Crt.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.Crt.LineWrap = false;
             this.Crt.Location = new System.Drawing.Point(0, 0);
             this.Crt.Margin = new System.Windows.Forms.Padding(440714, 347787, 440714, 347787);
             this.Crt.Name = "Crt";
-            this.Crt.Size = new System.Drawing.Size(839, 615);
+            this.Crt.Size = new System.Drawing.Size(864, 914);
             this.Crt.StatusText = null;
             this.Crt.TabIndex = 1;
             this.Crt.Terminal = null;
             this.Crt.TextCursor = TerminalUI.TextCursorStyles.Underline;
+            // 
+            // transferControl1
+            // 
+            this.transferControl1.BytesSent = 0;
+            this.transferControl1.BytesToSend = 0;
+            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.transferControl1.Filename = "[unknown]";
+            this.transferControl1.Location = new System.Drawing.Point(864, 0);
+            this.transferControl1.Name = "transferControl1";
+            this.transferControl1.Operation = "Send / Receive";
+            this.transferControl1.Protocol = "[unknown protocol]";
+            this.transferControl1.Size = new System.Drawing.Size(220, 914);
+            this.transferControl1.TabIndex = 2;
+            this.transferControl1.Visible = false;
             // 
             // toolStrip1
             // 
@@ -385,25 +398,11 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // transferControl1
-            // 
-            this.transferControl1.BytesSent = 0;
-            this.transferControl1.BytesToSend = 0;
-            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.transferControl1.Filename = "[unknown]";
-            this.transferControl1.Location = new System.Drawing.Point(839, 0);
-            this.transferControl1.Name = "transferControl1";
-            this.transferControl1.Operation = "Send / Receive";
-            this.transferControl1.Protocol = "[unknown protocol]";
-            this.transferControl1.Size = new System.Drawing.Size(220, 615);
-            this.transferControl1.TabIndex = 2;
-            this.transferControl1.Visible = false;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1059, 662);
+            this.ClientSize = new System.Drawing.Size(1084, 961);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainWindow";

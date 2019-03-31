@@ -58,39 +58,47 @@ namespace CRTerm
 
         private void PortName_Clicked(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            if (item == null)
-                return;
-
-            if (item.Text == "Test")
+            try
             {
-                InitTestPort();
-                return;
-            }
+                ToolStripMenuItem item = sender as ToolStripMenuItem;
+                if (item == null)
+                    return;
 
-            if (item.Text == "Telnet")
+                if (item.Text == "Test")
+                {
+                    InitTestPort();
+                    return;
+                }
+
+                if (item.Text == "Telnet")
+                {
+                    InitTelnet();
+                    return;
+                }
+
+                IO.SerialIOPort port = Session.Transport as IO.SerialIOPort;
+                if (port == null)
+                {
+                    int baudRate = 9600;
+                    IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
+                    if (p != null)
+                        baudRate = p.BaudRate;
+                    port = new IO.SerialIOPort();
+                    port.BaudRate = baudRate;
+                }
+
+                port.Address = item.Text;
+                if (port.Status == ConnectionStatusCodes.Connected)
+                    port.Disconnect();
+                Session.Transport = port;
+                port.Connect();
+                UpdateStatus();
+
+            }
+            catch (Exception ex)
             {
-                InitTelnet();
-                return;
+                Crt.Print(ex.Message);
             }
-
-            IO.SerialIOPort port = Session.Transport as IO.SerialIOPort;
-            if (port == null)
-            {
-                int baudRate = 9600;
-                IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
-                if (p != null)
-                    baudRate = p.BaudRate;
-                port = new IO.SerialIOPort();
-                port.BaudRate = baudRate;
-            }
-
-            port.Address = item.Text;
-            if (port.Status == ConnectionStatusCodes.Connected)
-                port.Disconnect();
-            Session.Transport = port;
-            port.Connect();
-            UpdateStatus();
         }
 
         private void InitTelnet()
@@ -237,7 +245,7 @@ namespace CRTerm
                 currentBaud = p.BaudRate;
 
             int[] baudRates = new int[] { 300, 1200, 2400, 9600, 19200, 38400, 57600, 115200 };
-            for (int i = 0; i<baudRates.Length; i++)
+            for (int i = 0; i < baudRates.Length; i++)
             {
                 AddBaudRate(baudRates[i], currentBaud);
             }
@@ -336,7 +344,7 @@ namespace CRTerm
             SaveFileDialog f = new SaveFileDialog();
 
             f.InitialDirectory = Session.DownloadDirectory;
-            if(f.ShowDialog() == DialogResult.OK)
+            if (f.ShowDialog() == DialogResult.OK)
             {
                 Session.DownloadDirectory = System.IO.Path.GetDirectoryName(f.FileName);
 

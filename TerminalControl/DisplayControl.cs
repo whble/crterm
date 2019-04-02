@@ -664,15 +664,6 @@ namespace TerminalUI
         //    }
         //}
 
-        public void PrintFirst(string s, bool NewLine = true)
-        {
-            if (CurrentColumn > 0)
-                PrintLine();
-            Print(s);
-            if (NewLine)
-                PrintLine();
-        }
-
         public void PrintClear(string s, bool NewLine = true)
         {
             CurrentColumn = 0;
@@ -689,6 +680,15 @@ namespace TerminalUI
                 SetCharacter(CurrentRow, CurrentColumn, s.Substring(i, 1), CurrentTextColor, CurrentBackground, CurrentAttribute);
                 AdvanceCursor();
             }
+        }
+
+        public void PrintAtStart(string s, bool NewLine = true)
+        {
+            if (CurrentColumn > 0)
+                PrintLine();
+            Print(s);
+            if (NewLine)
+                PrintLine();
         }
 
         public void PrintLine(string s)

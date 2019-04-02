@@ -330,7 +330,7 @@ namespace TerminalUI
         {
             InitializeComponent();
 
-            CurrentTextColor = CharacterCell.ColorCodes.Green;
+            CurrentTextColor = CharacterCell.ColorCodes.Gray;
             SetTextMode(36, 80);
             DoubleBuffered = true;
 
@@ -409,7 +409,7 @@ namespace TerminalUI
                 case EchoModes.EchoOff:
                 case EchoModes.LocalEcho:
                 default:
-                    if (e.KeyCode == Keys.F12)
+                    if (e.KeyCode == Keys.Apps)
                     {
                         EchoMode = EchoModes.FullScreen;
                         InsertMode = InsertKeyMode.Overwrite;
@@ -432,7 +432,7 @@ namespace TerminalUI
             bool handled = true;
             switch (e.KeyCode)
             {
-                case Keys.F12:
+                case Keys.Apps:
                     EchoMode = EchoModes.EchoOff;
                     CurrentColumn = 0;
                     CurrentRow = Rows - 1;
@@ -830,12 +830,18 @@ namespace TerminalUI
                     y = row * RowHeight;
 
                     CharacterCell.ColorCodes color = cc.BackColor;
+                    Brush b = Brushes[(int)cc.TextColor];
                     if (color != CurrentBackground)
                     {
                         g.FillRectangle(Brushes[(int)cc.BackColor], x, y, ColWidth, RowHeight);
                     }
+                    if (cc.Attribute.HasFlag(CharacterCell.Attributes.Reverse))
+                    {
+                        g.FillRectangle(Brushes[(int)cc.TextColor], x, y, ColWidth, RowHeight);
+                        b = Brushes[(int)cc.BackColor];
+                    }
 
-                    g.DrawString(cc.Value, Font, Brushes[(int)cc.TextColor], x, y, StringFormat.GenericTypographic);
+                    g.DrawString(cc.Value, Font, b, x, y, StringFormat.GenericTypographic);
                 }
             }
 

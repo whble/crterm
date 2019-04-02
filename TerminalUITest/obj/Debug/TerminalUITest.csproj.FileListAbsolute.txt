@@ -22,3 +22,16 @@ F:\Projects\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.Generat
 F:\Projects\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.CoreCompileInputs.cache
 F:\Projects\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.exe
 F:\Projects\Github\crterm\TerminalUITest\obj\Debug\TerminalUITest.pdb
+E:\github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe.config
+E:\github\crterm\TerminalUITest\bin\Debug\TerminalUITest.exe
+E:\github\crterm\TerminalUITest\bin\Debug\TerminalUITest.pdb
+E:\github\crterm\TerminalUITest\bin\Debug\TerminalUI.dll
+E:\github\crterm\TerminalUITest\bin\Debug\TerminalUI.pdb
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csprojAssemblyReference.cache
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.TestWindow.resources
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.Properties.Resources.resources
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.GenerateResource.cache
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.CoreCompileInputs.cache
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.csproj.CopyComplete
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.exe
+E:\github\crterm\TerminalUITest\obj\Debug\TerminalUITest.pdb

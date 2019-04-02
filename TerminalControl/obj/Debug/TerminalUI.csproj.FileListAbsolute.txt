@@ -29,3 +29,11 @@ F:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateRe
 F:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
 F:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
 F:\Projects\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb
+E:\github\crterm\TerminalControl\bin\Debug\TerminalUI.dll
+E:\github\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.csprojAssemblyReference.cache
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.DisplayControl.resources
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateResource.cache
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
+E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb

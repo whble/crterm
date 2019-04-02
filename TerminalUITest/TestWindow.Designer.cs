@@ -41,7 +41,7 @@
             this.terminalControl1.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
             this.terminalControl1.CurrentColumn = 0;
             this.terminalControl1.CurrentRow = 0;
-            this.terminalControl1.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Green;
+            this.terminalControl1.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Gray;
             this.terminalControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.terminalControl1.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.terminalControl1.Font = new System.Drawing.Font("Consolas", 15.227F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);

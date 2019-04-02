@@ -7,10 +7,36 @@ namespace TerminalUI.Terminals
     {
         private const char CONTROL_E = '\x05';
         private const char ESCAPE = '\x1B';
-        int inOperand = 0;
-        List<int> operands = new List<int>();
-        bool inCmd = false;
+        private int inOperand = 0;
+        private List<int> operands = new List<int>();
+        private bool inCmd = false;
         private int savedPos;
+
+        private SortedList<System.Windows.Forms.Keys, string> KeyCodes = new SortedList<System.Windows.Forms.Keys, string>
+        {
+            { System.Windows.Forms.Keys.Up, ESCAPE+"[A"},
+            { System.Windows.Forms.Keys.Down, ESCAPE+"[B"},
+            { System.Windows.Forms.Keys.Right, ESCAPE+"[C"},
+            { System.Windows.Forms.Keys.Left, ESCAPE+"[D"},
+            { System.Windows.Forms.Keys.Home, ESCAPE+"[1~"},
+            { System.Windows.Forms.Keys.Insert, ESCAPE+"[2~"},
+            { System.Windows.Forms.Keys.Delete, ESCAPE+"[3~"},
+            { System.Windows.Forms.Keys.End, ESCAPE+"[4~"},
+            { System.Windows.Forms.Keys.PageUp, ESCAPE+"[5~"},
+            { System.Windows.Forms.Keys.PageDown, ESCAPE+"[6~"},
+            { System.Windows.Forms.Keys.F1, ESCAPE+"[11~"},
+            { System.Windows.Forms.Keys.F2, ESCAPE+"[12~"},
+            { System.Windows.Forms.Keys.F3, ESCAPE+"[13~"},
+            { System.Windows.Forms.Keys.F4, ESCAPE+"[14~"},
+            { System.Windows.Forms.Keys.F5, ESCAPE+"[15~"},
+            { System.Windows.Forms.Keys.F6, ESCAPE+"[16~"},
+            { System.Windows.Forms.Keys.F7, ESCAPE+"[17~"},
+            { System.Windows.Forms.Keys.F8, ESCAPE+"[18~"},
+            { System.Windows.Forms.Keys.F9, ESCAPE+"[19~"},
+            { System.Windows.Forms.Keys.F10, ESCAPE+"[20~"},
+            { System.Windows.Forms.Keys.F11, ESCAPE+"[21~"},
+            { System.Windows.Forms.Keys.F12, ESCAPE+"[22~"},
+        };
 
         public override string Name
         {
@@ -22,21 +48,24 @@ namespace TerminalUI.Terminals
 
         public override void SendKey(TerminalKeyEventArgs terminalKey)
         {
-            switch(terminalKey.KeyCode)
-            {
-                case System.Windows.Forms.Keys.Up:
-                    SendString("\x1B[A");
-                    break;
-                case System.Windows.Forms.Keys.Down:
-                    SendString("\x1B[B");
-                    break;
-                case System.Windows.Forms.Keys.Right:
-                    SendString("\x1B[C");
-                    break;
-                case System.Windows.Forms.Keys.Left:
-                    SendString("\x1B[D");
-                    break;
-            }
+            if (KeyCodes.ContainsKey(terminalKey.KeyCode))
+                SendString(KeyCodes[terminalKey.KeyCode]);
+
+            //switch (terminalKey.KeyCode)
+            //{
+            //    case System.Windows.Forms.Keys.Up:
+            //        SendString(ESCAPE+"[A");
+            //        break;
+            //    case System.Windows.Forms.Keys.Down:
+            //        SendString(ESCAPE+"[B");
+            //        break;
+            //    case System.Windows.Forms.Keys.Right:
+            //        SendString(ESCAPE+"[C");
+            //        break;
+            //    case System.Windows.Forms.Keys.Left:
+            //        SendString(ESCAPE+"[D");
+            //        break;
+            //}
 
             base.SendKey(terminalKey);
         }
@@ -164,8 +193,33 @@ namespace TerminalUI.Terminals
                             inCmd = false;
                             Display.CursorPos = savedPos;
                             break;
+                        case 'm':
+                            inCmd = false;
+                            if (operands.Count > 0)
+                            {
+                                switch (operands[0])
+                                {
+                                    case 0:
+                                        Display.CurrentAttribute = CharacterCell.Attributes.Normal;
+                                        break;
+                                    case 7:
+                                        Display.CurrentAttribute = CharacterCell.Attributes.Reverse;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            break;
                         default:
                             inCmd = false;
+                            System.Diagnostics.Debug.Write("Escape character ignored: " + c + " (" + ((int)c).ToString() + ") Operands:");
+                            for (int i = 0; i < operands.Count; i++)
+                            {
+                                if (i > 0)
+                                    System.Diagnostics.Debug.Write(";");
+                                System.Diagnostics.Debug.Write(operands[i].ToString());
+                            }
+                            System.Diagnostics.Debug.WriteLine("");
                             break;
 
                     }

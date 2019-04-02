@@ -33,10 +33,11 @@ namespace TerminalUI
             Underline = 0x01,
             Bold = 0x02,
             Italic = 0x04,
-            Blink = 0x08
+            Blink = 0x08,
+            Reverse = 0x10
         }
 
-        public ColorCodes TextColor = ColorCodes.Green;
+        public ColorCodes TextColor = ColorCodes.Gray;
         public ColorCodes BackColor = ColorCodes.Black;
         public Attributes Attribute = Attributes.Normal;
         public string Value = " ";

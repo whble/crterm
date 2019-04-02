@@ -144,7 +144,7 @@
             this.Crt.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
             this.Crt.CurrentColumn = 0;
             this.Crt.CurrentRow = 0;
-            this.Crt.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Green;
+            this.Crt.CurrentTextColor = TerminalUI.CharacterCell.ColorCodes.Gray;
             this.Crt.CursorPos = 0;
             this.Crt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Crt.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;

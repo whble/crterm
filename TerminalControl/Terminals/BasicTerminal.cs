@@ -150,6 +150,9 @@ namespace TerminalUI.Terminals
                     if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Control))
                         Display.Clear();    
                     break;
+                case System.Windows.Forms.Keys.Tab:
+                    SendChar('\t');
+                    break;
                 default:
                     break;
             }

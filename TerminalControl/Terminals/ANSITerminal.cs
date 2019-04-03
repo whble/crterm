@@ -38,6 +38,22 @@ namespace TerminalUI.Terminals
             { System.Windows.Forms.Keys.F12, ESCAPE+"[22~"},
         };
 
+        private SortedList<System.Windows.Forms.Keys, string> ShiftKeyCodes = new SortedList<System.Windows.Forms.Keys, string>
+        {
+            //{ System.Windows.Forms.Keys.F1, ESCAPE+"[23~"},
+            //{ System.Windows.Forms.Keys.F2, ESCAPE+"[24~"},
+            { System.Windows.Forms.Keys.F3, ESCAPE+"[25~"},
+            { System.Windows.Forms.Keys.F4, ESCAPE+"[26~"},
+            { System.Windows.Forms.Keys.F5, ESCAPE+"[28~"},
+            { System.Windows.Forms.Keys.F6, ESCAPE+"[29~"},
+            { System.Windows.Forms.Keys.F7, ESCAPE+"[31~"},
+            { System.Windows.Forms.Keys.F8, ESCAPE+"[32~"},
+            { System.Windows.Forms.Keys.F9, ESCAPE+"[33~"},
+            { System.Windows.Forms.Keys.F10, ESCAPE+"[34~"},
+            //{ System.Windows.Forms.Keys.F11, ESCAPE+"[21~"},
+            //{ System.Windows.Forms.Keys.F12, ESCAPE+"[22~"},
+        };
+
         public override string Name
         {
             get
@@ -48,7 +64,10 @@ namespace TerminalUI.Terminals
 
         public override void SendKey(TerminalKeyEventArgs terminalKey)
         {
-            if (KeyCodes.ContainsKey(terminalKey.KeyCode))
+            if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Shift)
+                && ShiftKeyCodes.ContainsKey(terminalKey.KeyCode))
+                SendString(ShiftKeyCodes[terminalKey.KeyCode]);
+            else if (KeyCodes.ContainsKey(terminalKey.KeyCode))
                 SendString(KeyCodes[terminalKey.KeyCode]);
 
             //switch (terminalKey.KeyCode)

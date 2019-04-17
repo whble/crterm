@@ -132,8 +132,10 @@ namespace TerminalUI.Terminals
             for (int i = 0; i < Text.Length; i++)
             {
                 SendBuffer.Add(Text[i]);
+                ReadyToSend?.Invoke(this, new EventArgs());
+                while (SendBuffer.Count > 255)
+                    System.Windows.Forms.Application.DoEvents();
             }
-            ReadyToSend?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace TerminalUI
 
         private IEditorPlugin _editor = null;
         private ITerminal _terminal = new Terminals.ANSITerminal();
-        #endregion
+        #endregion 
 
         #region Public Properties
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -677,8 +677,20 @@ namespace TerminalUI
         {
             for (int i = 0; i < s.Length; i++)
             {
-                SetCharacter(CurrentRow, CurrentColumn, s.Substring(i, 1), CurrentTextColor, CurrentBackground, CurrentAttribute);
-                AdvanceCursor();
+                char c = s[i];
+                switch (c)
+                {
+                    case '\r':
+                        CurrentColumn = 0;
+                        break;
+                    case '\n':
+                        CurrentRow += 1;
+                        break;
+                    default:
+                        SetCharacter(CurrentRow, CurrentColumn, s.Substring(i, 1), CurrentTextColor, CurrentBackground, CurrentAttribute);
+                        AdvanceCursor();
+                        break;
+                }
             }
         }
 

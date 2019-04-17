@@ -267,6 +267,7 @@ namespace CRTerm
             string s = "";
             if (Clipboard.ContainsText())
                 s = Clipboard.GetText();
+
             Session.Terminal.SendString(s);
         }
 

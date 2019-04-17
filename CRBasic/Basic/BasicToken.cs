@@ -10,8 +10,8 @@ namespace CRBasic.Basic
     {
         public string Name;
         public UInt16 Code;
-        public delegate void CommandDelegate(BasicProgram Program, ProgramStep Step);
-        public event CommandDelegate ExecuteMethod;
+        public delegate void CommandDelegate(BasicProgram Program, ProgramLine SourceLine);
+        public event CommandDelegate Translate;
 
         public BasicToken(string Name, UInt16 Code)
         {
@@ -21,12 +21,12 @@ namespace CRBasic.Basic
         {
             this.Name = Name;
             this.Code = Code;
-            this.ExecuteMethod += Command;
+            this.Translate += Command;
         }
 
-        public void Execute(BasicProgram Program, ProgramStep Step)
+        public void Execute(BasicProgram Program, ProgramLine Step)
         {
-            ExecuteMethod?.Invoke(Program, Step);
+            Translate?.Invoke(Program, Step);
         }
 
         public override string ToString()

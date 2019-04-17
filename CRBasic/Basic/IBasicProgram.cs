@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace CRBasic.Basic
 {
-    public class BasicVariable
+
+    public interface IBasicProgram
     {
-        public string Name;
-        public string Type;
-        public object Value;
+        BasicVariables Globals { get; set; }
+
+        void Run();
+        void Break();
+        void End();
     }
 }

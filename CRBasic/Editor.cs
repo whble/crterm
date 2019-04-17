@@ -124,7 +124,7 @@ namespace CRBasic
 
             //System.Diagnostics.Debug.WriteLine(line);
             Display.PrintLine();
-            Interpreter.Execute(line);
+            Interpreter.ExecuteStatement(line);
         }
     }
 }

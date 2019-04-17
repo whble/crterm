@@ -37,3 +37,4 @@ E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.GenerateResource.ca
 E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.csproj.CoreCompileInputs.cache
 E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
 E:\github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb
+D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.csprojAssemblyReference.cache

@@ -7,7 +7,7 @@ namespace CRBasic
     {
         // private IInterpreter engine = new PyMain();
         // private IInterpreter engine = new CRBasic.PyBasic.BasicMain();
-        private IInterpreter engine = new Basic.BasicMain();
+        private IInterpreter engine = new Basic.BasicInterpreter();
 
         public CRBasicMainWindow()
         {
@@ -28,8 +28,9 @@ namespace CRBasic
 
             engine.Init();
 
-            string autoexec = "autoexec.bas";
-            // engine.Run(autoexec);
+            string autoexec = "autorun.bas.txt";
+            engine.Load(autoexec);
+            // engine.Run();
         }
 
         private void CRBasicMain_KeyDown(object sender, KeyEventArgs e)

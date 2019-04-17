@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace CRBasic.Basic
@@ -8,10 +9,10 @@ namespace CRBasic.Basic
     /// </summary>
     public class BasicParser
     {
-        private enum SymbolModes
+        private enum SymbolTypes
         {
             None,
-            Word,
+            Identifier,
             Number,
             LineNumber,
             Operator,
@@ -22,146 +23,69 @@ namespace CRBasic.Basic
             Separator
         }
 
-        public int Pos = 0;
-        public string Text = "";
-        private ProgramLine Line = new ProgramLine();
+        public SortedList<string, BasicLabel> Labels = new SortedList<string, BasicLabel>();
+        public ProgramLine OutputLine = new ProgramLine();
+        public StringBuffer InputLine = null;
 
         /// <summary>
-        /// true when first character in symbol is a letter. 
+        /// Reads a line of program text and returns a ProgramLine object
         /// </summary>
-        private bool InQuote = false;
-        private int ParenLevel = 0;
-
-        public ProgramLine Parse(string CommandText)
+        /// <param name="BasicText"></param>
+        /// <param name="LineNumber">Line number of the source file. The first line is 1. (This is not the BASIC line number, ie: 10 GOTO 10.) 
+        /// Enter ProgramLine.LINENUMBER_IMMEDIATE for immediate statements</param>
+        /// <returns></returns>
+        public ProgramLine ParseLine(string BasicText)
         {
-            Pos = 0;
-            InQuote = false;
-            ParenLevel = 0;
-            Line = new ProgramLine();
-            Text = CommandText;
-
-            if (IsDigit(ThisChar))
+            OutputLine = new ProgramLine();
+            InputLine = new StringBuffer(BasicText);
+            if (IsDigit(InputLine.ThisChar))
             {
-                ParseLineNumber();
+                ParseLineNumber(true);
             }
 
-            while (!EndOfLine)
+            while (!InputLine.EndOfLine)
             {
                 ParseStatement();
             }
-            return Line;
+            return OutputLine;
         }
 
-        private void ParseLineNumber()
+        private void ParseLineNumber(bool Declaration)
         {
+            StringBuilder s = new StringBuilder();
             try
             {
-                StringBuilder s = new StringBuilder();
-                while (IsDigit(ThisChar))
-                    s.Append(Read());
-                Line.LineNumber = int.Parse(s.ToString());
+                while (IsDigit(InputLine.ThisChar))
+                    s.Append(InputLine.Next());
             }
             catch (Exception ex)
             {
                 throw new BasicException(ex, "Parsing line number");
             }
 
+            string ln = s.ToString().Trim();
+            BasicLabel label;
+            if (Labels.ContainsKey(ln))
+                label = Labels[ln];
+            else
+            {
+                label = new BasicLabel();
+                label.Name = ln;
+                if (!int.TryParse(ln, out label.LineNumber))
+                    label.LineNumber = -1;
+                Labels.Add(ln, label);
+                OutputLine.LineNumber = label.LineNumber;
+            }
+
+            if (Declaration)
+                label.FoundDeclaration = true;
+            else
+                label.FoundReference = true;
         }
 
-        public bool EndOfLine
+        internal void Clear()
         {
-            get
-            {
-                return Pos >= Text.Length;
-            }
-        }
-
-        public bool EndOfStatement
-        {
-            get
-            {
-                if (EndOfLine)
-                {
-                    return true;
-                }
-
-                if (ParenLevel > 0 && ThisChar == ':')
-                {
-                    throw new BasicException("Syntax error", Line.LineNumber, Pos, ": is inside parentheses");
-                }
-
-                if (!InQuote && ThisChar == ':')
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        private char Read()
-        {
-            if (Pos >= Text.Length)
-            {
-                return '\0';
-            }
-
-            char c = Text[Pos++];
-            if (c == '"')
-            {
-                InQuote = !InQuote;
-            }
-
-            if (!InQuote && c == '(')
-            {
-                ParenLevel++;
-            }
-
-            if (!InQuote && c == ')')
-            {
-                ParenLevel--;
-            }
-
-            return c;
-        }
-
-        private char ThisChar
-        {
-            get
-            {
-                if (Pos < Text.Length)
-                {
-                    return Text[Pos];
-                }
-
-                return '\0';
-            }
-        }
-
-        private char NextChar
-        {
-            get
-            {
-                if (Pos < Text.Length - 1)
-                {
-                    return '\0';
-                }
-
-                return Text[Pos + 1];
-            }
-        }
-
-        private char LastChar
-        {
-            get
-            {
-                if (Pos <= 0 || Pos >= Text.Length)
-                {
-                    return '\0';
-                }
-
-                return Text[Pos - 1];
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -264,190 +188,129 @@ namespace CRBasic.Basic
 
         private void DiscardWhiteSpace()
         {
-            while (!EndOfStatement && IsWhitespace(ThisChar))
+            while (!InputLine.EndOfStatement && IsWhitespace(InputLine.ThisChar))
             {
-                Pos++;
+                InputLine.Next();
             }
         }
 
         /// <summary>
         /// Parse a statement. A statement is a word followed by 0 or more arguments and is 
         /// terminated by end of line or a colon (:). 
-        /// <para>Parsed statemetns will be placed in the current ProgramLine</para>
-        /// <para>If none of the above, a syntax error is generated.</para>
+        /// An assignment is a variable, followed by =, followed by the value.
+        /// <para>Examples</para>
+        /// <para>PRINT "HELLO"</para>
+        /// <para>A = 23</para>
         /// </summary>
         private void ParseStatement()
         {
-            char c;
-            SymbolModes lastMode = SymbolModes.None;
-            SymbolModes mode = SymbolModes.None;
-            StringBuilder s = new StringBuilder();
-
-            lastMode = mode;
-            c = ThisChar;
-            while (!EndOfStatement)
+            SkipSpace();
+            OutputLine.Command = ReadWord();
+            SkipSpace();
+            if (InputLine.ThisChar == '=')
             {
-                mode = CheckMode(c, lastMode);
+                OutputLine.LValue = OutputLine.Command;
+                OutputLine.Command = "=";
+                InputLine.Next();
+            }
+            SkipSpace();
+            OutputLine.Arguments = InputLine.ReadToEOS();
+        }
+
+        string ReadWord()
+        {
+            StringBuilder s = new StringBuilder();
+            SymbolTypes mode = SymbolType(InputLine.ThisChar, SymbolTypes.None);
+            SymbolTypes lastMode = mode;
+            while (mode == lastMode)
+            {
+                s.Append(InputLine.ThisChar);
+                InputLine.Next();
                 lastMode = mode;
-                while (mode == lastMode)
-                {
-                    s.Append(c);
-                    Read();
-                    c = ThisChar;
-                    mode = CheckMode(c, lastMode);
-                }
-                AppendSymbol(s.ToString(), lastMode);
-                s.Clear();
+                mode = SymbolType(InputLine.ThisChar, lastMode);
+            }
+            return s.ToString();
+        }
+
+        private void SkipSpace()
+        {
+            while ((SymbolType(InputLine.ThisChar, SymbolTypes.None) == SymbolTypes.Whitespace) && !InputLine.EndOfStatement)
+            {
+                InputLine.Next();
             }
         }
 
-        private SymbolModes CheckMode(char c, SymbolModes lastMode)
+        private SymbolTypes SymbolType(char c, SymbolTypes lastMode)
         {
-            if (InQuote)
-                return SymbolModes.String;
+            if (InputLine.InQuote)
+                return SymbolTypes.String;
             else if (c == '"')
-                return SymbolModes.String;
-            else if (lastMode == SymbolModes.Word && IsSigil(c))
-                return SymbolModes.Word;
-            else if (IsIdentifier(c, lastMode != SymbolModes.Word))
-                return SymbolModes.Word;
+                return SymbolTypes.String;
+            else if (lastMode == SymbolTypes.Identifier && IsSigil(c))
+                return SymbolTypes.Identifier;
+            else if (IsIdentifier(c, lastMode != SymbolTypes.Identifier))
+                return SymbolTypes.Identifier;
             else if (IsDigit(c))
-                return SymbolModes.Number;
+                return SymbolTypes.Number;
             else if (IsOperatorChar(c))
-                return SymbolModes.Operator;
+                return SymbolTypes.Operator;
             else if (IsWhitespace(c))
-                return SymbolModes.Whitespace;
+                return SymbolTypes.Whitespace;
             else if (IsSeparator(c))
-                return SymbolModes.Separator;
+                return SymbolTypes.Separator;
             else
-                return SymbolModes.Other;
+                return SymbolTypes.Other;
         }
 
-        private void AppendSymbol(string s, SymbolModes mode)
+        private void AppendSymbol(StringBuilder Line, string Symbol, SymbolTypes Mode)
         {
-            BasicSymbol ns = new BasicSymbol();
-            string su = s.ToUpper();
+            String ns = null;
+            string su = Symbol.ToUpper();
 
-            switch (mode)
+            switch (Mode)
             {
-                case SymbolModes.None:
-                    ns.SetText(s);
-                    ns.PadSpace = BasicSymbol.Padding.Required;
+                case SymbolTypes.None:
+                    ns = " " + Symbol;
                     break;
-                case SymbolModes.String:
-                    ns.DataType = DataTypes.String;
-                    if (s.Length > 2 && s.StartsWith("\"") && s.EndsWith("\""))
-                        ns.Value = s.Substring(1, s.Length - 2);
+                case SymbolTypes.String:
+                    if (Symbol.Length > 2 && Symbol.StartsWith("\"") && Symbol.EndsWith("\""))
+                        ns = Symbol;
                     else
-                        ns.Value = s;
+                        ns = "\"" + Symbol + "\"";
                     break;
-                case SymbolModes.Separator:
-                    ns.SetText(su);
-                    ns.DataType = DataTypes.Delimiter;
-                    ns.PadSpace = BasicSymbol.Padding.None;
+                case SymbolTypes.Separator:
+                    ns = Symbol;
                     break;
-                case SymbolModes.Operator:
-                case SymbolModes.Other:
-                case SymbolModes.Word:
-                    if (BasicTokens.Operators.ContainsKey(su))
-                    {
-                        ns.SetOperator(su);
-                        ns.PadSpace = BasicSymbol.Padding.None;
-                    }
-                    else if (BasicTokens.Commands.ContainsKey(su))
-                    {
-                        ns.PadSpace = BasicSymbol.Padding.Allowed;
-                        ns.SetToken(su);
-                    }
-                    else
-                    {
-                        ns.SetText(su);
-                        ns.PadSpace = BasicSymbol.Padding.Allowed;
-                    }
+                case SymbolTypes.Operator:
+                    ns = su;
                     break;
-                case SymbolModes.Number:
-                    int i;
-                    float f;
-                    double d;
-                    if (int.TryParse(s, out i))
-                    {
-                        ns.DataType = DataTypes.Integer;
-                        ns.Value = i;
-                    }
-                    else if (float.TryParse(s, out f))
-                    {
-                        ns.DataType = DataTypes.Single;
-                        ns.Value = f;
-                    }
-                    else if (double.TryParse(s, out d))
-                    {
-                        ns.DataType = DataTypes.Double;
-                        ns.Value = f;
-                    }
-                    else
-                        ns.SetText(s);
-                    ns.PadSpace = BasicSymbol.Padding.Allowed;
+                case SymbolTypes.Other:
+                case SymbolTypes.Identifier:
+                    ns = su;
                     break;
-                case SymbolModes.LineNumber:
-                    Line.LineNumber = int.Parse(s);
-                    ns.PadSpace = BasicSymbol.Padding.Required;
+                case SymbolTypes.Number:
+                    ns = su;
                     break;
-                case SymbolModes.Whitespace:
+                case SymbolTypes.Whitespace:
                 default:
                     break;
             }
 
-            if (ns.Value != null)
-                Line.Symbols.Add(ns);
-            mode = SymbolModes.None;
+            if (!string.IsNullOrEmpty(ns))
+                Line.Append(ns);
         }
 
         private string ParseExpressoin()
         {
             DiscardWhiteSpace();
             StringBuilder s = new StringBuilder();
-            while (!EndOfStatement)
+            while (!InputLine.EndOfStatement)
             {
-                char c = Read();
+                char c = InputLine.Next();
 
             }
             return "";
         }
 
-        /// <summary>
-        /// Reads to the end of the statement. No arguments are allowed, so any values in this space
-        /// should trigger a syntax error.
-        /// </summary>
-        private void ReadNoArgs()
-        {
-            while (!EndOfLine)
-            {
-                char c = Read();
-                if (c == ':')
-                {
-                    return;
-                }
-
-                if (c > ' ')
-                {
-                    throw new BasicException("Syntax Error", Line.LineNumber, Pos, "No arguments allowed");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Discards all text to the end of the current statement. 
-        /// <para>Reading ends at a colon (:) or end of line. </para>
-        /// <para>If a colon is found, the colon is discarded and Pos will be on the character following the colon.</para>
-        /// </summary>
-        /// <returns></returns>
-        private void SkipToEnd()
-        {
-            char c = Read();
-            while (!EndOfStatement)
-            {
-                c = Read();
-            }
-        }
     }
 }

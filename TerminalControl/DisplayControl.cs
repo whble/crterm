@@ -10,7 +10,7 @@ namespace TerminalUI
 {
     public partial class DisplayControl : UserControl
     {
-        #region Private Fields
+        #region Fields
         private static string MEASURE_STRING = new string('W', 80);
 
         private int _cols;
@@ -44,14 +44,15 @@ namespace TerminalUI
 
         private IEditorPlugin _editor = null;
         private ITerminal _terminal = new Terminals.ANSITerminal();
-        #endregion 
 
-        #region Public Properties
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public List<string> Buffer = new List<string>();
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public CharacterCell[] CharacterData = new CharacterCell[2000];
 
+        #endregion
+
+        #region Public Properties
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public EchoModes EchoMode
         {
@@ -701,6 +702,19 @@ namespace TerminalUI
             Print(s);
             if (NewLine)
                 PrintLine();
+        }
+
+        /// <summary>
+        /// Prints a series of objects. All objects will be converted to a string with ToString(). If the last object is null, 
+        /// NewLine will be suppressed.
+        /// </summary>
+        /// <param name="s"></param>
+        public void Print(string[] s)
+        {
+            foreach (var item in s)
+            {
+                Print(item.ToString());
+            }
         }
 
         public void PrintLine(string s)

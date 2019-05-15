@@ -108,7 +108,9 @@ namespace TerminalUI
 
                 if (x >= Columns)
                 {
-                    x = Columns - 1;
+                    int r = (int)(x / Columns);
+                    CurrentRow += r;
+                    x = x % Columns;
                 }
 
                 BlinkCursor();
@@ -332,8 +334,10 @@ namespace TerminalUI
             InitializeComponent();
 
             CurrentTextColor = CharacterCell.ColorCodes.Gray;
-            SetTextMode(36, 80);
+            SetTextMode(25, 80);
             DoubleBuffered = true;
+            DoubleBuffered = true;
+            LineWrap = true;
 
             drawTimer.Interval = 1000 / 60;
             drawTimer.Tick += DrawTimer_Tick;
@@ -678,20 +682,7 @@ namespace TerminalUI
         {
             for (int i = 0; i < s.Length; i++)
             {
-                char c = s[i];
-                switch (c)
-                {
-                    case '\r':
-                        CurrentColumn = 0;
-                        break;
-                    case '\n':
-                        CurrentRow += 1;
-                        break;
-                    default:
-                        SetCharacter(CurrentRow, CurrentColumn, s.Substring(i, 1), CurrentTextColor, CurrentBackground, CurrentAttribute);
-                        AdvanceCursor();
-                        break;
-                }
+                Print(s[i]);
             }
         }
 

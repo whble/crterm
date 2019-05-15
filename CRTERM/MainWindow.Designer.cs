@@ -63,6 +63,7 @@
             this.xmodemPCPUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.DisplayOptionsDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -79,9 +80,9 @@
             this.PortStatus,
             this.TerminalNameLabel,
             this.EchoStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 939);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 702);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1124, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -122,11 +123,11 @@
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.Crt);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.transferControl1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1084, 914);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1124, 677);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1084, 939);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1124, 702);
             this.toolStripContainer1.TabIndex = 1;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -149,13 +150,13 @@
             this.Crt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Crt.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.Crt.Editor = null;
-            this.Crt.Font = new System.Drawing.Font("Classic Console", 31.61946F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Crt.Font = new System.Drawing.Font("Classic Console", 23.42054F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Crt.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.Crt.LineWrap = false;
             this.Crt.Location = new System.Drawing.Point(0, 0);
             this.Crt.Margin = new System.Windows.Forms.Padding(440714, 347787, 440714, 347787);
             this.Crt.Name = "Crt";
-            this.Crt.Size = new System.Drawing.Size(864, 914);
+            this.Crt.Size = new System.Drawing.Size(904, 677);
             this.Crt.StatusText = null;
             this.Crt.TabIndex = 1;
             this.Crt.Terminal = null;
@@ -167,11 +168,11 @@
             this.transferControl1.BytesToSend = 0;
             this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
             this.transferControl1.Filename = "[unknown]";
-            this.transferControl1.Location = new System.Drawing.Point(864, 0);
+            this.transferControl1.Location = new System.Drawing.Point(904, 0);
             this.transferControl1.Name = "transferControl1";
             this.transferControl1.Operation = "Send / Receive";
             this.transferControl1.Protocol = "[unknown protocol]";
-            this.transferControl1.Size = new System.Drawing.Size(220, 914);
+            this.transferControl1.Size = new System.Drawing.Size(220, 677);
             this.transferControl1.TabIndex = 2;
             this.transferControl1.Visible = false;
             // 
@@ -189,10 +190,11 @@
             this.UploadButton,
             this.toolStripDropDownloadButton,
             this.CancelTransferButton,
-            this.toolStripSeparator2});
+            this.toolStripSeparator2,
+            this.DisplayOptionsDropdown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(503, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(592, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -393,6 +395,16 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // DisplayOptionsDropdown
+            // 
+            this.DisplayOptionsDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.DisplayOptionsDropdown.Image = ((System.Drawing.Image)(resources.GetObject("DisplayOptionsDropdown.Image")));
+            this.DisplayOptionsDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DisplayOptionsDropdown.Name = "DisplayOptionsDropdown";
+            this.DisplayOptionsDropdown.Size = new System.Drawing.Size(58, 22);
+            this.DisplayOptionsDropdown.Text = "Display";
+            this.DisplayOptionsDropdown.DropDownOpening += new System.EventHandler(this.DisplayOptionsDropdown_DropDownOpening);
+            // 
             // timer1
             // 
             this.timer1.Interval = 1000;
@@ -402,7 +414,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1084, 961);
+            this.ClientSize = new System.Drawing.Size(1124, 724);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainWindow";
@@ -460,6 +472,7 @@
         private System.Windows.Forms.ToolStripMenuItem xmodemPCPUTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lineWrapToolStripMenuItem;
         private Transfer.TransferControl transferControl1;
+        private System.Windows.Forms.ToolStripDropDownButton DisplayOptionsDropdown;
     }
 }
 

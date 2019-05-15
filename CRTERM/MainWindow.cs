@@ -357,5 +357,61 @@ namespace CRTerm
                 t.ReceiveFile(Session, f.FileName);
             }
         }
+
+        private void AddNewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DisplayOptionsDropdown_DropDownOpening(object sender, EventArgs e)
+        {
+            LoadDisplayModes();
+        }
+
+        private void LoadDisplayModes()
+        {
+            DisplayOptionsDropdown.DropDownItems.Clear();
+            string currentOption = Session.Display.Columns.ToString() + "x" + Session.Display.Rows.ToString();
+
+            foreach (string option in new string[] { "80x25", "80x36", "120x50" })
+            {
+                AddDropdownItem(DisplayOptionsDropdown, option, currentOption, DisplaySize_Clicked);
+            }
+        }
+
+        void AddDropdownItem(ToolStripDropDownButton Parent, string Name, string CurrentItem, System.EventHandler ClickHandler)
+        {
+            ToolStripMenuItem item = new ToolStripMenuItem();
+            item.Text = Name;
+            item.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            if (Name == CurrentItem)
+                item.Checked = true;
+            item.Click += ClickHandler;
+            Parent.DropDownItems.Add(item);
+        }
+
+        void DisplaySize_Clicked(object sender, EventArgs e)
+        {
+            ToolStripMenuItem c = sender as ToolStripMenuItem;
+            if (c == null)
+                return;
+
+            string[] parts = c.Text.Split('x');
+            if (parts.Length < 2)
+                return;
+
+            int rows, cols;
+            int.TryParse(parts[0], out cols);
+            int.TryParse(parts[1], out rows);
+
+            if (rows == 0 || cols == 0)
+            {
+                Session.Display.PrintAtStart("Cannot set video mode: " + cols.ToString() + "x" + rows.ToString() + "x");
+                return;
+            }
+
+            Session.Display.SetTextMode(rows, cols);
+        }
+
     }
 }

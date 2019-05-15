@@ -183,8 +183,8 @@ namespace CRTerm.IO
 
                 // if the port can't be opened, allow the program to run
                 // but with no data communication. However, the main form should handle this
-                throw new CRTException("COM Port not available: " + Address + "\n" +
-                  "Edit the Application config file to set the correct COM port\n" +
+                throw new CRTException("COM Port not available: " + Address + "\r\n" +
+                  "Edit the Application config file to set the correct COM port\r\n" +
                   ex.Message);
             }
         }

@@ -1,8 +1,0 @@
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csproj.GenerateResource.Cache
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csproj.CoreCompileInputs.cache
-D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.dll
-D:\Github\crterm\TerminalControl\bin\Debug\TerminalUI.pdb
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.dll
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.pdb
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalControl.csprojResolveAssemblyReference.cache
-D:\Github\crterm\TerminalControl\obj\Debug\TerminalUI.DisplayControl.resources

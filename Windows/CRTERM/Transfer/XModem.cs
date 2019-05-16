@@ -86,11 +86,7 @@ namespace CRTerm.Transfer
             {
                 if (value == _transport)
                     return;
-                if (_transport != null)
-                    _transport.DataReceived -= this.ReceiveData;
                 _transport = value;
-                if (_transport != null)
-                    _transport.DataReceived += this.ReceiveData;
             }
         }
 
@@ -351,11 +347,11 @@ namespace CRTerm.Transfer
 
             while (Transport.BytesWaiting > 0)
             {
-                dataBuffer.Add(Transport.ReadByte());
+                dataBuffer.Add(Transport.Read());
             }
         }
 
-        public virtual void ReceiveData(IBuffered receiver)
+        public virtual void ReceiveData(IReceiveChannel receiver)
         {
             ResetNAKTimer();
             ResetFailTimer();

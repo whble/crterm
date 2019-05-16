@@ -11,6 +11,6 @@ namespace CRTerm.Transfer
         void SendFile(Session CurrentSession, string Filename);
         void ReceiveFile(Session CurrentSession, string Filename);
         void Cancel();
-        void ReceiveData(IBuffered receiver);
+        void ReceiveData(IReceiveChannel receiver);
     }
 }

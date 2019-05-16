@@ -284,7 +284,7 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
             if (b.Checked)
-                Crt.EchoMode = EchoModes.FullScreen;
+                Crt.EchoMode = EchoModes.EditMode;
             else
                 Crt.EchoMode = EchoModes.EchoOff;
 
@@ -371,7 +371,7 @@ namespace CRTerm
             DisplayOptionsDropdown.DropDownItems.Clear();
             string currentOption = Session.Display.Columns.ToString() + "x" + Session.Display.Rows.ToString();
 
-            foreach (string option in new string[] { "80x25", "80x36", "120x50" })
+			foreach (string option in new string[] { "80x24", "80x25", "80x36", "120x25", "120x36", "120x50" })
             {
                 AddDropdownItem(DisplayOptionsDropdown, option, currentOption, DisplaySize_Clicked);
             }
@@ -409,6 +409,7 @@ namespace CRTerm
             }
 
             Session.Display.SetTextMode(rows, cols);
+			Session.Display.TerminalControl_Resize(this, e);
         }
 
         private void ReceiveTimer_Tick(object sender, EventArgs e)

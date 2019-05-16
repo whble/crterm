@@ -213,6 +213,8 @@ namespace CRTerm.IO
         {
             get
             {
+                if (port == null || !port.IsOpen)
+                    return 0;
                 return port.BytesToRead;
             }
         }

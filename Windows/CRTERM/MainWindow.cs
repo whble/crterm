@@ -183,9 +183,7 @@ namespace CRTerm
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
-            if (p == null)
-                return;
+            Session?.ReceiveTimer_Tick(sender, e);
             UpdateStatus();
         }
 
@@ -413,5 +411,11 @@ namespace CRTerm
             Session.Display.SetTextMode(rows, cols);
         }
 
+        private void ReceiveTimer_Tick(object sender, EventArgs e)
+        {
+            if (Session == null)
+                return;
+            Session.ReceiveTimer_Tick(sender, e);
+        }
     }
 }

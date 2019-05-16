@@ -260,9 +260,10 @@ namespace CRTerm
 
 		public byte Read()
 		{
-			if(BytesWaiting > 0)
-				return this.Transport.Read();
-			return 0;
+            if (BytesWaiting == 0)
+                return 0;
+
+            return this.Transport.Read();
 		}
 
 		public void ReceiveTimer_Tick(object sender, EventArgs e)
@@ -272,7 +273,7 @@ namespace CRTerm
 			if(Terminal == null)
 				return;
 			
-			if(this.BytesWaiting > 0)
+			while(this.BytesWaiting > 0)
 			{
 				byte b = Read();
 				Terminal.ProcessReceivedCharacter((char) b);

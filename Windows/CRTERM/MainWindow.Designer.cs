@@ -38,7 +38,6 @@
             this.EchoStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.Crt = new TerminalUI.DisplayControl();
-            this.transferControl1 = new CRTerm.Transfer.TransferControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ConnectButton = new System.Windows.Forms.ToolStripButton();
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
@@ -65,6 +64,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.DisplayOptionsDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.transferControl1 = new CRTerm.Transfer.TransferControl();
+            this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -150,7 +151,7 @@
             this.Crt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Crt.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.Crt.Editor = null;
-            this.Crt.Font = new System.Drawing.Font("Classic Console", 23.42054F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Crt.Font = new System.Drawing.Font("Classic Console", 33.32923F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Crt.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.Crt.LineWrap = false;
             this.Crt.Location = new System.Drawing.Point(0, 0);
@@ -161,20 +162,6 @@
             this.Crt.TabIndex = 1;
             this.Crt.Terminal = null;
             this.Crt.TextCursor = TerminalUI.TextCursorStyles.Underline;
-            // 
-            // transferControl1
-            // 
-            this.transferControl1.BytesSent = 0;
-            this.transferControl1.BytesToSend = 0;
-            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.transferControl1.Filename = "[unknown]";
-            this.transferControl1.Location = new System.Drawing.Point(904, 0);
-            this.transferControl1.Name = "transferControl1";
-            this.transferControl1.Operation = "Send / Receive";
-            this.transferControl1.Protocol = "[unknown protocol]";
-            this.transferControl1.Size = new System.Drawing.Size(220, 677);
-            this.transferControl1.TabIndex = 2;
-            this.transferControl1.Visible = false;
             // 
             // toolStrip1
             // 
@@ -194,7 +181,7 @@
             this.DisplayOptionsDropdown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(592, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(561, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -410,6 +397,26 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // transferControl1
+            // 
+            this.transferControl1.BytesSent = 0;
+            this.transferControl1.BytesToSend = 0;
+            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.transferControl1.Filename = "[unknown]";
+            this.transferControl1.Location = new System.Drawing.Point(904, 0);
+            this.transferControl1.Name = "transferControl1";
+            this.transferControl1.Operation = "Send / Receive";
+            this.transferControl1.Protocol = "[unknown protocol]";
+            this.transferControl1.Size = new System.Drawing.Size(220, 677);
+            this.transferControl1.TabIndex = 2;
+            this.transferControl1.Visible = false;
+            // 
+            // ReceiveTimer
+            // 
+            this.ReceiveTimer.Enabled = true;
+            this.ReceiveTimer.Interval = 16;
+            this.ReceiveTimer.Tick += new System.EventHandler(this.ReceiveTimer_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -473,6 +480,7 @@
         private System.Windows.Forms.ToolStripMenuItem lineWrapToolStripMenuItem;
         private Transfer.TransferControl transferControl1;
         private System.Windows.Forms.ToolStripDropDownButton DisplayOptionsDropdown;
+        private System.Windows.Forms.Timer ReceiveTimer;
     }
 }
 

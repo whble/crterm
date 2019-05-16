@@ -1,0 +1,28 @@
+2018-02-20T08:57:28.858-08:00| vmx| I125: Log for VMware Workstation pid=8864 version=12.5.9 build=build-7535481 option=Release
+2018-02-20T08:57:28.858-08:00| vmx| I125: The process is 64-bit.
+2018-02-20T08:57:28.858-08:00| vmx| I125: Host codepage=windows-1252 encoding=windows-1252
+2018-02-20T08:57:28.858-08:00| vmx| I125: Host is Windows 10, 64-bit  (Build 16299)
+2018-02-20T08:57:28.752-08:00| vmx| I125: VTHREAD initialize main thread 0 "vmx" host id 15372
+2018-02-20T08:57:28.754-08:00| vmx| I125: LOCALE windows-1252 -> NULL User=409 System=409
+2018-02-20T08:57:28.754-08:00| vmx| I125: Msg_SetLocaleEx: HostLocale=windows-1252 UserLocale=NULL
+2018-02-20T08:57:28.757-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.758-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.760-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.760-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.760-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.760-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.765-08:00| vmx| I125: DictionaryLoad: Cannot open file "C:\Users\bqcw37\AppData\Roaming\VMware\config.ini": The system cannot find the file specified.
+2018-02-20T08:57:28.765-08:00| vmx| I125: Msg_Reset:
+2018-02-20T08:57:28.765-08:00| vmx| I125: [msg.dictionary.load.openFailed] Cannot open file "C:\Users\bqcw37\AppData\Roaming\VMware\config.ini": The system cannot find the file specified.
+2018-02-20T08:57:28.765-08:00| vmx| I125: ----------------------------------------
+2018-02-20T08:57:28.765-08:00| vmx| I125: ConfigDB: Failed to load C:\Users\bqcw37\AppData\Roaming\VMware\config.ini
+2018-02-20T08:57:28.765-08:00| vmx| I125: OBJLIB-LIB: Objlib initialized.
+2018-02-20T08:57:28.767-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.767-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.767-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.768-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.768-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.768-08:00| vmx| I125: FILE: FileCreateDirectoryRetry: Non-retriable error encountered (C:\ProgramData\VMware\VMware Workstation): Cannot create a file when that file already exists (183)
+2018-02-20T08:57:28.769-08:00| vmx| I125: DictionaryLoad: Cannot open file "C:\Users\bqcw37\AppData\Roaming\VMware\config.ini": The system cannot find the file specified.
+2018-02-20T08:57:28.769-08:00| vmx| I125: PREF Optional preferences file not found at C:\Users\bqcw37\AppData\Roaming\VMware\config.ini. Using default values.
+2018

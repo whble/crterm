@@ -1,2 +1,15 @@
-
-.vs/CRTERM/v15/.suo
+.vs
+obj
+bin
+.vs/CRTERM/v15/Server/sqlite3/storage.ide
+*.dll
+*.ide
+*.cache
+*.dll
+*.pdb
+*.FileListAbsolute.txt
+TerminalControl/obj/Debug/TerminalUI.csproj.FileListAbsolute.txt
+TerminalUITest/obj/Debug/TerminalUITest.csproj.FileListAbsolute.txt
+.vs/CRTERM/v15/Server/sqlite3/storage.ide
+*.ide
+.vs/CRTERM/v15/Server/sqlite3/storage.ide

@@ -20,6 +20,7 @@ namespace CRTerm
         private ITerminal _terminal = null;
         private Transfer.ITransferProtocol _transfer;
         private DisplayControl _frameBuffer = null;
+        public CaptureBuffer captureBuffer = new CaptureBuffer();
 
         [ConfigItem]
         public ITransport Transport
@@ -275,9 +276,13 @@ namespace CRTerm
 			
 			while(this.BytesWaiting > 0)
 			{
-				byte b = Read();
-				Terminal.ProcessReceivedCharacter((char) b);
+				char c= (char) Read();
+				Terminal.ProcessReceivedCharacter(c);
+                if (captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
+                    captureBuffer.Buffer.Append(c);
 			}
 		}
+
+
     }
 }

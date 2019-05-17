@@ -64,8 +64,10 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.DisplayOptionsDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.transferControl1 = new CRTerm.Transfer.TransferControl();
             this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
+            this.transferControl1 = new CRTerm.Transfer.TransferControl();
+            this.textCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CaptureStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -75,12 +77,14 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.BackColor = System.Drawing.Color.Black;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PortStatusLabel,
             this.PortNameLabel,
             this.PortStatus,
             this.TerminalNameLabel,
-            this.EchoStatus});
+            this.EchoStatus,
+            this.CaptureStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 702);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1124, 22);
@@ -89,30 +93,35 @@
             // 
             // PortStatusLabel
             // 
+            this.PortStatusLabel.ForeColor = System.Drawing.Color.LightGray;
             this.PortStatusLabel.Name = "PortStatusLabel";
             this.PortStatusLabel.Size = new System.Drawing.Size(79, 17);
             this.PortStatusLabel.Text = "Disconnected";
             // 
             // PortNameLabel
             // 
+            this.PortNameLabel.ForeColor = System.Drawing.Color.LightGray;
             this.PortNameLabel.Name = "PortNameLabel";
             this.PortNameLabel.Size = new System.Drawing.Size(48, 17);
             this.PortNameLabel.Text = "No Port";
             // 
             // PortStatus
             // 
+            this.PortStatus.ForeColor = System.Drawing.Color.LightGray;
             this.PortStatus.Name = "PortStatus";
             this.PortStatus.Size = new System.Drawing.Size(68, 17);
             this.PortStatus.Text = "No Address";
             // 
             // TerminalNameLabel
             // 
+            this.TerminalNameLabel.ForeColor = System.Drawing.Color.LightGray;
             this.TerminalNameLabel.Name = "TerminalNameLabel";
             this.TerminalNameLabel.Size = new System.Drawing.Size(72, 17);
             this.TerminalNameLabel.Text = "No Terminal";
             // 
             // EchoStatus
             // 
+            this.EchoStatus.ForeColor = System.Drawing.Color.LightGray;
             this.EchoStatus.Name = "EchoStatus";
             this.EchoStatus.Size = new System.Drawing.Size(53, 17);
             this.EchoStatus.Text = "Echo Off";
@@ -134,6 +143,7 @@
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
+            this.toolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.Black;
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             // 
             // Crt
@@ -162,16 +172,19 @@
             this.Crt.TabIndex = 1;
             this.Crt.Terminal = null;
             this.Crt.TextCursor = TerminalUI.TextCursorStyles.Underline;
+            this.Crt.ToggleFullScreenRequest += new System.EventHandler(this.Crt_ToggleFullScreenRequest);
+            this.Crt.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CRT_MouseMove);
             // 
             // toolStrip1
             // 
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ConnectButton,
             this.DisconnectButton,
+            this.PortOptionsButton,
             this.toolStripSeparator1,
             this.ClearScreenButton,
-            this.PortOptionsButton,
             this.BaudRateButton,
             this.TerminalOptionsButton,
             this.UploadButton,
@@ -187,6 +200,7 @@
             // ConnectButton
             // 
             this.ConnectButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ConnectButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ConnectButton.Image = ((System.Drawing.Image)(resources.GetObject("ConnectButton.Image")));
             this.ConnectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ConnectButton.Name = "ConnectButton";
@@ -197,6 +211,7 @@
             // DisconnectButton
             // 
             this.DisconnectButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.DisconnectButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.DisconnectButton.Image = ((System.Drawing.Image)(resources.GetObject("DisconnectButton.Image")));
             this.DisconnectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DisconnectButton.Name = "DisconnectButton";
@@ -206,12 +221,14 @@
             // 
             // toolStripSeparator1
             // 
+            this.toolStripSeparator1.ForeColor = System.Drawing.Color.LightGray;
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // ClearScreenButton
             // 
             this.ClearScreenButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ClearScreenButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ClearScreenButton.Image = ((System.Drawing.Image)(resources.GetObject("ClearScreenButton.Image")));
             this.ClearScreenButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ClearScreenButton.Name = "ClearScreenButton";
@@ -222,6 +239,7 @@
             // PortOptionsButton
             // 
             this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.PortOptionsButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
             this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PortOptionsButton.Name = "PortOptionsButton";
@@ -232,6 +250,7 @@
             // BaudRateButton
             // 
             this.BaudRateButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.BaudRateButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.BaudRateButton.Image = ((System.Drawing.Image)(resources.GetObject("BaudRateButton.Image")));
             this.BaudRateButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BaudRateButton.Name = "BaudRateButton";
@@ -249,6 +268,7 @@
             this.aNSIToolStripMenuItem,
             this.pETSCIIToolStripMenuItem,
             this.lineWrapToolStripMenuItem});
+            this.TerminalOptionsButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.TerminalOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("TerminalOptionsButton.Image")));
             this.TerminalOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.TerminalOptionsButton.Name = "TerminalOptionsButton";
@@ -302,6 +322,7 @@
             this.aSCIIToolStripMenuItem,
             this.xMODEMToolStripMenuItem,
             this.xModemPCGETToolStripMenuItem});
+            this.UploadButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.UploadButton.Image = ((System.Drawing.Image)(resources.GetObject("UploadButton.Image")));
             this.UploadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.UploadButton.Name = "UploadButton";
@@ -345,7 +366,9 @@
             this.toolStripDropDownloadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownloadButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xMODEMToolStripMenuItem1,
-            this.xmodemPCPUTToolStripMenuItem});
+            this.xmodemPCPUTToolStripMenuItem,
+            this.textCaptureToolStripMenuItem});
+            this.toolStripDropDownloadButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripDropDownloadButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownloadButton.Image")));
             this.toolStripDropDownloadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownloadButton.Name = "toolStripDropDownloadButton";
@@ -370,6 +393,7 @@
             // CancelTransferButton
             // 
             this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.CancelTransferButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.CancelTransferButton.Image = ((System.Drawing.Image)(resources.GetObject("CancelTransferButton.Image")));
             this.CancelTransferButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CancelTransferButton.Name = "CancelTransferButton";
@@ -379,12 +403,14 @@
             // 
             // toolStripSeparator2
             // 
+            this.toolStripSeparator2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // DisplayOptionsDropdown
             // 
             this.DisplayOptionsDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.DisplayOptionsDropdown.ForeColor = System.Drawing.SystemColors.ControlText;
             this.DisplayOptionsDropdown.Image = ((System.Drawing.Image)(resources.GetObject("DisplayOptionsDropdown.Image")));
             this.DisplayOptionsDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DisplayOptionsDropdown.Name = "DisplayOptionsDropdown";
@@ -396,6 +422,12 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // ReceiveTimer
+            // 
+            this.ReceiveTimer.Enabled = true;
+            this.ReceiveTimer.Interval = 16;
+            this.ReceiveTimer.Tick += new System.EventHandler(this.ReceiveTimer_Tick);
             // 
             // transferControl1
             // 
@@ -411,11 +443,20 @@
             this.transferControl1.TabIndex = 2;
             this.transferControl1.Visible = false;
             // 
-            // ReceiveTimer
+            // textCaptureToolStripMenuItem
             // 
-            this.ReceiveTimer.Enabled = true;
-            this.ReceiveTimer.Interval = 16;
-            this.ReceiveTimer.Tick += new System.EventHandler(this.ReceiveTimer_Tick);
+            this.textCaptureToolStripMenuItem.Name = "textCaptureToolStripMenuItem";
+            this.textCaptureToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+            this.textCaptureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.textCaptureToolStripMenuItem.Text = "Text Capture";
+            this.textCaptureToolStripMenuItem.Click += new System.EventHandler(this.TextCaptureToolStripMenuItem_Click);
+            // 
+            // CaptureLabel
+            // 
+            this.CaptureStatus.ForeColor = System.Drawing.Color.LightGray;
+            this.CaptureStatus.Name = "CaptureLabel";
+            this.CaptureStatus.Size = new System.Drawing.Size(68, 17);
+            this.CaptureStatus.Text = "No Capture";
             // 
             // MainWindow
             // 
@@ -481,6 +522,8 @@
         private Transfer.TransferControl transferControl1;
         private System.Windows.Forms.ToolStripDropDownButton DisplayOptionsDropdown;
         private System.Windows.Forms.Timer ReceiveTimer;
+        private System.Windows.Forms.ToolStripMenuItem textCaptureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel CaptureStatus;
     }
 }
 

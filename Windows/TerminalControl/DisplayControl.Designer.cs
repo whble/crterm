@@ -30,12 +30,13 @@
         {
             this.SuspendLayout();
             // 
-            // TerminalControl
+            // DisplayControl
             // 
             this.BackColor = System.Drawing.Color.DimGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Name = "TerminalControl";
+            this.Name = "DisplayControl";
             this.Size = new System.Drawing.Size(725, 471);
+            this.Load += new System.EventHandler(this.DisplayControl_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.DisplayControl_Paint);
             this.ResumeLayout(false);
 

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaptureBuffer.cs" />
     <Compile Include="Config\ConfigDialog.cs">
       <SubType>Form</SubType>
     </Compile>

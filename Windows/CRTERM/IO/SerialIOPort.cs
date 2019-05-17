@@ -169,12 +169,6 @@ namespace CRTerm.IO
             try
             {
                 Port.Open();
-#if EVENT_DRIVEN
-                Port.DataReceived += Port_DataReceived;
-#else
-                ReadThread = new Thread(ReadThreadMain);
-                ReadThread.Start();
-#endif
                 Status = ConnectionStatusCodes.Connected;
             }
             catch (Exception ex)
@@ -189,18 +183,8 @@ namespace CRTerm.IO
             }
         }
 
-        private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            DataReceived?.Invoke(this);
-        }
-
         internal void Close()
         {
-            ThreadDone = true;
-#if ! EVENT_DRIVEN
-            ReadThread.Join();
-#endif
-            Port.DataReceived -= Port_DataReceived;
             Port.Close();
         }
 
@@ -208,8 +192,6 @@ namespace CRTerm.IO
         {
             while (ThreadDone == false)
             {
-                while (DataWaiting && ThreadDone == false)
-                    Port_DataReceived(null, null);
                 System.Threading.Thread.Sleep(100);
             }
         }
@@ -227,26 +209,19 @@ namespace CRTerm.IO
             }
         }
 
-        public virtual void ReceiveData(IReceiveChannel dataChannel)
-        {
-            DataReceived?.Invoke(this);
-        }
-
         public int BytesWaiting
         {
             get
             {
+                if (port == null || !port.IsOpen)
+                    return 0;
                 return port.BytesToRead;
             }
         }
 
-        public byte ReadByte()
+        public byte Read()
         {
             int b = port.ReadByte();
-            //if (b >= 32)
-            //    System.Diagnostics.Debug.Write((char)b);
-            //else
-            //    System.Diagnostics.Debug.Write("^" + (char) (b+64));
             return (byte)b;
         }
 

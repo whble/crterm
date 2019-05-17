@@ -21,5 +21,5 @@ namespace CRTerm
     }
     public delegate void StatusChangeEventHandler(IHasStatus dataChannel, StatusEventArgs e);
 
-    public delegate void DataReadyEventHandler(IBuffered receiver);
+    public delegate void DataReadyEventHandler(IReceiveChannel receiver);
 }

@@ -11,6 +11,7 @@ namespace TerminalUI
     public partial class DisplayControl : UserControl
     {
         #region Fields
+
         private static string MEASURE_STRING = new string('W', 80);
 
         private int _cols;
@@ -19,15 +20,21 @@ namespace TerminalUI
         private float ColWidth = 8;
         private int x;
         private int y;
+
+        private Pen borderPen = new Pen(Color.FromArgb(32, 32, 32));
+
         public TextCursorStyles TextCursor { get; set; }
+
         private InsertKeyMode _insertMode = InsertKeyMode.Overwrite;
 
         private EchoModes _echoMode;
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool AddLinefeed { get; set; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public bool LineWrap { get; set; }
+
         private string _statusText;
 
         protected bool FontValid = false;
@@ -39,7 +46,9 @@ namespace TerminalUI
         public int BlinkInterval = 20;
 
         public CharacterCell.ColorCodes CurrentBackground { get; set; }
+
         public CharacterCell.ColorCodes CurrentTextColor { get; set; }
+
         public CharacterCell.Attributes CurrentAttribute { get; set; }
 
         private IEditorPlugin _editor = null;
@@ -52,7 +61,12 @@ namespace TerminalUI
 
         #endregion
 
+        #region Events
+        public event EventHandler ToggleFullScreenRequest;
+        #endregion
+
         #region Public Properties
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public EchoModes EchoMode
         {
@@ -174,6 +188,7 @@ namespace TerminalUI
                 return "Text " + Columns.ToString() + "x" + Rows.ToString();
             }
         }
+
         #endregion
 
         #region Methods
@@ -185,7 +200,7 @@ namespace TerminalUI
 
 
         //
-        // Insert a blank character at the cursor. Character in right column will be lost off right side of the screen. 
+        // Insert a blank character at the cursor. Character in right column will be lost off right side of the screen.
         //
         private void Insert()
         {
@@ -309,24 +324,23 @@ namespace TerminalUI
         }
 
 
-        public static Brush[] Brushes = new SolidBrush[]
-        {
-            new SolidBrush(Color.FromArgb(0,0,0)),
-            new SolidBrush(Color.FromArgb(0,0,128)),
-            new SolidBrush(Color.FromArgb(0,128,0)),
-            new SolidBrush(Color.FromArgb(0,128,128)),
-            new SolidBrush(Color.FromArgb(128,0,0)),
-            new SolidBrush(Color.FromArgb(0,0,128)),
-            new SolidBrush(Color.FromArgb(0,128,128)),
-            new SolidBrush(Color.FromArgb(128,128,128)),
-            new SolidBrush(Color.FromArgb(64,64,64)),
-            new SolidBrush(Color.FromArgb(0,0,255)),
-            new SolidBrush(Color.FromArgb(0,255,0)),
-            new SolidBrush(Color.FromArgb(0,255,255)),
-            new SolidBrush(Color.FromArgb(255,0,0)),
-            new SolidBrush(Color.FromArgb(0,0,255)),
-            new SolidBrush(Color.FromArgb(0,255,255)),
-            new SolidBrush(Color.FromArgb(255,255,255)),
+        public static Brush[] Brushes = new SolidBrush[] {
+            new SolidBrush(Color.FromArgb(0, 0, 0)),
+            new SolidBrush(Color.FromArgb(0, 0, 128)),
+            new SolidBrush(Color.FromArgb(0, 128, 0)),
+            new SolidBrush(Color.FromArgb(0, 128, 128)),
+            new SolidBrush(Color.FromArgb(128, 0, 0)),
+            new SolidBrush(Color.FromArgb(0, 0, 128)),
+            new SolidBrush(Color.FromArgb(0, 128, 128)),
+            new SolidBrush(Color.FromArgb(128, 128, 128)),
+            new SolidBrush(Color.FromArgb(64, 64, 64)),
+            new SolidBrush(Color.FromArgb(0, 0, 255)),
+            new SolidBrush(Color.FromArgb(0, 255, 0)),
+            new SolidBrush(Color.FromArgb(0, 255, 255)),
+            new SolidBrush(Color.FromArgb(255, 0, 0)),
+            new SolidBrush(Color.FromArgb(0, 0, 255)),
+            new SolidBrush(Color.FromArgb(0, 255, 255)),
+            new SolidBrush(Color.FromArgb(255, 255, 255)),
         };
 
         public DisplayControl()
@@ -349,7 +363,7 @@ namespace TerminalUI
             KeyUp += HandleKeyUp;
         }
 
-        private void TerminalControl_Resize(object sender, EventArgs e)
+        public void TerminalControl_Resize(object sender, EventArgs e)
         {
             FontValid = false;
             NextDraw = 0;
@@ -399,48 +413,67 @@ namespace TerminalUI
 
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            bool handled = true;
-            switch (EchoMode)
+            if (!e.Handled)
             {
-                case EchoModes.LineEdit:
-                    break;
-                case EchoModes.FullScreen:
-                    handled = HandleFullScreenKey(e);
-                    break;
-                case EchoModes.Plugin:
-                    handled = true;
-                    Editor?.HandleKeyDown(sender, e);
-                    break;
-                case EchoModes.EchoOff:
-                case EchoModes.LocalEcho:
-                default:
-                    if (e.KeyCode == Keys.Apps)
-                    {
-                        EchoMode = EchoModes.FullScreen;
-                        InsertMode = InsertKeyMode.Overwrite;
-                        BlinkCursor();
-                    }
-                    else
-                        handled = false;
-                    break;
+
+                switch (e.KeyCode)
+                {
+                    case Keys.F11:
+                        if (ToggleFullScreenRequest != null)
+                        {
+                            ToggleFullScreenRequest(sender, e);
+                            e.Handled = true;
+                        }
+                        break;
+                }
             }
 
-            if (!handled)
+            if (!e.Handled)
+            {
+                switch (EchoMode)
+                {
+                    case EchoModes.LineEdit:
+                        break;
+                    case EchoModes.EditMode:
+                        e.Handled = HandleEditKey(e);
+                        break;
+                    case EchoModes.Plugin:
+                        e.Handled = true;
+                        Editor?.HandleKeyDown(sender, e);
+                        break;
+                    case EchoModes.EchoOff:
+                    case EchoModes.LocalEcho:
+                    default:
+                        if (e.KeyCode == Keys.F12)
+                        {
+                            EchoMode = EchoModes.EditMode;
+                            InsertMode = InsertKeyMode.Overwrite;
+                            BlinkCursor();
+                            e.Handled = true;
+                        }
+                        break;
+                }
+            }
+
+            if (!e.Handled)
             {
                 TerminalKeyEventArgs k = new TerminalKeyEventArgs(e);
                 Terminal.SendKey(k);
             }
         }
 
-        private bool HandleFullScreenKey(KeyEventArgs e)
+        private bool HandleEditKey(KeyEventArgs e)
         {
             bool handled = true;
             switch (e.KeyCode)
             {
-                case Keys.Apps:
+                case Keys.F12:
                     EchoMode = EchoModes.EchoOff;
                     CurrentColumn = 0;
-                    CurrentRow = Rows - 1;
+                    int y = Rows - 1;
+                    while (GetChar(y - 1, 0) == " ")
+                        y = y - 1;
+                    CurrentRow = y;
                     BlinkCursor();
                     break;
                 case Keys.Return:
@@ -452,6 +485,7 @@ namespace TerminalUI
                     ClearCurrentLine(true, true);
                     Terminal?.SendString(ss);
                     Terminal?.SendChar('\r');
+                    InsertMode = InsertKeyMode.Overwrite;
                     if (ss.Trim().ToLower() == "run")
                         EchoMode = EchoModes.EchoOff;
                     break;
@@ -520,7 +554,7 @@ namespace TerminalUI
                     break;
                 case EchoModes.LineEdit:
                     break;
-                case EchoModes.FullScreen:
+                case EchoModes.EditMode:
                     // break key
                     // turn off BASIC mode and pass the key through
                     if (e.KeyChar == 3)
@@ -569,9 +603,11 @@ namespace TerminalUI
                 SetCharacter(CurrentRow, CurrentColumn, c.ToString(), CurrentTextColor, CurrentBackground, CurrentAttribute);
                 AdvanceCursor();
             }
-            else if (c == '\r')
+            else
+            if (c == '\r')
                 PrintReturn();
-            else if (c == '\n')
+            else
+                if (c == '\n')
                 PrintLineFeed();
         }
 
@@ -754,20 +790,20 @@ namespace TerminalUI
                 RowHeight = 8;
             }
 
-            string[] fonts = new[]
-            {
+            string[] fonts = new[] {
                 "Classic Console",
                 "Consolas",
                 "Lucida Console",
+                "Monospace"
             };
 
             foreach (string f in fonts)
             {
                 using (Font testFont = new Font(
-                        f,
-                        testSize,
-                        FontStyle.Regular,
-                        GraphicsUnit.Pixel))
+                                           f,
+                                           testSize,
+                                           FontStyle.Regular,
+                                           GraphicsUnit.Pixel))
                 {
                     if (testFont.Name == f)
                     {
@@ -819,6 +855,8 @@ namespace TerminalUI
 
             Graphics g = e.Graphics;
 
+            g.Clear(Color.Black);
+
             float right = (Columns + 1) * ColWidth;
             float bottom = (Rows + 1) * RowHeight;
             float x = 0;
@@ -831,6 +869,8 @@ namespace TerminalUI
             float yo = 0;
 
             g.TranslateTransform(xo, yo);
+
+            g.DrawRectangle(borderPen, -2, -2, right + 4, bottom + 4);
 
             g.FillRectangle(Brushes[(int)CurrentBackground], 0, 0, right, bottom);
             for (int row = 0; row < Rows; row++)
@@ -897,7 +937,7 @@ namespace TerminalUI
                 case EchoModes.LineEdit:
                     TextCursor = TextCursorStyles.Left;
                     break;
-                case EchoModes.FullScreen:
+                case EchoModes.EditMode:
                     if (InsertMode == InsertKeyMode.Insert)
                         TextCursor = TextCursorStyles.Left;
                     else
@@ -1014,5 +1054,10 @@ namespace TerminalUI
         }
 
         #endregion
+
+        private void DisplayControl_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

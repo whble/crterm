@@ -13,6 +13,8 @@ namespace TerminalUI.Terminals
         public Keys KeyCode = Keys.None;
         public Keys Modifier = Keys.None;
 
+		public bool Handled=false;
+
         public TerminalKeyEventArgs() : base(CHAR_NONE)
         {
         }

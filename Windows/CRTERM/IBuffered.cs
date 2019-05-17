@@ -16,6 +16,6 @@ namespace CRTerm
         /// retrieve a byte from the buffer
         /// </summary>
         /// <returns></returns>
-        byte ReadByte();
+        byte Read();
     }
 }

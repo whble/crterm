@@ -16,6 +16,8 @@ namespace CRTerm
 {
     public partial class MainWindow : Form
     {
+        int MouseY = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -129,6 +131,7 @@ namespace CRTerm
             PortStatus.Text = Session.Transport.StatusDetails;
             TerminalNameLabel.Text = Session.Terminal_StatusDetails;
             EchoStatus.Text = CamelToSpace(Crt.EchoMode.ToString());
+            CaptureStatus.Text = Session.captureBuffer.StatusText;
         }
 
         private string CamelToSpace(string Name)
@@ -183,10 +186,11 @@ namespace CRTerm
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            IO.SerialIOPort p = Session.Transport as IO.SerialIOPort;
-            if (p == null)
-                return;
+            Session?.ReceiveTimer_Tick(sender, e);
             UpdateStatus();
+
+            if (FormBorderStyle == FormBorderStyle.None && toolStrip1.Visible && MouseY > toolStrip1.Height)
+                SetMenuVisible(false);
         }
 
         private void UploadButton_Click(object sender, EventArgs e)
@@ -286,7 +290,7 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
             if (b.Checked)
-                Crt.EchoMode = EchoModes.FullScreen;
+                Crt.EchoMode = EchoModes.EditMode;
             else
                 Crt.EchoMode = EchoModes.EchoOff;
 
@@ -373,7 +377,7 @@ namespace CRTerm
             DisplayOptionsDropdown.DropDownItems.Clear();
             string currentOption = Session.Display.Columns.ToString() + "x" + Session.Display.Rows.ToString();
 
-            foreach (string option in new string[] { "80x25", "80x36", "120x50" })
+            foreach (string option in new string[] { "80x24", "80x25", "80x36", "120x25", "120x36", "120x50" })
             {
                 AddDropdownItem(DisplayOptionsDropdown, option, currentOption, DisplaySize_Clicked);
             }
@@ -411,7 +415,78 @@ namespace CRTerm
             }
 
             Session.Display.SetTextMode(rows, cols);
+            Session.Display.TerminalControl_Resize(this, e);
         }
 
+        private void ReceiveTimer_Tick(object sender, EventArgs e)
+        {
+            if (Session == null)
+                return;
+            Session.ReceiveTimer_Tick(sender, e);
+        }
+
+        public void ToggleFullScreen()
+        {
+            Form f = this;
+            if (f == null)
+                return;
+
+            // already full screen. Restore to previous state
+            if (f.FormBorderStyle == FormBorderStyle.None)
+            {
+                f.FormBorderStyle = FormBorderStyle.Sizable;
+                f.WindowState = FormWindowState.Normal;
+                f.TopMost = false;
+                SetMenuVisible(true);
+            }
+            else
+            {
+                f.TopMost = true;
+                f.FormBorderStyle = FormBorderStyle.None;
+                f.WindowState = FormWindowState.Maximized;
+                SetMenuVisible(false);
+            }
+        }
+
+        private void SetMenuVisible(bool Visible)
+        {
+            if (FormBorderStyle != FormBorderStyle.None)
+                Visible = true;
+
+            toolStrip1.Visible = Visible;
+        }
+
+        private void Crt_ToggleFullScreenRequest(object sender, EventArgs e)
+        {
+            ToggleFullScreen();
+        }
+
+        private void CRT_MouseMove(object sender, MouseEventArgs e)
+        {
+            MouseY = e.Y;
+            if (e.Y < toolStrip1.Height)
+                SetMenuVisible(true);
+        }
+
+        private void TextCaptureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Session.captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
+            {
+                Session.captureBuffer.Status = CaptureBuffer.CaptureStatusCodes.Closed;
+                SaveFileDialog d = new SaveFileDialog();
+                DialogResult r = d.ShowDialog();
+                if (r == DialogResult.OK)
+                {
+                    System.IO.File.WriteAllText(d.FileName, Session.captureBuffer.ToString());
+                    Session.captureBuffer.Status = CaptureBuffer.CaptureStatusCodes.Saved;
+                }
+            }
+            else
+                Session.captureBuffer.Status = CaptureBuffer.CaptureStatusCodes.Capturing;
+
+
+            UpdateStatus();
+        }
     }
+
 }

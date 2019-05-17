@@ -64,29 +64,17 @@ namespace TerminalUI.Terminals
 
         public override void SendKey(TerminalKeyEventArgs terminalKey)
         {
-            if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Shift)
-                && ShiftKeyCodes.ContainsKey(terminalKey.KeyCode))
-                SendString(ShiftKeyCodes[terminalKey.KeyCode]);
-            else if (KeyCodes.ContainsKey(terminalKey.KeyCode))
-                SendString(KeyCodes[terminalKey.KeyCode]);
+			base.SendKey(terminalKey);
 
-            //switch (terminalKey.KeyCode)
-            //{
-            //    case System.Windows.Forms.Keys.Up:
-            //        SendString(ESCAPE+"[A");
-            //        break;
-            //    case System.Windows.Forms.Keys.Down:
-            //        SendString(ESCAPE+"[B");
-            //        break;
-            //    case System.Windows.Forms.Keys.Right:
-            //        SendString(ESCAPE+"[C");
-            //        break;
-            //    case System.Windows.Forms.Keys.Left:
-            //        SendString(ESCAPE+"[D");
-            //        break;
-            //}
-
-            base.SendKey(terminalKey);
+			if(!terminalKey.Handled)
+			{
+				if(terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Shift)
+				   && ShiftKeyCodes.ContainsKey(terminalKey.KeyCode))
+					SendString(ShiftKeyCodes[terminalKey.KeyCode]);
+				else
+				if(KeyCodes.ContainsKey(terminalKey.KeyCode))
+						SendString(KeyCodes[terminalKey.KeyCode]);
+			}
         }
 
         public override void ProcessReceivedCharacter(char c)

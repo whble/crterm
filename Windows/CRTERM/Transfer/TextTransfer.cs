@@ -129,12 +129,12 @@ namespace CRTerm.Transfer
             sendTimer.Enabled = false;
         }
 
-        public void ReceiveData(IBuffered receiver)
+        public void ReceiveData(IReceiveChannel receiver)
         {
             while (receiver.BytesWaiting > 0)
             {
 
-                lastReceived = (char)receiver.ReadByte();
+                lastReceived = (char)receiver.Read();
 
                 if (waitFor == '\0' || lastReceived == waitFor)
                     sendTimer.Interval = 1;

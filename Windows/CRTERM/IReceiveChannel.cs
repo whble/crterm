@@ -1,16 +1,15 @@
 ﻿namespace CRTerm
 {
-    public interface IReceiveChannel : IBuffered
+    public interface IReceiveChannel
     {
-        /// <summary>
-        /// Notify an upstream object that data is waiting to be read. Recipient can bubble 
-        /// this up or read the data directly.
-        /// </summary>
-        event DataReadyEventHandler DataReceived;
-        /// <summary>
-        /// Tell a receiving class to go get data from this object
-        /// </summary>
-        /// <param name="dataChannel"></param>
-        void ReceiveData(IReceiveChannel dataChannel);
+		/// <summary>
+		/// number of bytes waiting to be read
+		/// </summary>
+		int BytesWaiting { get; }
+		/// <summary>
+		/// retrieve a byte from the buffer
+		/// </summary>
+		/// <returns></returns>
+		byte Read();
     }
 }

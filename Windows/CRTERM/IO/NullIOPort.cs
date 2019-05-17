@@ -7,133 +7,132 @@ using TerminalUI;
 
 namespace CRTerm.IO
 {
-    /// <summary>
-    /// Ports carry data in and out of CRTERM. All data is encoded as byte arrays
-    /// and must be translated to character data by the Terminal Emulator.
-    /// </summary>
-    public class NullIOPort : ITransport, IConfigurable, IReceiveChannel, ISendChannel, IHasStatus
-    {
-        [ConfigItem]
-        public virtual string Address { get; set; }
-        public virtual string Name
-        {
-            get
-            {
-                return "Null";
-            }
-        }
-        public bool Paused { get; set; }
-        ConnectionStatusCodes status = ConnectionStatusCodes.Disconnected;
-        public ConnectionStatusCodes Status
-        {
-            get { return status; }
-            protected set
-            {
-                status = value;
-                UpdateStatus();
-            }
-        }
+	/// <summary>
+	/// Ports carry data in and out of CRTERM. All data is encoded as byte arrays
+	/// and must be translated to character data by the Terminal Emulator.
+	/// </summary>
+	public class NullIOPort : ITransport, IConfigurable, IReceiveChannel, ISendChannel, IHasStatus
+	{
+		[ConfigItem]
+		public virtual string Address { get; set; }
 
-        public virtual string StatusDetails
-        {
-            get
-            {
-                return "";
-            }
-        }
-        private bool localEcho;
-        protected RingBuffer receiveBuffer = new RingBuffer();
+		public virtual string Name {
+			get {
+				return "Null";
+			}
+		}
 
-        public event StatusChangeEventHandler StatusChangedEvent;
-        public event DataReadyEventHandler DataReceived;
+		public bool Paused { get; set; }
 
-        protected bool LocalEcho
-        {
-            get
-            {
-                return this.localEcho;
-            }
+		ConnectionStatusCodes status = ConnectionStatusCodes.Disconnected;
 
-            set
-            {
-                this.localEcho = value;
-                UpdateStatus();
-            }
-        }
+		public ConnectionStatusCodes Status {
+			get { return status; }
+			protected set {
+				status = value;
+				UpdateStatus ();
+			}
+		}
 
-        public virtual void Connect()
-        {
-            Status = ConnectionStatusCodes.Connected;
-        }
+		public virtual string StatusDetails {
+			get {
+				return "";
+			}
+		}
 
-        public virtual void Disconnect()
-        {
-            Status = ConnectionStatusCodes.Disconnected;
-        }
+		private bool localEcho;
+		protected RingBuffer receiveBuffer = new RingBuffer ();
 
-        public byte ReadByte()
-        {
-            return receiveBuffer.Read();
-        }
+		public event StatusChangeEventHandler StatusChangedEvent;
+		public event DataReadyEventHandler DataReceived;
 
-        public bool SendAvailable()
-        {
-            return true;
-        }
+		protected bool LocalEcho {
+			get {
+				return this.localEcho;
+			}
 
-        public virtual void Send(byte Data)
-        {
-            receiveBuffer.Add(Data);
-            DataReceived?.Invoke(this);
-        }
+			set {
+				this.localEcho = value;
+				UpdateStatus ();
+			}
+		}
 
-        public virtual void Send(byte[] Data)
-        {
-            foreach (byte b in Data)
-            {
-                Send(b);
-            }
-        }
+		public virtual void Connect()
+		{
+			Status = ConnectionStatusCodes.Connected;
+		}
 
-        public virtual void ReceiveData(IReceiveChannel dataChannel)
-        {
-            DataReceived?.Invoke(this);
-        }
+		public virtual void Disconnect()
+		{
+			Status = ConnectionStatusCodes.Disconnected;
+		}
 
-        public void UpdateStatus()
-        {
-            StatusEventArgs eventArgs = new StatusEventArgs(this.status, this.StatusDetails);
-            StatusChangedEvent?.Invoke(this, eventArgs);
-        }
+		public byte ReadByte()
+		{
+			return receiveBuffer.Read ();
+		}
 
-        public int ReadData(byte[] Data, int Count)
-        {
-            return receiveBuffer.Read(Data, Count);
-        }
+		public bool SendAvailable()
+		{
+			return true;
+		}
 
-        public int BytesAvailable
-        {
-            get
-            {
-                return receiveBuffer.Count;
-            }
-        }
+		public virtual void Send(byte Data)
+		{
+			receiveBuffer.Add (Data);
+			DataReceived?.Invoke (this);
+		}
 
-        public virtual int BytesWaiting
-        {
-            get
-            {
-                return receiveBuffer.Count;
-            }
-        }
+		public virtual void Send(byte[] Data)
+		{
+			foreach (byte b in Data)
+			{
+				Send (b);
+			}
+		}
 
-        public virtual bool ClearToSend
-        {
-            get
-            {
-                return (receiveBuffer.Count < receiveBuffer.Capacity);
-            }
-        }
+		public void UpdateStatus()
+		{
+			StatusEventArgs eventArgs = new StatusEventArgs (this.status, this.StatusDetails);
+			StatusChangedEvent?.Invoke (this, eventArgs);
+		}
 
-    }
+		public int ReadData(byte[] Data, int Count)
+		{
+			return receiveBuffer.Read (Data, Count);
+		}
+
+		public int BytesAvailable {
+			get {
+				return receiveBuffer.Count;
+			}
+		}
+
+		public virtual int BytesWaiting {
+			get {
+				return receiveBuffer.Count;
+			}
+		}
+
+		public virtual bool ClearToSend {
+			get {
+				return (receiveBuffer.Count < receiveBuffer.Capacity);
+			}
+		}
+
+		public int BytesWating 
+		{
+			get 
+			{
+				return receiveBuffer.Count;
+			}
+		}
+
+		public byte Read()
+		{
+			if(BytesWaiting > 0)
+				return receiveBuffer.Read();
+			return 0;
+		}
+	}
 }

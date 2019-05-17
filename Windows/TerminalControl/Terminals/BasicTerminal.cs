@@ -148,9 +148,12 @@ namespace TerminalUI.Terminals
         {
             switch (terminalKey.KeyCode)
             {
-                case System.Windows.Forms.Keys.Home:
-                    if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Control))
-                        Display.Clear();    
+				case System.Windows.Forms.Keys.Home:
+					if(terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Control))
+					{
+						Display.Clear();    
+						terminalKey.Handled = true;
+					}
                     break;
                 case System.Windows.Forms.Keys.Tab:
                     SendChar('\t');

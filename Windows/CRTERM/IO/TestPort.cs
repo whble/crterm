@@ -55,7 +55,6 @@ namespace CRTerm.IO
         {
             byte[] data = BasicTerminal.GetBytes(Text);
             receiveBuffer.Add(data);
-            ReceiveData(this);
         }
 
         public override void Send(byte Data)

@@ -181,5 +181,10 @@ namespace CRTerm.IO
         {
             DataReceived?.Invoke(this);
         }
+
+		public byte Read()
+		{
+			throw new NotImplementedException();
+		}
     }
 }

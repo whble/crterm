@@ -21,6 +21,9 @@ namespace TerminalUI
         {
             get
             {
+                if (Status == CaptureStatusCodes.Closed)
+                    return "";
+
                 if (Status == CaptureStatusCodes.Capturing)
                     return Status.ToString() + " " + Buffer.Length.ToString();
 
@@ -32,5 +35,7 @@ namespace TerminalUI
         {
             return Buffer.ToString();
         }
+
+
     }
 }

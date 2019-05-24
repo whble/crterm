@@ -130,11 +130,7 @@ namespace CRTerm
             }
         }
 
-        public string Terminal_StatusDetails { get; internal set; }
-
-        //public TextConsole Display { get; internal set; }
-
-        public List<string> GetPortNames()
+            public List<string> GetPortNames()
         {
             List<string> ret = new List<string>();
 

@@ -30,20 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.PortStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.PortNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.PortStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TerminalNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.EchoStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.Crt = new TerminalUI.DisplayControl();
+            this.transferControl1 = new CRTerm.Transfer.TransferControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ConnectButton = new System.Windows.Forms.ToolStripButton();
             this.DisconnectButton = new System.Windows.Forms.ToolStripButton();
+            this.PortOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ClearScreenButton = new System.Windows.Forms.ToolStripButton();
-            this.PortOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.BaudRateButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.TerminalOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.bASICModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,71 +55,19 @@
             this.toolStripDropDownloadButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.xMODEMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.xmodemPCPUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.DisplayOptionsDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
-            this.transferControl1 = new CRTerm.Transfer.TransferControl();
-            this.textCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CaptureStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusStrip1.SuspendLayout();
+            this.StatusBox = new System.Windows.Forms.PictureBox();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StatusBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.BackColor = System.Drawing.Color.Black;
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.PortStatusLabel,
-            this.PortNameLabel,
-            this.PortStatus,
-            this.TerminalNameLabel,
-            this.EchoStatus,
-            this.CaptureStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 702);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1124, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // PortStatusLabel
-            // 
-            this.PortStatusLabel.ForeColor = System.Drawing.Color.LightGray;
-            this.PortStatusLabel.Name = "PortStatusLabel";
-            this.PortStatusLabel.Size = new System.Drawing.Size(79, 17);
-            this.PortStatusLabel.Text = "Disconnected";
-            // 
-            // PortNameLabel
-            // 
-            this.PortNameLabel.ForeColor = System.Drawing.Color.LightGray;
-            this.PortNameLabel.Name = "PortNameLabel";
-            this.PortNameLabel.Size = new System.Drawing.Size(48, 17);
-            this.PortNameLabel.Text = "No Port";
-            // 
-            // PortStatus
-            // 
-            this.PortStatus.ForeColor = System.Drawing.Color.LightGray;
-            this.PortStatus.Name = "PortStatus";
-            this.PortStatus.Size = new System.Drawing.Size(68, 17);
-            this.PortStatus.Text = "No Address";
-            // 
-            // TerminalNameLabel
-            // 
-            this.TerminalNameLabel.ForeColor = System.Drawing.Color.LightGray;
-            this.TerminalNameLabel.Name = "TerminalNameLabel";
-            this.TerminalNameLabel.Size = new System.Drawing.Size(72, 17);
-            this.TerminalNameLabel.Text = "No Terminal";
-            // 
-            // EchoStatus
-            // 
-            this.EchoStatus.ForeColor = System.Drawing.Color.LightGray;
-            this.EchoStatus.Name = "EchoStatus";
-            this.EchoStatus.Size = new System.Drawing.Size(53, 17);
-            this.EchoStatus.Text = "Echo Off";
             // 
             // toolStripContainer1
             // 
@@ -133,17 +76,17 @@
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.Crt);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.transferControl1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1124, 677);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1124, 675);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1124, 702);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1124, 700);
             this.toolStripContainer1.TabIndex = 1;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.Color.Black;
+            this.toolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.SystemColors.MenuBar;
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             // 
             // Crt
@@ -152,7 +95,7 @@
             this.Crt.BackColor = System.Drawing.Color.DimGray;
             this.Crt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Crt.CharUnderCursor = ' ';
-            this.Crt.CurrentAttribute = TerminalUI.CharacterCell.Attributes.Normal;
+            this.Crt.CurrentAttribute = TerminalUI.CharacterCell.AttributeCodes.Normal;
             this.Crt.CurrentBackground = TerminalUI.CharacterCell.ColorCodes.Black;
             this.Crt.CurrentColumn = 0;
             this.Crt.CurrentRow = 0;
@@ -161,19 +104,34 @@
             this.Crt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Crt.EchoMode = TerminalUI.Terminals.EchoModes.EchoOff;
             this.Crt.Editor = null;
-            this.Crt.Font = new System.Drawing.Font("Classic Console", 33.32923F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Crt.Font = new System.Drawing.Font("Classic Console", 33.23077F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Crt.InsertMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.Crt.LineWrap = false;
             this.Crt.Location = new System.Drawing.Point(0, 0);
             this.Crt.Margin = new System.Windows.Forms.Padding(440714, 347787, 440714, 347787);
             this.Crt.Name = "Crt";
-            this.Crt.Size = new System.Drawing.Size(904, 677);
+            this.Crt.Size = new System.Drawing.Size(904, 675);
             this.Crt.StatusText = null;
             this.Crt.TabIndex = 1;
             this.Crt.Terminal = null;
             this.Crt.TextCursor = TerminalUI.TextCursorStyles.Underline;
             this.Crt.ToggleFullScreenRequest += new System.EventHandler(this.Crt_ToggleFullScreenRequest);
+            this.Crt.HotkeyPressed += new System.Windows.Forms.KeyEventHandler(this.Crt_HotkeyPressed);
             this.Crt.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CRT_MouseMove);
+            // 
+            // transferControl1
+            // 
+            this.transferControl1.BytesSent = 0;
+            this.transferControl1.BytesToSend = 0;
+            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.transferControl1.Filename = "[unknown]";
+            this.transferControl1.Location = new System.Drawing.Point(904, 0);
+            this.transferControl1.Name = "transferControl1";
+            this.transferControl1.Operation = "Send / Receive";
+            this.transferControl1.Protocol = "[unknown protocol]";
+            this.transferControl1.Size = new System.Drawing.Size(220, 675);
+            this.transferControl1.TabIndex = 2;
+            this.transferControl1.Visible = false;
             // 
             // toolStrip1
             // 
@@ -219,6 +177,17 @@
             this.DisconnectButton.Text = "Disconnect";
             this.DisconnectButton.Click += new System.EventHandler(this.DisconnectButton_Click);
             // 
+            // PortOptionsButton
+            // 
+            this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.PortOptionsButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
+            this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PortOptionsButton.Name = "PortOptionsButton";
+            this.PortOptionsButton.Size = new System.Drawing.Size(42, 22);
+            this.PortOptionsButton.Text = "Port";
+            this.PortOptionsButton.DropDownOpening += new System.EventHandler(this.PortOptionsButton_DropDownOpening);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.ForeColor = System.Drawing.Color.LightGray;
@@ -235,17 +204,6 @@
             this.ClearScreenButton.Size = new System.Drawing.Size(38, 22);
             this.ClearScreenButton.Text = "Clear";
             this.ClearScreenButton.Click += new System.EventHandler(this.ClearScreenButton_Click);
-            // 
-            // PortOptionsButton
-            // 
-            this.PortOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.PortOptionsButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.PortOptionsButton.Image = ((System.Drawing.Image)(resources.GetObject("PortOptionsButton.Image")));
-            this.PortOptionsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.PortOptionsButton.Name = "PortOptionsButton";
-            this.PortOptionsButton.Size = new System.Drawing.Size(42, 22);
-            this.PortOptionsButton.Text = "Port";
-            this.PortOptionsButton.DropDownOpening += new System.EventHandler(this.PortOptionsButton_DropDownOpening);
             // 
             // BaudRateButton
             // 
@@ -390,6 +348,14 @@
             this.xmodemPCPUTToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.xmodemPCPUTToolStripMenuItem.Text = "Xmodem-PCPUT";
             // 
+            // textCaptureToolStripMenuItem
+            // 
+            this.textCaptureToolStripMenuItem.Name = "textCaptureToolStripMenuItem";
+            this.textCaptureToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+            this.textCaptureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.textCaptureToolStripMenuItem.Text = "Text Capture";
+            this.textCaptureToolStripMenuItem.Click += new System.EventHandler(this.TextCaptureToolStripMenuItem_Click);
+            // 
             // CancelTransferButton
             // 
             this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -429,34 +395,16 @@
             this.ReceiveTimer.Interval = 16;
             this.ReceiveTimer.Tick += new System.EventHandler(this.ReceiveTimer_Tick);
             // 
-            // transferControl1
+            // StatusBox
             // 
-            this.transferControl1.BytesSent = 0;
-            this.transferControl1.BytesToSend = 0;
-            this.transferControl1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.transferControl1.Filename = "[unknown]";
-            this.transferControl1.Location = new System.Drawing.Point(904, 0);
-            this.transferControl1.Name = "transferControl1";
-            this.transferControl1.Operation = "Send / Receive";
-            this.transferControl1.Protocol = "[unknown protocol]";
-            this.transferControl1.Size = new System.Drawing.Size(220, 677);
-            this.transferControl1.TabIndex = 2;
-            this.transferControl1.Visible = false;
-            // 
-            // textCaptureToolStripMenuItem
-            // 
-            this.textCaptureToolStripMenuItem.Name = "textCaptureToolStripMenuItem";
-            this.textCaptureToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this.textCaptureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.textCaptureToolStripMenuItem.Text = "Text Capture";
-            this.textCaptureToolStripMenuItem.Click += new System.EventHandler(this.TextCaptureToolStripMenuItem_Click);
-            // 
-            // CaptureLabel
-            // 
-            this.CaptureStatus.ForeColor = System.Drawing.Color.LightGray;
-            this.CaptureStatus.Name = "CaptureLabel";
-            this.CaptureStatus.Size = new System.Drawing.Size(68, 17);
-            this.CaptureStatus.Text = "No Capture";
+            this.StatusBox.BackColor = System.Drawing.Color.Black;
+            this.StatusBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.StatusBox.Location = new System.Drawing.Point(0, 700);
+            this.StatusBox.Name = "StatusBox";
+            this.StatusBox.Size = new System.Drawing.Size(1124, 24);
+            this.StatusBox.TabIndex = 3;
+            this.StatusBox.TabStop = false;
+            this.StatusBox.Paint += new System.Windows.Forms.PaintEventHandler(this.StatusBox_Paint);
             // 
             // MainWindow
             // 
@@ -464,14 +412,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1124, 724);
             this.Controls.Add(this.toolStripContainer1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.StatusBox);
+            this.KeyPreview = true;
             this.Name = "MainWindow";
             this.Text = "CR Term";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.SizeChanged += new System.EventHandler(this.MainWindow_SizeChanged);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
@@ -479,8 +427,8 @@
             this.toolStripContainer1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StatusBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -493,11 +441,6 @@
         private System.Windows.Forms.ToolStripButton DisconnectButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton ClearScreenButton;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel PortStatusLabel;
-        private System.Windows.Forms.ToolStripStatusLabel PortNameLabel;
-        private System.Windows.Forms.ToolStripStatusLabel PortStatus;
-        private System.Windows.Forms.ToolStripStatusLabel TerminalNameLabel;
         private System.Windows.Forms.ToolStripDropDownButton TerminalOptionsButton;
         private System.Windows.Forms.ToolStripMenuItem bSDELToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton PortOptionsButton;
@@ -511,7 +454,6 @@
         private System.Windows.Forms.ToolStripMenuItem xMODEMToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton CancelTransferButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripStatusLabel EchoStatus;
         private System.Windows.Forms.ToolStripMenuItem xModemPCGETToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bASICModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem echoOnOffToolStripMenuItem;
@@ -523,7 +465,7 @@
         private System.Windows.Forms.ToolStripDropDownButton DisplayOptionsDropdown;
         private System.Windows.Forms.Timer ReceiveTimer;
         private System.Windows.Forms.ToolStripMenuItem textCaptureToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel CaptureStatus;
+        private System.Windows.Forms.PictureBox StatusBox;
     }
 }
 

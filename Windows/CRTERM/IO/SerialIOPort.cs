@@ -33,7 +33,7 @@ namespace CRTerm.IO
         #endregion
 
         #region Properties
-        public string Name { get; }
+        public string Name { get { return "Serial"; } }
         public bool ClearToSend
         {
             get

@@ -102,7 +102,7 @@ namespace CRTerm
             {
                 char c = Terminal.SendBuffer.Read();
                 SendChar(c);
-                DateTime t = DateTime.Now.AddMilliseconds(5);
+                DateTime t = DateTime.Now.AddMilliseconds(2);
                 while (DateTime.Now < t)
                     System.Windows.Forms.Application.DoEvents();
             }

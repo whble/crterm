@@ -109,6 +109,7 @@
       <DependentUpon>TransferDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Transfer\XModem.cs" />
+    <Content Include="Menu.txt" />
     <EmbeddedResource Include="Transfer\TransferControl.resx">
       <DependentUpon>TransferControl.cs</DependentUpon>
     </EmbeddedResource>

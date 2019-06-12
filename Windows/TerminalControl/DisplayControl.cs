@@ -56,19 +56,19 @@ namespace TerminalUI
         internal void DrawRectangle(int left, int top, int width, int height)
         {
             SetCharacter(top, left, '╔');
-            SetCharacter(top, left+width-1, '╗');
-            SetCharacter(top+height-1, left, '╚');
-            SetCharacter(top+height-1, left + width-1, '╝');
+            SetCharacter(top, left + width - 1, '╗');
+            SetCharacter(top + height - 1, left, '╚');
+            SetCharacter(top + height - 1, left + width - 1, '╝');
 
             for (int col = left + 1; col < left + width - 1; col++)
             {
                 SetCharacter(top, col, '═');
-                SetCharacter(top+height-1, col, '═');
+                SetCharacter(top + height - 1, col, '═');
             }
-            for (int row = top+1; row < top + height-1; row++)
+            for (int row = top + 1; row < top + height - 1; row++)
             {
                 SetCharacter(row, left, '║');
-                SetCharacter(row, left + width-1, '║');
+                SetCharacter(row, left + width - 1, '║');
             }
         }
 
@@ -390,7 +390,9 @@ namespace TerminalUI
 
             drawTimer.Interval = 1000 / 60;
             drawTimer.Tick += DrawTimer_Tick;
-            drawTimer.Enabled = true;
+
+            if (!DesignMode)
+                drawTimer.Enabled = true;
 
             Resize += TerminalControl_Resize;
             KeyDown += HandleKeyDown;

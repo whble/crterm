@@ -1,0 +1,25 @@
+﻿Connection
+	Connect
+	Disconnect
+Port
+Baud rate, data length, parity, stop bits
+Terminal
+	Terminal type (ANSI, TTY, VDM-1, ?)
+	Line Wrap
+	Character Set (ASCII, ANSI, PETSCII)
+	Backspace Mode (8, 127)
+	Return mode (CR, LF, CRLF)
+	Local Echo
+	BASIC Editor
+Screen
+	Terminal layout (80x24, 80x25, 80x36, 80x50, 120x25, 120x50)
+	Colors
+Font
+Transfer
+	XModem Send
+	XModem Receive
+	Text Send
+	Capture To File
+	Paste
+	Capture To Clipboard
+Clear screen

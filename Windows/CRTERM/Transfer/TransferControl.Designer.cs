@@ -69,13 +69,17 @@
             // 
             // CancelTransfer
             // 
+            this.CancelTransfer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(96)))), ((int)(((byte)(96)))));
             this.CancelTransfer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelTransfer.Location = new System.Drawing.Point(6, 403);
+            this.CancelTransfer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CancelTransfer.ForeColor = System.Drawing.Color.Silver;
+            this.CancelTransfer.Location = new System.Drawing.Point(47, 403);
             this.CancelTransfer.Name = "CancelTransfer";
             this.CancelTransfer.Size = new System.Drawing.Size(120, 23);
             this.CancelTransfer.TabIndex = 33;
             this.CancelTransfer.Text = "Cancel";
-            this.CancelTransfer.UseVisualStyleBackColor = true;
+            this.CancelTransfer.UseVisualStyleBackColor = false;
+            this.CancelTransfer.Click += new System.EventHandler(this.CancelTransfer_Click);
             // 
             // protocolLabel
             // 
@@ -221,6 +225,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.remainingLabel);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.CancelTransfer);
@@ -239,8 +245,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.operationLabel);
             this.Controls.Add(this.label1);
+            this.ForeColor = System.Drawing.Color.Silver;
             this.Name = "TransferControl";
-            this.Size = new System.Drawing.Size(212, 440);
+            this.Size = new System.Drawing.Size(210, 438);
             this.ResumeLayout(false);
             this.PerformLayout();
 

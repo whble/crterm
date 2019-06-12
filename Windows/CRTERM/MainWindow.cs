@@ -322,11 +322,6 @@ namespace CRTerm
             Crt.CursorEnabled = true;
         }
 
-        private void xMODEMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void xModemPCGETToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -341,7 +336,23 @@ namespace CRTerm
         {
         }
 
-        private void xMODEMToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void XModem_Send_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog f = new OpenFileDialog();
+
+            f.InitialDirectory = Session.DownloadDirectory;
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                Session.DownloadDirectory = System.IO.Path.GetDirectoryName(f.FileName);
+
+                Transfer.ITransferProtocol t = new Transfer.XModem();
+                t.TransferControl = transferControl1;
+                Session.Transfer = t;
+                t.SendFile(Session, f.FileName);
+            }
+        }
+
+        private void XModem_Receive_Click(object sender, EventArgs e)
         {
             SaveFileDialog f = new SaveFileDialog();
 
@@ -632,6 +643,7 @@ namespace CRTerm
             //debug 
             //Crt.PrintAtStart("Main Menu");
         }
+
     }
 
 }

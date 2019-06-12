@@ -26,6 +26,7 @@ namespace CRTerm.Transfer
         char lastReceived = '\0';
         private Session _currentSession;
         bool ClearToSend = false;
+        private TransferControl _tc = null;
 
         public string Text = "";
         public string Filename = "";
@@ -44,6 +45,19 @@ namespace CRTerm.Transfer
                 this._currentSession = value;
                 if (value != null)
                     _currentSession.Transfer = this;
+            }
+        }
+
+        public TransferControl TransferControl
+        {
+            get
+            {
+                return this._tc;
+            }
+
+            set
+            {
+                this._tc = value;
             }
         }
 

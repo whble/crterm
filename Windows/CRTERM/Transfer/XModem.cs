@@ -25,7 +25,7 @@ namespace CRTerm.Transfer
         // ^C during the waiting phase cancels the transfer
         const byte ETX = 3;
 
-        private ITransferDialog _dialog = null;
+        private TransferControl _tc = null;
         private ITransport _transport = null;
         private ConnectionStatusCodes _status = ConnectionStatusCodes.Disconnected;
         RingBuffer dataBuffer = new RingBuffer();
@@ -171,10 +171,16 @@ namespace CRTerm.Transfer
 
         public void Close(bool Success)
         {
+            if (TransferControl != null)
+            {
+                TransferControl.Hide();
+                TransferControl.CancelClicked -= TransferControl_CancelClicked;
+            }
+
             if (Success)
                 Display.PrintAtStart("Transfer SUCCESS");
             else
-                Display.PrintAtStart("Transfer FAIL");
+                Display.PrintAtStart("Transfer FAILED");
 
             if (this.Transport != null)
             {
@@ -304,7 +310,7 @@ namespace CRTerm.Transfer
 
         public void Cancel()
         {
-            Display.PrintAtStart("Transfer canceled.");
+            //Display.PrintAtStart("Transfer canceled.");
             Stage = TransferStages.Fail;
             Close(false);
         }
@@ -317,16 +323,16 @@ namespace CRTerm.Transfer
             }
         }
 
-        public ITransferDialog Dialog
+        public TransferControl TransferControl
         {
             get
             {
-                return this._dialog;
+                return this._tc;
             }
 
             set
             {
-                this._dialog = value;
+                this._tc = value;
             }
         }
 
@@ -501,11 +507,6 @@ namespace CRTerm.Transfer
             throw new NotImplementedException();
         }
 
-        public void Send(string Filename)
-        {
-
-        }
-
         public void Receive()
         {
             throw new NotImplementedException();
@@ -513,7 +514,21 @@ namespace CRTerm.Transfer
 
         public void SendFile(Session CurrentSession, string Filename)
         {
-            throw new NotImplementedException();
+            FileInfo info = new FileInfo(filename);
+
+            TransferControl.Protocol = "XMODEM";
+            TransferControl.Filename = System.IO.Path.GetFileName(Filename);
+            TransferControl.Operation = "Send";
+            TransferControl.BytesToSend = info.Length;
+            TransferControl.BytesSent = 0;
+            TransferControl.ClearTimer();
+            TransferControl.CancelClicked += TransferControl_CancelClicked;
+            TransferControl.Show();
+        }
+
+        private void TransferControl_CancelClicked(object sender, EventArgs e)
+        {
+            this.Cancel();
         }
 
         #endregion

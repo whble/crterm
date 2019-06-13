@@ -66,7 +66,7 @@ namespace CRTerm.Transfer
 
                 bytesSentLabel.Text = value.ToString();
                 _bytesSent = value;
-                progressBar1.Value = (int) value;
+                progressBar1.Value = Math.Min((int)value, progressBar1.Maximum);
                 UpdateTimer();
             }
         }

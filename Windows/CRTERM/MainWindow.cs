@@ -18,6 +18,7 @@ namespace CRTerm
     {
         int MouseY = 0;
         private static string MEASURE_STRING = new string('W', 80);
+        private EchoModes lastEchoMode = EchoModes.EchoOff;
 
         string[] fonts = new[] {
             "Classic Console",
@@ -287,7 +288,7 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
             if (b.Checked)
-                Crt.EchoMode = EchoModes.EditMode;
+                Crt.EchoMode = EchoModes.FullScreenEdit;
             else
                 Crt.EchoMode = EchoModes.EchoOff;
 
@@ -329,7 +330,18 @@ namespace CRTerm
 
         private void echoOnOffToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (Session == null || Session.Terminal == null)
+                return;
 
+            if (Session.Terminal.EchoMode == EchoModes.LocalEcho)
+            {
+                Session.Terminal.EchoMode = EchoModes.EchoOff;
+            }
+            else
+            {
+                Session.Terminal.EchoMode = EchoModes.LocalEcho;
+            }
+            lastEchoMode = Session.Terminal.EchoMode;
         }
 
         private void aSCIIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -564,6 +576,9 @@ namespace CRTerm
             StatusText = s.ToString();
 
             StatusBox.Refresh();
+
+            UpdatePortMenu();
+            UpdateTerminalMode();
         }
 
         private void StatusBox_Paint(object sender, PaintEventArgs e)
@@ -576,9 +591,9 @@ namespace CRTerm
             g.DrawLine(Pens.Gray, 0, 0, StatusBox.ClientRectangle.Width, 0);
             g.DrawString(StatusText, this.StatusFont, Brushes.Gray, 4, 0);
 
-            string PressAlt = "Press ALT-M for menu";
-            SizeF sf = g.MeasureString(PressAlt, StatusFont);
-            g.DrawString(PressAlt, this.StatusFont, Brushes.Gray, StatusBox.ClientRectangle.Width - sf.Width, 0);
+            //string PressAlt = "Press ALT-M for menu";
+            //SizeF sf = g.MeasureString(PressAlt, StatusFont);
+            //g.DrawString(PressAlt, this.StatusFont, Brushes.Gray, StatusBox.ClientRectangle.Width - sf.Width, 0);
         }
 
         private void UpdateStatusSize()
@@ -610,12 +625,12 @@ namespace CRTerm
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(e.Alt.ToString() + " " + e.KeyCode.ToString());
-            if(e.Alt && e.KeyCode == Keys.M)
-            {
-                ShowMainMenu();
-                e.Handled = true;
-            }
+            //System.Diagnostics.Debug.WriteLine(e.Alt.ToString() + " " + e.KeyCode.ToString());
+            //if(e.Alt && e.KeyCode == Keys.M)
+            //{
+            //    ShowMainMenu();
+            //    e.Handled = true;
+            //}
         }
 
         private void ShowMainMenu()
@@ -644,6 +659,67 @@ namespace CRTerm
             //Crt.PrintAtStart("Main Menu");
         }
 
+        public void UpdatePortMenu()
+        {
+            if (Session.Transport == null)
+                return;
+
+            IO.SerialIOPort sp = Session.Transport as IO.SerialIOPort;
+            if (sp == null)
+            {
+                BitsDropdown.Visible = false;
+            }
+            else
+            {
+                BitsDropdown.Visible = true;
+
+                if (sp.Port != null)
+                {
+                    dataBits7.Checked = sp.Port.DataBits == 7;
+                    dataBits8.Checked = sp.Port.DataBits == 8;
+
+                    parityNoneToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.None;
+                    paritySpaceToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Space;
+                    parityMarkToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Mark;
+                    parityEvenToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Even;
+                    parityOddToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Odd;
+
+                    stop1ToolStripMenuItem.Checked = sp.Port.StopBits == System.IO.Ports.StopBits.One;
+                    stop2ToolStripMenuItem.Checked = sp.Port.StopBits == System.IO.Ports.StopBits.Two;
+                }
+            }
+
+            if (Session.Terminal != null)
+            {
+                bitTrimToolStripMenuItem.Checked = Session.Terminal.TrimHighBit;
+            }
+
+        }
+
+        public void UpdateTerminalMode()
+        {
+            if (Session == null || Session.Terminal == null)
+                return;
+
+            BasicModeMenuItem.Checked = Session.Terminal.EchoMode == EchoModes.FullScreenEdit;
+            echoOnOffToolStripMenuItem.Checked = Session.Terminal.EchoMode == EchoModes.LocalEcho;
+        }
+
+        private void BasicModeMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Session == null || Session.Terminal == null)
+                return;
+
+            if (Session.Terminal.EchoMode == EchoModes.FullScreenEdit)
+            {
+                Session.Terminal.EchoMode = lastEchoMode;
+            }
+            else
+            {
+                lastEchoMode = Session.Terminal.EchoMode;
+                Session.Terminal.EchoMode = EchoModes.FullScreenEdit;
+            }
+        }
     }
 
 }

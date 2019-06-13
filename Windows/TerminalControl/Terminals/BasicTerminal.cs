@@ -61,6 +61,13 @@ namespace TerminalUI.Terminals
             get { return "TTY"; }
         }
 
+        /// <summary>
+        /// Trims the high bit from inbound and outbound data. This affects the terminal layer, so
+        /// file transfers are not affected. 
+        /// </summary>
+        [ConfigItem]
+        public virtual bool TrimHighBit { get; set; }
+
         private RingBuffer<char> _sendBuffer = new RingBuffer<char>();
 
         public event EventHandler ReadyToSend;

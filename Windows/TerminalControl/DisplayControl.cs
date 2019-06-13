@@ -481,7 +481,7 @@ namespace TerminalUI
                 {
                     case EchoModes.LineEdit:
                         break;
-                    case EchoModes.EditMode:
+                    case EchoModes.FullScreenEdit:
                         e.Handled = HandleEditKey(e);
                         break;
                     case EchoModes.Plugin:
@@ -493,7 +493,7 @@ namespace TerminalUI
                     default:
                         if (e.KeyCode == Keys.F12)
                         {
-                            EchoMode = EchoModes.EditMode;
+                            EchoMode = EchoModes.FullScreenEdit;
                             InsertMode = InsertKeyMode.Overwrite;
                             BlinkCursor();
                             e.Handled = true;
@@ -601,7 +601,7 @@ namespace TerminalUI
                     break;
                 case EchoModes.LineEdit:
                     break;
-                case EchoModes.EditMode:
+                case EchoModes.FullScreenEdit:
                     // break key
                     // turn off BASIC mode and pass the key through
                     if (e.KeyChar == 3)
@@ -948,7 +948,7 @@ namespace TerminalUI
                 case EchoModes.LineEdit:
                     TextCursor = TextCursorStyles.Left;
                     break;
-                case EchoModes.EditMode:
+                case EchoModes.FullScreenEdit:
                     if (InsertMode == InsertKeyMode.Insert)
                         TextCursor = TextCursorStyles.Left;
                     else
@@ -981,6 +981,9 @@ namespace TerminalUI
         /// <param name="e"></param>
         private void DrawTimer_Tick(object sender, EventArgs e)
         {
+            if (this.Terminal == null)
+                return;
+
             NextDraw -= 1;
             if (NextDraw > 0)
             {

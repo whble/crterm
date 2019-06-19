@@ -53,6 +53,7 @@
     <Compile Include="SelectablePanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Terminals\ADM31Terminal.cs" />
     <Compile Include="TextCursorStyles.cs" />
     <Compile Include="IConfigurable.cs" />
     <Compile Include="RingBuffer.cs" />

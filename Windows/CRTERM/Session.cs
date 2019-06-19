@@ -102,7 +102,7 @@ namespace CRTerm
             {
                 char c = Terminal.SendBuffer.Read();
                 SendChar(c);
-                DateTime t = DateTime.Now.AddMilliseconds(5);
+                DateTime t = DateTime.Now.AddMilliseconds(2);
                 while (DateTime.Now < t)
                     System.Windows.Forms.Application.DoEvents();
             }
@@ -130,11 +130,7 @@ namespace CRTerm
             }
         }
 
-        public string Terminal_StatusDetails { get; internal set; }
-
-        //public TextConsole Display { get; internal set; }
-
-        public List<string> GetPortNames()
+            public List<string> GetPortNames()
         {
             List<string> ret = new List<string>();
 

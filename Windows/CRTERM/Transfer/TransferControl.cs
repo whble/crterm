@@ -21,6 +21,8 @@ namespace CRTerm.Transfer
         TimeSpan elapsedTime = new TimeSpan();
         TimeSpan estimatedTime = new TimeSpan();
 
+        public event EventHandler CancelClicked;
+
         public string Protocol
         {
             get { return protocolLabel.Text; }
@@ -39,22 +41,22 @@ namespace CRTerm.Transfer
             set { operationLabel.Text = value; }
         }
 
-        private int _bytesToSend;
-        public int BytesToSend
+        private long _bytesToSend;
+        public long BytesToSend
         {
             get { return _bytesToSend; }
             set
             {
                 BytesToSendLabel.Text = value.ToString();
                 _bytesToSend = value;
-                if (progressBar1.Value > value)
-                    progressBar1.Value = value;
-                progressBar1.Maximum = value;
+                if (progressBar1.Value > (int) value)
+                    progressBar1.Value = (int) value;
+                progressBar1.Maximum = (int) value;
             }
         }
 
-        private int _bytesSent;
-        public int BytesSent
+        private long _bytesSent;
+        public long BytesSent
         {
             get { return _bytesSent; }
             set
@@ -64,7 +66,7 @@ namespace CRTerm.Transfer
 
                 bytesSentLabel.Text = value.ToString();
                 _bytesSent = value;
-                progressBar1.Value = value;
+                progressBar1.Value = Math.Min((int)value, progressBar1.Maximum);
                 UpdateTimer();
             }
         }
@@ -91,6 +93,11 @@ namespace CRTerm.Transfer
             elapsedTimeLabel.Text = elapsedTime.ToString();
             estimatedTimeLabel.Text = estimatedTime.ToString();
             remainingLabel.Text = (estimatedTime - elapsedTime).ToString();
+        }
+
+        private void CancelTransfer_Click(object sender, EventArgs e)
+        {
+            CancelClicked?.Invoke(sender, e);
         }
     }
 

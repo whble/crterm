@@ -12,5 +12,6 @@ namespace CRTerm.Transfer
         void ReceiveFile(Session CurrentSession, string Filename);
         void Cancel();
         void ReceiveData(IReceiveChannel receiver);
+        TransferControl TransferControl { get; set; }
     }
 }

@@ -11,6 +11,12 @@ namespace TerminalUI.Terminals
         TerminalKeyMap KeyMap { get; }
 
         /// <summary>
+        /// Trims the high bit from inbound and outbound data. This affects the terminal layer, so
+        /// file transfers are not affected. 
+        /// </summary>
+        bool TrimHighBit { get; set; }
+
+        /// <summary>
         /// Sends a character from the keyboard. This should be converted to ASCII and sent straight through.
         /// </summary>
         /// <param name="c"></param>

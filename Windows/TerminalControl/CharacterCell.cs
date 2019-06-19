@@ -27,7 +27,7 @@ namespace TerminalUI
             White = 0x0F,
         }
 
-        public enum Attributes
+        public enum AttributeCodes
         {
             Normal=0,
             Underline = 0x01,
@@ -39,7 +39,7 @@ namespace TerminalUI
 
         public ColorCodes TextColor = ColorCodes.Gray;
         public ColorCodes BackColor = ColorCodes.Black;
-        public Attributes Attribute = Attributes.Normal;
+        public AttributeCodes Attribute = AttributeCodes.Normal;
         public string Value = " ";
 
         public CharacterCell Copy()

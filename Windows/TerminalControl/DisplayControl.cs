@@ -13,6 +13,7 @@ namespace TerminalUI
         #region Fields
 
         private static string MEASURE_STRING = new string('W', 80);
+        public TextDialog CurrentDialog = null;
 
         private int _cols;
         private int _rows;
@@ -21,7 +22,11 @@ namespace TerminalUI
         private int x;
         private int y;
 
+        private ScreenBuffer SaveBuffer = null;
+
         private Pen borderPen = new Pen(Color.FromArgb(32, 32, 32));
+
+        public List<KeyEventArgs> Hotkeys = new List<KeyEventArgs>();
 
         public TextCursorStyles TextCursor { get; set; }
 
@@ -37,6 +42,36 @@ namespace TerminalUI
 
         private string _statusText;
 
+        internal void ClearRectangle(int x, int y, int width, int height)
+        {
+            for (int row = y; row < y + height; row++)
+            {
+                for (int col = x; col < x + width; col++)
+                {
+                    SetCharacter(row, col, ' ');
+                }
+            }
+        }
+
+        internal void DrawRectangle(int left, int top, int width, int height)
+        {
+            SetCharacter(top, left, '╔');
+            SetCharacter(top, left + width - 1, '╗');
+            SetCharacter(top + height - 1, left, '╚');
+            SetCharacter(top + height - 1, left + width - 1, '╝');
+
+            for (int col = left + 1; col < left + width - 1; col++)
+            {
+                SetCharacter(top, col, '═');
+                SetCharacter(top + height - 1, col, '═');
+            }
+            for (int row = top + 1; row < top + height - 1; row++)
+            {
+                SetCharacter(row, left, '║');
+                SetCharacter(row, left + width - 1, '║');
+            }
+        }
+
         protected bool FontValid = false;
         private Timer drawTimer = new Timer();
 
@@ -49,7 +84,7 @@ namespace TerminalUI
 
         public CharacterCell.ColorCodes CurrentTextColor { get; set; }
 
-        public CharacterCell.Attributes CurrentAttribute { get; set; }
+        public CharacterCell.AttributeCodes CurrentAttribute { get; set; }
 
         private IEditorPlugin _editor = null;
         private ITerminal _terminal = new Terminals.ANSITerminal();
@@ -57,12 +92,18 @@ namespace TerminalUI
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public List<string> Buffer = new List<string>();
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
-        public CharacterCell[] CharacterData = new CharacterCell[2000];
+
+        public char[] CharacterData = new char[2000];
+        public CharacterCell.ColorCodes[] TextColorData = new CharacterCell.ColorCodes[2000];
+        public CharacterCell.ColorCodes[] BackColorData = new CharacterCell.ColorCodes[2000];
+        public CharacterCell.AttributeCodes[] AttributeData = new CharacterCell.AttributeCodes[2000];
+
 
         #endregion
 
         #region Events
         public event EventHandler ToggleFullScreenRequest;
+        public event KeyEventHandler HotkeyPressed;
         #endregion
 
         #region Public Properties
@@ -135,18 +176,7 @@ namespace TerminalUI
         {
             get
             {
-                CharacterCell cell = CharacterData[CursorPos];
-                if (cell == null)
-                {
-                    return '\0';
-                }
-
-                if (cell.Value.Length < 1)
-                {
-                    return '\0';
-                }
-
-                return cell.Value[0];
+                return CharacterData[CursorPos];
             }
             set
             {
@@ -207,7 +237,7 @@ namespace TerminalUI
             for (int col = Columns - 1; col > CurrentColumn; col--)
             {
                 int pos = GetPos(CurrentRow, col);
-                CharacterData[pos] = CharacterData[pos - 1].Copy();
+                CopyCharacter(pos, pos - 1);
             }
             SetCharacter(CurrentRow, CurrentColumn, ' ');
             BlinkCursor();
@@ -223,7 +253,7 @@ namespace TerminalUI
             for (int col = CurrentColumn + 1; col < Columns - 1; col++)
             {
                 int pos = GetPos(CurrentRow, col);
-                CharacterData[pos - 1] = CharacterData[pos].Copy();
+                CopyCharacter(pos - 1, pos);
             }
             SetCharacter(CurrentRow, Columns - 1, ' ');
             BlinkCursor();
@@ -314,13 +344,18 @@ namespace TerminalUI
             int end = ToEnd ? CharacterData.Length - 1 : CursorPos;
             for (int i = start; i <= end; i++)
             {
-                SetCharacter(i, " ", CurrentTextColor, CurrentBackground, CurrentAttribute);
+                SetCharacter(i, ' ', CurrentTextColor, CurrentBackground, CurrentAttribute);
             }
         }
 
         public int GetPos(int row, int col)
         {
-            return row * Columns + col;
+            int pos = row * Columns + col;
+            if (pos < 0)
+                return 0;
+            if (pos >= CharacterData.Length)
+                return CharacterData.Length - 1;
+            return pos;
         }
 
 
@@ -355,7 +390,9 @@ namespace TerminalUI
 
             drawTimer.Interval = 1000 / 60;
             drawTimer.Tick += DrawTimer_Tick;
-            drawTimer.Enabled = true;
+
+            if (!DesignMode)
+                drawTimer.Enabled = true;
 
             Resize += TerminalControl_Resize;
             KeyDown += HandleKeyDown;
@@ -378,7 +415,12 @@ namespace TerminalUI
 
             _rows = Rows;
             _cols = Columns;
-            CharacterData = new CharacterCell[Rows * Columns];
+            int len = Rows * Columns;
+
+            CharacterData = new char[len];
+            TextColorData = new CharacterCell.ColorCodes[len];
+            BackColorData = new CharacterCell.ColorCodes[len];
+            AttributeData = new CharacterCell.AttributeCodes[len];
             Clear();
         }
 
@@ -400,19 +442,24 @@ namespace TerminalUI
             BlinkCursor();
         }
 
-        public void Fill(string c)
+        public void Fill(char c)
         {
-            for (int row = 0; row < Rows; row++)
+            for (int i = 0; i < CharacterData.Length; i++)
             {
-                for (int col = 0; col < Columns; col++)
-                {
-                    SetCharacter(row, col, c, CurrentTextColor, CurrentBackground, CharacterCell.Attributes.Normal);
-                }
+                SetCharacter(i, c, CurrentTextColor, CurrentBackground, CharacterCell.AttributeCodes.Normal);
             }
         }
 
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
+            foreach (KeyEventArgs key in Hotkeys)
+            {
+                if (key.Modifiers == e.Modifiers && key.KeyCode == e.KeyCode)
+                {
+                    HotkeyPressed?.Invoke(sender, e);
+                }
+            }
+
             if (!e.Handled)
             {
 
@@ -434,7 +481,7 @@ namespace TerminalUI
                 {
                     case EchoModes.LineEdit:
                         break;
-                    case EchoModes.EditMode:
+                    case EchoModes.FullScreenEdit:
                         e.Handled = HandleEditKey(e);
                         break;
                     case EchoModes.Plugin:
@@ -446,7 +493,7 @@ namespace TerminalUI
                     default:
                         if (e.KeyCode == Keys.F12)
                         {
-                            EchoMode = EchoModes.EditMode;
+                            EchoMode = EchoModes.FullScreenEdit;
                             InsertMode = InsertKeyMode.Overwrite;
                             BlinkCursor();
                             e.Handled = true;
@@ -471,7 +518,7 @@ namespace TerminalUI
                     EchoMode = EchoModes.EchoOff;
                     CurrentColumn = 0;
                     int y = Rows - 1;
-                    while (GetChar(y - 1, 0) == " ")
+                    while (GetChar(y - 1, 0) == ' ')
                         y = y - 1;
                     CurrentRow = y;
                     BlinkCursor();
@@ -526,7 +573,7 @@ namespace TerminalUI
                     else
                     {
                         CurrentColumn = Columns - 1;
-                        while (CurrentColumn > 0 && CharacterData[CursorPos - 1].Value == " ")
+                        while (CurrentColumn > 0 && CharacterData[CursorPos - 1] == ' ')
                             CurrentColumn -= 1;
                     }
                     break;
@@ -537,10 +584,10 @@ namespace TerminalUI
             return handled;
         }
 
-        private string GetChar(int Row, int Col)
+        private char GetChar(int Row, int Col)
         {
             int pos = GetPos(Row, Col);
-            return CharacterData[pos].Value;
+            return CharacterData[pos];
         }
 
         public void HandleKeyPress(object sender, KeyPressEventArgs e)
@@ -554,7 +601,7 @@ namespace TerminalUI
                     break;
                 case EchoModes.LineEdit:
                     break;
-                case EchoModes.EditMode:
+                case EchoModes.FullScreenEdit:
                     // break key
                     // turn off BASIC mode and pass the key through
                     if (e.KeyChar == 3)
@@ -600,7 +647,7 @@ namespace TerminalUI
         {
             if (c >= ' ')
             {
-                SetCharacter(CurrentRow, CurrentColumn, c.ToString(), CurrentTextColor, CurrentBackground, CurrentAttribute);
+                SetCharacter(CursorPos, c, CurrentTextColor, CurrentBackground, CurrentAttribute);
                 AdvanceCursor();
             }
             else
@@ -613,97 +660,59 @@ namespace TerminalUI
 
         public void AdvanceCursor()
         {
-            CurrentColumn++;
-            if (CurrentColumn >= Columns && LineWrap == true)
-            {
-                CurrentColumn = 0;
-                CurrentRow++;
-            }
+            if (LineWrap)
+                CursorPos++;
+            else
+                CurrentColumn++;
         }
+
+        public void CopyCharacter(int dest, int src)
+        {
+            CharacterData[dest] = CharacterData[src];
+            TextColorData[dest] = TextColorData[src];
+            BackColorData[dest] = BackColorData[src];
+            AttributeData[dest] = AttributeData[src];
+        }
+
+        public void SetCharacter(int pos, char c)
+        {
+            if (pos < 0 || pos >= CharacterData.Length)
+                return;
+
+            CharacterData[pos] = c;
+            TextColorData[pos] = CurrentTextColor;
+            BackColorData[pos] = CurrentBackground;
+            AttributeData[pos] = CurrentAttribute;
+        }
+
+        public void SetCharacter(int row, int col, char c, CharacterCell.ColorCodes textColor, CharacterCell.ColorCodes backColor, CharacterCell.AttributeCodes attribute)
+        {
+            int pos = GetPos(row, col);
+            SetCharacter(pos, c, textColor, backColor, attribute);
+        }
+
+        public void SetCharacter(int pos, char c, CharacterCell.ColorCodes textColor, CharacterCell.ColorCodes backColor, CharacterCell.AttributeCodes attribute)
+        {
+            if (pos < 0 || pos >= CharacterData.Length)
+                return;
+
+            CharacterData[pos] = c;
+            TextColorData[pos] = textColor;
+            BackColorData[pos] = backColor;
+            AttributeData[pos] = attribute;
+        }
+
 
         public void SetCharacter(char c)
         {
-            int pos = CursorPos;
-            CharacterData[pos] = new CharacterCell
-            {
-                Value = c.ToString()
-            };
+            SetCharacter(CursorPos, c);
         }
 
         private void SetCharacter(int row, int col, char c)
         {
-            int pos = row * Columns + col;
-            if (pos < 0 || pos >= CharacterData.Length)
-            {
-                return;
-            }
-
-            if (CharacterData[pos] == null)
-            {
-                CharacterData[pos] = new CharacterCell();
-            }
-
-            CharacterData[pos].Value = c.ToString();
-            CharacterData[pos].TextColor = CurrentTextColor;
-            CharacterData[pos].BackColor = CurrentBackground;
-            CharacterData[pos].Attribute = CurrentAttribute;
+            int pos = GetPos(row, col);
+            SetCharacter(pos, c);
         }
-
-        public void SetCharacter(
-            int pos,
-            string c,
-            CharacterCell.ColorCodes textColor,
-            CharacterCell.ColorCodes backColor,
-            CharacterCell.Attributes attribute)
-        {
-            if (pos < 0 || pos >= CharacterData.Length)
-            {
-                return;
-            }
-
-            if (CharacterData[pos] == null)
-            {
-                CharacterData[pos] = new CharacterCell();
-            }
-
-            CharacterData[pos].Value = c.ToString();
-            CharacterData[pos].TextColor = textColor;
-            CharacterData[pos].BackColor = backColor;
-            CharacterData[pos].Attribute = attribute;
-        }
-
-        public void SetCharacter(
-            int row,
-            int col,
-            string c,
-            CharacterCell.ColorCodes textColor,
-            CharacterCell.ColorCodes backColor,
-            CharacterCell.Attributes attribute)
-        {
-            int pos = row * Columns + col;
-            if (pos < 0 || pos >= CharacterData.Length)
-            {
-                return;
-            }
-
-            if (CharacterData[pos] == null)
-            {
-                CharacterData[pos] = new CharacterCell();
-            }
-
-            CharacterData[pos].Value = c.ToString();
-            CharacterData[pos].TextColor = textColor;
-            CharacterData[pos].BackColor = backColor;
-            CharacterData[pos].Attribute = attribute;
-        }
-
-        //public void Print(char[] c)
-        //{
-        //    for (int i = 0; i < c.Length; i++)
-        //    {
-        //        Print(c[i]);
-        //    }
-        //}
 
         public void PrintClear(string s, bool NewLine = true)
         {
@@ -838,7 +847,7 @@ namespace TerminalUI
 
         public void Clear()
         {
-            Fill(" ");
+            Fill(' ');
             CurrentColumn = 0;
             CurrentRow = 0;
         }
@@ -877,28 +886,24 @@ namespace TerminalUI
             {
                 for (int col = 0; col < Columns; col++)
                 {
-                    CharacterCell cc = CharacterData[row * Columns + col];
-                    if (cc == null)
-                    {
-                        continue;
-                    }
-
+                    int pos = GetPos(row, col);
                     x = col * ColWidth;
                     y = row * RowHeight;
 
-                    CharacterCell.ColorCodes color = cc.BackColor;
-                    Brush b = Brushes[(int)cc.TextColor];
+                    CharacterCell.ColorCodes color = BackColorData[pos];
+                    Brush b = Brushes[(int)TextColorData[pos]];
+                    Brush bg = Brushes[(int)BackColorData[pos]];
                     if (color != CurrentBackground)
                     {
-                        g.FillRectangle(Brushes[(int)cc.BackColor], x, y, ColWidth, RowHeight);
+                        g.FillRectangle(bg, x, y, ColWidth, RowHeight);
                     }
-                    if (cc.Attribute.HasFlag(CharacterCell.Attributes.Reverse))
+                    if (AttributeData[pos].HasFlag(CharacterCell.AttributeCodes.Reverse))
                     {
-                        g.FillRectangle(Brushes[(int)cc.TextColor], x, y, ColWidth, RowHeight);
-                        b = Brushes[(int)cc.BackColor];
+                        g.FillRectangle(b, x, y, ColWidth, RowHeight);
+                        b = bg;
                     }
 
-                    g.DrawString(cc.Value, Font, b, x, y, StringFormat.GenericTypographic);
+                    g.DrawString(CharacterData[pos].ToString(), Font, b, x, y, StringFormat.GenericTypographic);
                 }
             }
 
@@ -930,6 +935,12 @@ namespace TerminalUI
 
         private void UpdateTextCursorMode()
         {
+            if (CurrentDialog != null && CurrentDialog.Visible)
+            {
+                TextCursor = TextCursorStyles.None;
+                return;
+            }
+
             if (Terminal != null)
                 Terminal.EchoMode = this.EchoMode;
             switch (EchoMode)
@@ -937,7 +948,7 @@ namespace TerminalUI
                 case EchoModes.LineEdit:
                     TextCursor = TextCursorStyles.Left;
                     break;
-                case EchoModes.EditMode:
+                case EchoModes.FullScreenEdit:
                     if (InsertMode == InsertKeyMode.Insert)
                         TextCursor = TextCursorStyles.Left;
                     else
@@ -970,6 +981,9 @@ namespace TerminalUI
         /// <param name="e"></param>
         private void DrawTimer_Tick(object sender, EventArgs e)
         {
+            if (this.Terminal == null)
+                return;
+
             NextDraw -= 1;
             if (NextDraw > 0)
             {
@@ -1009,9 +1023,9 @@ namespace TerminalUI
             int end = GetPos(Rows, 0);
             for (int i = start; i < end; i++)
             {
-                CharacterData[i - Columns] = CharacterData[i].Copy();
+                CopyCharacter(i - Columns, i);
             }
-            FillRow(Rows - 1, " ");
+            FillRow(Rows - 1, ' ');
         }
 
         /// <summary>
@@ -1028,11 +1042,12 @@ namespace TerminalUI
             Buffer.Add(s.ToString());
         }
 
-        private void FillRow(int Row, string Value)
+        private void FillRow(int Row, char Value)
         {
-            for (int col = 0; col < Columns; col++)
+            int pos = GetPos(Row, 0);
+            for (int x = 0; x < Columns; x++)
             {
-                SetCharacter(Row, col, Value, CurrentTextColor, CurrentBackground, CurrentAttribute);
+                SetCharacter(pos + x, Value, CurrentTextColor, CurrentBackground, CurrentAttribute);
             }
         }
 
@@ -1053,11 +1068,23 @@ namespace TerminalUI
             return true;  // used
         }
 
-        #endregion
-
         private void DisplayControl_Load(object sender, EventArgs e)
         {
 
         }
+
+        public void SaveScreen(ScreenBuffer buffer)
+        {
+            buffer = new ScreenBuffer(CharacterData.Length);
+            buffer.Save(CharacterData, TextColorData, BackColorData, AttributeData);
+        }
+
+        public void RestoreScreen(ScreenBuffer buffer)
+        {
+            SaveBuffer.Load(CharacterData, TextColorData, BackColorData, AttributeData);
+        }
+
+        #endregion
+
     }
 }

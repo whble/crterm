@@ -207,10 +207,10 @@ namespace TerminalUI.Terminals
                                 switch (operands[0])
                                 {
                                     case 0:
-                                        Display.CurrentAttribute = CharacterCell.Attributes.Normal;
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Normal;
                                         break;
                                     case 7:
-                                        Display.CurrentAttribute = CharacterCell.Attributes.Reverse;
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Reverse;
                                         break;
                                     default:
                                         break;

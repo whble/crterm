@@ -20,7 +20,7 @@
         /// transmits that line of text to the host. 
         /// Cursor command keystrokes (Up, Down, Left, Right, Home, End) are not sent to the host.
         /// </summary>
-        EditMode = 3,
+        FullScreenEdit = 3,
         /// <summary>
         /// Keystrokes are sent to a plugin, such as a program interpreter. Responses from the plugin
         /// should be sent to the Terminal for processing.

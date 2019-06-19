@@ -17,6 +17,17 @@ namespace CRTerm
     public partial class MainWindow : Form
     {
         int MouseY = 0;
+        private static string MEASURE_STRING = new string('W', 80);
+        private EchoModes lastEchoMode = EchoModes.EchoOff;
+
+        string[] fonts = new[] {
+            "Classic Console",
+            "Consolas",
+            "Lucida Console",
+            "Monospace"
+        };
+
+        string StatusText = "CRTerm (c) 2019 Tom Wilson";
 
         public MainWindow()
         {
@@ -24,6 +35,7 @@ namespace CRTerm
         }
 
         private Session Session = null;
+        private Font StatusFont;
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -32,6 +44,7 @@ namespace CRTerm
             Session.Init();
             MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
+
         }
 
         private void LoadPortOptions()
@@ -118,21 +131,6 @@ namespace CRTerm
             UpdateStatus();
         }
 
-        public void UpdateStatus()
-        {
-            if (Session == null)
-                return;
-
-            if (Session.Transport == null)
-                return;
-
-            PortStatusLabel.Text = Session.Transport.Status.ToString();
-            PortNameLabel.Text = Session.Transport.Name;
-            PortStatus.Text = Session.Transport.StatusDetails;
-            TerminalNameLabel.Text = Session.Terminal_StatusDetails;
-            EchoStatus.Text = CamelToSpace(Crt.EchoMode.ToString());
-            CaptureStatus.Text = Session.captureBuffer.StatusText;
-        }
 
         private string CamelToSpace(string Name)
         {
@@ -290,7 +288,7 @@ namespace CRTerm
 
             b.Checked = !b.Checked;
             if (b.Checked)
-                Crt.EchoMode = EchoModes.EditMode;
+                Crt.EchoMode = EchoModes.FullScreenEdit;
             else
                 Crt.EchoMode = EchoModes.EchoOff;
 
@@ -325,11 +323,6 @@ namespace CRTerm
             Crt.CursorEnabled = true;
         }
 
-        private void xMODEMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void xModemPCGETToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -337,14 +330,41 @@ namespace CRTerm
 
         private void echoOnOffToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (Session == null || Session.Terminal == null)
+                return;
 
+            if (Session.Terminal.EchoMode == EchoModes.LocalEcho)
+            {
+                Session.Terminal.EchoMode = EchoModes.EchoOff;
+            }
+            else
+            {
+                Session.Terminal.EchoMode = EchoModes.LocalEcho;
+            }
+            lastEchoMode = Session.Terminal.EchoMode;
         }
 
         private void aSCIIToolStripMenuItem_Click(object sender, EventArgs e)
         {
         }
 
-        private void xMODEMToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void XModem_Send_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog f = new OpenFileDialog();
+
+            f.InitialDirectory = Session.DownloadDirectory;
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                Session.DownloadDirectory = System.IO.Path.GetDirectoryName(f.FileName);
+
+                Transfer.ITransferProtocol t = new Transfer.XModem();
+                t.TransferControl = transferControl1;
+                Session.Transfer = t;
+                t.SendFile(Session, f.FileName);
+            }
+        }
+
+        private void XModem_Receive_Click(object sender, EventArgs e)
         {
             SaveFileDialog f = new SaveFileDialog();
 
@@ -486,6 +506,219 @@ namespace CRTerm
 
 
             UpdateStatus();
+        }
+
+        private SizeF MeasureFont(Font font, Graphics g)
+        {
+            SizeF size = g.MeasureString(MEASURE_STRING, font, int.MaxValue, StringFormat.GenericTypographic);
+            size.Width = size.Width / MEASURE_STRING.Length;
+            return size;
+        }
+
+        private Font GetBestFont(int Rows)
+        {
+            float RowHeight = 16;
+            float ColWidth = 8;
+            int testSize = 12;
+
+            Font useFont = this.Font;
+            float ch = (float)ClientRectangle.Height / (float)(Rows + 1);
+            if (ch < 8)
+            {
+                ch = 8;
+            }
+
+            foreach (string f in fonts)
+            {
+                using (Font testFont = new Font(
+                                           f,
+                                           testSize,
+                                           FontStyle.Regular,
+                                           GraphicsUnit.Pixel))
+                {
+                    if (testFont.Name == f)
+                    {
+                        useFont = new Font(f, ch, FontStyle.Regular, GraphicsUnit.Pixel);
+                        break;
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+            return useFont;
+        }
+
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+        }
+
+        public void UpdateStatus()
+        {
+            if (Session == null)
+                return;
+
+            if (Session.Transport == null)
+                return;
+
+            StringBuilder s = new StringBuilder();
+            s.Append(CamelToSpace(Session.Transport.Status.ToString()));
+            s.Append(" │ ");
+            s.Append(Session.Transport.Name);
+            s.Append(" │ ");
+            s.Append(Session.Transport.StatusDetails);
+            s.Append(" │ ");
+            s.Append(Session.Terminal.Name);
+            s.Append(" │ ");
+            s.Append(CamelToSpace(Crt.EchoMode.ToString()));
+            s.Append(" │ ");
+            s.Append(Session.captureBuffer.StatusText);
+            StatusText = s.ToString();
+
+            StatusBox.Refresh();
+
+            UpdatePortMenu();
+            UpdateTerminalMode();
+        }
+
+        private void StatusBox_Paint(object sender, PaintEventArgs e)
+        {
+            if (this.StatusFont == null)
+                UpdateStatusSize();
+
+            Graphics g = e.Graphics;
+            g.Clear(Color.Black);
+            g.DrawLine(Pens.Gray, 0, 0, StatusBox.ClientRectangle.Width, 0);
+            g.DrawString(StatusText, this.StatusFont, Brushes.Gray, 4, 0);
+
+            //string PressAlt = "Press ALT-M for menu";
+            //SizeF sf = g.MeasureString(PressAlt, StatusFont);
+            //g.DrawString(PressAlt, this.StatusFont, Brushes.Gray, StatusBox.ClientRectangle.Width - sf.Width, 0);
+        }
+
+        private void UpdateStatusSize()
+        {
+            int rows = 25;
+            if (Crt != null)
+                rows = Crt.Rows + 1;
+            this.StatusFont = GetBestFont(rows);
+            StatusBox.Height = this.Font.Height + 8;
+        }
+
+        private void Crt_HotkeyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Menu)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.H:
+                        ShowHelp();
+                        break;
+                }
+            }
+        }
+
+        private void ShowHelp()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine(e.Alt.ToString() + " " + e.KeyCode.ToString());
+            //if(e.Alt && e.KeyCode == Keys.M)
+            //{
+            //    ShowMainMenu();
+            //    e.Handled = true;
+            //}
+        }
+
+        private void ShowMainMenu()
+        {
+            TextDialog d = new TextDialog();
+            Crt.CurrentDialog = d;
+            d.Display = Crt;
+
+            d.Add("Connect", "Alt-C");
+            d.Add("Disconnect", "Alt-D");
+            d.Add("Port settings", "Alt-P");
+            d.Add("Terminal Settings", "Alt-T");
+            d.Add("Screen Size", "Alt-V");
+            d.Add("Clear Screen", "Control-Home");
+            d.Add("Upload (Send)", "Alt-U");
+            d.Add("Download (Receive)", "Alt-R");
+
+            d.Left = 15;
+            d.Top = 5;
+            d.Width = 44;
+            d.Height = 14;
+
+            d.Show();
+
+            //debug 
+            //Crt.PrintAtStart("Main Menu");
+        }
+
+        public void UpdatePortMenu()
+        {
+            if (Session.Transport == null)
+                return;
+
+            IO.SerialIOPort sp = Session.Transport as IO.SerialIOPort;
+            if (sp == null)
+            {
+                BitsDropdown.Visible = false;
+            }
+            else
+            {
+                BitsDropdown.Visible = true;
+
+                if (sp.Port != null)
+                {
+                    dataBits7.Checked = sp.Port.DataBits == 7;
+                    dataBits8.Checked = sp.Port.DataBits == 8;
+
+                    parityNoneToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.None;
+                    paritySpaceToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Space;
+                    parityMarkToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Mark;
+                    parityEvenToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Even;
+                    parityOddToolStripMenuItem.Checked = sp.Port.Parity == System.IO.Ports.Parity.Odd;
+
+                    stop1ToolStripMenuItem.Checked = sp.Port.StopBits == System.IO.Ports.StopBits.One;
+                    stop2ToolStripMenuItem.Checked = sp.Port.StopBits == System.IO.Ports.StopBits.Two;
+                }
+            }
+
+            if (Session.Terminal != null)
+            {
+                bitTrimToolStripMenuItem.Checked = Session.Terminal.TrimHighBit;
+            }
+
+        }
+
+        public void UpdateTerminalMode()
+        {
+            if (Session == null || Session.Terminal == null)
+                return;
+
+            BasicModeMenuItem.Checked = Session.Terminal.EchoMode == EchoModes.FullScreenEdit;
+            echoOnOffToolStripMenuItem.Checked = Session.Terminal.EchoMode == EchoModes.LocalEcho;
+        }
+
+        private void BasicModeMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Session == null || Session.Terminal == null)
+                return;
+
+            if (Session.Terminal.EchoMode == EchoModes.FullScreenEdit)
+            {
+                Session.Terminal.EchoMode = lastEchoMode;
+            }
+            else
+            {
+                lastEchoMode = Session.Terminal.EchoMode;
+                Session.Terminal.EchoMode = EchoModes.FullScreenEdit;
+            }
         }
     }
 

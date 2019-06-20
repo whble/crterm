@@ -246,76 +246,76 @@
             // dataBits7
             // 
             this.dataBits7.Name = "dataBits7";
-            this.dataBits7.Size = new System.Drawing.Size(180, 22);
+            this.dataBits7.Size = new System.Drawing.Size(144, 22);
             this.dataBits7.Text = "7 bits";
             // 
             // dataBits8
             // 
             this.dataBits8.Name = "dataBits8";
-            this.dataBits8.Size = new System.Drawing.Size(180, 22);
+            this.dataBits8.Size = new System.Drawing.Size(144, 22);
             this.dataBits8.Text = "8 bits";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
             // 
             // parityNoneToolStripMenuItem
             // 
             this.parityNoneToolStripMenuItem.Name = "parityNoneToolStripMenuItem";
-            this.parityNoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.parityNoneToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.parityNoneToolStripMenuItem.Text = "Parity-None";
             // 
             // paritySpaceToolStripMenuItem
             // 
             this.paritySpaceToolStripMenuItem.Name = "paritySpaceToolStripMenuItem";
-            this.paritySpaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.paritySpaceToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.paritySpaceToolStripMenuItem.Text = "Party-Space";
             // 
             // parityMarkToolStripMenuItem
             // 
             this.parityMarkToolStripMenuItem.Name = "parityMarkToolStripMenuItem";
-            this.parityMarkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.parityMarkToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.parityMarkToolStripMenuItem.Text = "Parity-Mark";
             // 
             // parityEvenToolStripMenuItem
             // 
             this.parityEvenToolStripMenuItem.Name = "parityEvenToolStripMenuItem";
-            this.parityEvenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.parityEvenToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.parityEvenToolStripMenuItem.Text = "Parity-Even";
             // 
             // parityOddToolStripMenuItem
             // 
             this.parityOddToolStripMenuItem.Name = "parityOddToolStripMenuItem";
-            this.parityOddToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.parityOddToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.parityOddToolStripMenuItem.Text = "Parity-Odd";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
             // 
             // stop1ToolStripMenuItem
             // 
             this.stop1ToolStripMenuItem.Name = "stop1ToolStripMenuItem";
-            this.stop1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stop1ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.stop1ToolStripMenuItem.Text = "Stop-1";
             // 
             // stop2ToolStripMenuItem
             // 
             this.stop2ToolStripMenuItem.Name = "stop2ToolStripMenuItem";
-            this.stop2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stop2ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.stop2ToolStripMenuItem.Text = "Stop-2";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(141, 6);
             // 
             // bitTrimToolStripMenuItem
             // 
             this.bitTrimToolStripMenuItem.Name = "bitTrimToolStripMenuItem";
-            this.bitTrimToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bitTrimToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.bitTrimToolStripMenuItem.Text = "Trim High Bit";
             // 
             // ClearScreenButton
@@ -349,14 +349,14 @@
             // BasicModeMenuItem
             // 
             this.BasicModeMenuItem.Name = "BasicModeMenuItem";
-            this.BasicModeMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.BasicModeMenuItem.Size = new System.Drawing.Size(163, 22);
             this.BasicModeMenuItem.Text = "BASIC Mode";
             this.BasicModeMenuItem.Click += new System.EventHandler(this.BasicModeMenuItem_Click);
             // 
             // echoOnOffToolStripMenuItem
             // 
             this.echoOnOffToolStripMenuItem.Name = "echoOnOffToolStripMenuItem";
-            this.echoOnOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.echoOnOffToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.echoOnOffToolStripMenuItem.Text = "Local Echo";
             this.echoOnOffToolStripMenuItem.Click += new System.EventHandler(this.echoOnOffToolStripMenuItem_Click);
             // 
@@ -364,26 +364,26 @@
             // 
             this.bSDELToolStripMenuItem.Name = "bSDELToolStripMenuItem";
             this.bSDELToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
-            this.bSDELToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bSDELToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.bSDELToolStripMenuItem.Text = "BS/DEL";
             this.bSDELToolStripMenuItem.Click += new System.EventHandler(this.bSDELToolStripMenuItem_Click);
             // 
             // aNSIToolStripMenuItem
             // 
             this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
-            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.aNSIToolStripMenuItem.Text = "ANSI";
             // 
             // pETSCIIToolStripMenuItem
             // 
             this.pETSCIIToolStripMenuItem.Name = "pETSCIIToolStripMenuItem";
-            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.pETSCIIToolStripMenuItem.Text = "PETSCII";
             // 
             // lineWrapToolStripMenuItem
             // 
             this.lineWrapToolStripMenuItem.Name = "lineWrapToolStripMenuItem";
-            this.lineWrapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lineWrapToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.lineWrapToolStripMenuItem.Text = "Line Wrap";
             // 
             // UploadButton
@@ -460,6 +460,7 @@
             this.bufferToClipboardToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
             this.bufferToClipboardToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.bufferToClipboardToolStripMenuItem.Text = "Capture  to Clipboard";
+            this.bufferToClipboardToolStripMenuItem.Click += new System.EventHandler(this.BufferToClipboardToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 

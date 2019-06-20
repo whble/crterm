@@ -133,13 +133,14 @@ namespace TerminalUI.Terminals
                         case '?':
                             cmdPrefix = "[?";
                             break;
+
                         // separate operands
                         case ';':
                             inOperand += 1;
                             operands.Add(0);
                             break;
 
-                        // cvursor up
+                        // cursor up
                         case 'A':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
@@ -273,6 +274,15 @@ namespace TerminalUI.Terminals
                                 {
                                     case 0:
                                         Display.CurrentAttribute = CharacterCell.AttributeCodes.Normal;
+                                        break;
+                                    case 1:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Bold;
+                                        break;
+                                    case 4:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Underline;
+                                        break;
+                                    case 5:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Blink;
                                         break;
                                     case 7:
                                         Display.CurrentAttribute = CharacterCell.AttributeCodes.Reverse;

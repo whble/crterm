@@ -378,6 +378,7 @@ namespace CRTerm
 
                 Transfer.ITransferProtocol t = new Transfer.XModem();
                 Session.Transfer = t;
+                t.TransferControl = this.transferControl1;
                 t.ReceiveFile(Session, f.FileName);
             }
         }

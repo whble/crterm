@@ -148,7 +148,7 @@ namespace CRTerm.Transfer
 
         protected virtual void SendNAK()
         {
-            Display.Print(" NAK");
+            Display.Print(" [NAK]");
             Transport.Send(NAK);
         }
 
@@ -201,6 +201,8 @@ namespace CRTerm.Transfer
 
         public void ReceiveFile(Session Session, string Filename)
         {
+            InitControl(Filename, "Receive");
+
             string fn = Filename;
             int fc = 0;
             while (System.IO.File.Exists(fn))
@@ -243,7 +245,7 @@ namespace CRTerm.Transfer
             {
                 if (Stage == TransferStages.Waiting)
                 {
-                    timer = new Timer(ReceiveTimeoutCheck, this, 1000, 1000);
+                    timer = new Timer(ReceiveDataCheck, this, 100, 100);
                 }
             }
 
@@ -254,8 +256,10 @@ namespace CRTerm.Transfer
             timer?.Dispose();
         }
 
-        public void ReceiveTimeoutCheck(object stateInfo)
+        public void ReceiveDataCheck(object stateInfo)
         {
+            ReceiveData(this.Transport);
+
             if (!(stateInfo is XModem x))
                 return;
             if (DateTime.Now < nextCheck)
@@ -359,21 +363,24 @@ namespace CRTerm.Transfer
 
         public virtual void ReceiveData(IReceiveChannel receiver)
         {
-            ResetNAKTimer();
-            ResetFailTimer();
-            ReadAllData();
-
-            switch (Mode)
+            while (receiver.BytesWaiting > 0)
             {
-                case TransferModes.None:
-                    break;
-                case TransferModes.Sending:
-                    break;
-                case TransferModes.Receiving:
-                    AppendData();
-                    break;
-                default:
-                    break;
+                ResetNAKTimer();
+                ResetFailTimer();
+                ReadAllData();
+
+                switch (Mode)
+                {
+                    case TransferModes.None:
+                        break;
+                    case TransferModes.Sending:
+                        break;
+                    case TransferModes.Receiving:
+                        AppendData();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -435,6 +442,7 @@ namespace CRTerm.Transfer
         private void ProcessBuffer()
         {
             Display.PrintClear("Receiving block " + CurrentBlock, false);
+            TransferControl.BytesSent = FilePosition;
 
             byte b = dataBuffer.Read();
             byte checksum = 0;
@@ -502,26 +510,30 @@ namespace CRTerm.Transfer
             //StatusChangedEvent?.Invoke(this, eventArgs);
         }
 
-        public int ReadData(byte[] Data, int Count)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Receive()
-        {
-            throw new NotImplementedException();
-        }
-
         public void SendFile(Session CurrentSession, string Filename)
         {
-            FileInfo info = new FileInfo(filename);
+            InitControl(Filename, "Send");
+        }
+
+        private void InitControl(string Filename, string Operation)
+        {
+            this.filename = Filename;
+
+            FileInfo info = null;
+            if (File.Exists(Filename))
+                info = new FileInfo(Filename);
+            if (info == null)
+                TransferControl.BytesToSend = 0;
+            else
+                TransferControl.BytesToSend = info.Length;
 
             TransferControl.Protocol = "XMODEM";
             TransferControl.Filename = System.IO.Path.GetFileName(Filename);
-            TransferControl.Operation = "Send";
-            TransferControl.BytesToSend = info.Length;
+            TransferControl.Operation = Operation;
             TransferControl.BytesSent = 0;
             TransferControl.ClearTimer();
+
+
             TransferControl.CancelClicked += TransferControl_CancelClicked;
             TransferControl.Show();
         }

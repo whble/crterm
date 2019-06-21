@@ -59,30 +59,11 @@ namespace CRTerm
 		[ConfigItem]
 		public string DownloadDirectory { get; internal set; }
 
-
-        private void _transport_DataReceived(IReceiveChannel receiver)
-        {
-            if (Transfer != null)
-                Transfer.ReceiveData(receiver);
-            else
-                Terminal_ReceiveData(receiver);
-        }
-
-        private void Terminal_ReceiveData(IReceiveChannel receiver)
-        {
-            while (receiver.BytesWaiting > 0)
-                Terminal.ProcessReceivedCharacter((char)receiver.Read());
-        }
-
-//        private void _terminal_DataSent(ISendChannel terminal)
-//        {
-//            while (terminal.BytesWaiting > 0)
-//                Transport?.Send(terminal.Read());
-//        }
-
         public DisplayControl Display
         {
-            get { return _frameBuffer; }
+            get {
+                return _frameBuffer;
+            }
             set
             {
                 _frameBuffer = value;

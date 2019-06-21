@@ -15,6 +15,7 @@ namespace CRTerm.Transfer
         public TransferControl()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         DateTime startTime = DateTime.Now;
@@ -47,11 +48,19 @@ namespace CRTerm.Transfer
             get { return _bytesToSend; }
             set
             {
-                BytesToSendLabel.Text = value.ToString();
+                BytesToSendLabel.Visible = value > 0;
+                progressBar1.Visible = value > 0;
+                if (value <= 0)
+                    return;
+
                 _bytesToSend = value;
-                if (progressBar1.Value > (int) value)
-                    progressBar1.Value = (int) value;
-                progressBar1.Maximum = (int) value;
+                if (progressBar1.Value > (int)value)
+                    progressBar1.Value = (int)value;
+                progressBar1.Maximum = (int)value;
+
+                ClearTimer();
+
+                UpdateUI();
             }
         }
 
@@ -64,11 +73,28 @@ namespace CRTerm.Transfer
                 if (_bytesSent == 0 && value > 0)
                     ClearTimer();
 
-                bytesSentLabel.Text = value.ToString();
                 _bytesSent = value;
-                progressBar1.Value = Math.Min((int)value, progressBar1.Maximum);
-                UpdateTimer();
+                UpdateUI();
             }
+        }
+
+        public void UpdateUI()
+        {
+            if (InvokeRequired)
+            {
+                MethodInvoker m = new MethodInvoker(UpdateUI_CT);
+                Invoke(m);
+            }
+            else
+                UpdateUI_CT();
+        }
+
+        public void UpdateUI_CT()
+        {
+            progressBar1.Value = Math.Min((int)_bytesSent, progressBar1.Maximum);
+            bytesSentLabel.Text = _bytesSent.ToString();
+            BytesToSendLabel.Text = _bytesToSend.ToString();
+            UpdateTimer();
         }
 
         public void ClearTimer()
@@ -82,11 +108,11 @@ namespace CRTerm.Transfer
 
         public void UpdateTimer()
         {
-            float bps = 0;
+            double bps = 1;
             elapsedTime = DateTime.Now - startTime;
             if (BytesToSend > 0 && BytesSent > 0)
             {
-                bps = BytesSent / BytesToSend;
+                bps = BytesSent / elapsedTime.TotalSeconds;
                 estimatedTime = new TimeSpan(0, 0, (int)(BytesToSend / bps));
             }
 

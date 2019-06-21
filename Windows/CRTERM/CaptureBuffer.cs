@@ -31,6 +31,17 @@ namespace TerminalUI
             }
         }
 
+        public void StartCapture()
+        {
+            Buffer.Clear();
+            Status = CaptureStatusCodes.Capturing;
+        }
+
+        public void StopCapture()
+        {
+            Status = CaptureStatusCodes.Closed;
+        }
+
         public override string ToString()
         {
             return Buffer.ToString();

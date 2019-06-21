@@ -10,6 +10,7 @@ namespace TerminalUI.Terminals
         private int inOperand = 0;
         private List<int> operands = new List<int>();
         private bool inCmd = false;
+        private string cmdPrefix = "";
         private int savedPos;
 
         private SortedList<System.Windows.Forms.Keys, string> KeyCodes = new SortedList<System.Windows.Forms.Keys, string>
@@ -64,17 +65,17 @@ namespace TerminalUI.Terminals
 
         public override void SendKey(TerminalKeyEventArgs terminalKey)
         {
-			base.SendKey(terminalKey);
+            base.SendKey(terminalKey);
 
-			if(!terminalKey.Handled)
-			{
-				if(terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Shift)
-				   && ShiftKeyCodes.ContainsKey(terminalKey.KeyCode))
-					SendString(ShiftKeyCodes[terminalKey.KeyCode]);
-				else
-				if(KeyCodes.ContainsKey(terminalKey.KeyCode))
-						SendString(KeyCodes[terminalKey.KeyCode]);
-			}
+            if (!terminalKey.Handled)
+            {
+                if (terminalKey.Modifier.HasFlag(System.Windows.Forms.Keys.Shift)
+                   && ShiftKeyCodes.ContainsKey(terminalKey.KeyCode))
+                    SendString(ShiftKeyCodes[terminalKey.KeyCode]);
+                else
+                if (KeyCodes.ContainsKey(terminalKey.KeyCode))
+                    SendString(KeyCodes[terminalKey.KeyCode]);
+            }
         }
 
         public override void ProcessReceivedCharacter(char c)
@@ -108,6 +109,7 @@ namespace TerminalUI.Terminals
             }
             else
             {
+                // append numerical digits to the command operand
                 if (inCmd && c >= '0' && c <= '9')
                 {
                     operands[inOperand] *= 10;
@@ -117,13 +119,28 @@ namespace TerminalUI.Terminals
                 {
                     switch (c)
                     {
+                        // start of ESC-[ command sequence (basically all ANSI commands)
                         case '[':
-                            inOperand = 0;
+                            if (cmdPrefix == "")
+                            {
+                                inOperand = 0;
+                                cmdPrefix = "[";
+                            }
+                            else
+                                inCmd = false;
                             break;
+                        // additional character for some obscure commands
+                        case '?':
+                            cmdPrefix = "[?";
+                            break;
+
+                        // separate operands
                         case ';':
                             inOperand += 1;
                             operands.Add(0);
                             break;
+
+                        // cursor up
                         case 'A':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
@@ -131,6 +148,8 @@ namespace TerminalUI.Terminals
                                 Display.CurrentRow -= 1;
                             }
                             break;
+
+                        // cursor down
                         case 'B':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
@@ -138,6 +157,8 @@ namespace TerminalUI.Terminals
                                 Display.CurrentRow += 1;
                             }
                             break;
+
+                        // cursor right
                         case 'C':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
@@ -145,6 +166,8 @@ namespace TerminalUI.Terminals
                                 Display.CurrentColumn += 1;
                             }
                             break;
+
+                        // cursor left
                         case 'D':
                             inCmd = false;
                             for (int i = 0; i < Math.Max(operands[0], 1); i++)
@@ -152,11 +175,47 @@ namespace TerminalUI.Terminals
                                 Display.CurrentColumn -= 1;
                             }
                             break;
+
+                        // what are you?
                         case 'c':
                             inCmd = false;
-                            Display.Clear();
-                            Display.Locate(0, 0);
+                            //Display.Clear();
+                            //Display.Locate(0, 0);
+                            SendString("ANSI");
                             break;
+
+                        // set terminal attribute
+                        // 25-show cursor
+                        case 'h':
+                            inCmd = false;
+                            if (operands.Count > 0)
+                            {
+                                switch (operands[0])
+                                {
+                                    case 25:
+                                        Display.TextCursor = TextCursorStyles.Underline;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        // reset terminal attribute
+                        // 25-hide cursor
+                        case 'l':
+                            inCmd = false;
+                            if (operands.Count > 0)
+                            {
+                                switch (operands[0])
+                                {
+                                    case 25:
+                                        Display.TextCursor = TextCursorStyles.None;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        // set cursor location
+                        // ^[[row;colH
                         case 'H':
                             inCmd = false;
                             if (operands.Count > 0)
@@ -169,6 +228,11 @@ namespace TerminalUI.Terminals
                             else
                                 Display.CurrentColumn = 0;
                             break;
+
+                        // Clear screen
+                        // ^[[J from cursor to end of screen
+                        // ^[[1J from start of screen to cursor
+                        // ^[[2J clear screen
                         case 'J':
                             inCmd = false;
                             if (operands[0] == 1)
@@ -178,6 +242,11 @@ namespace TerminalUI.Terminals
                             else
                                 Display.ClearScreen(false, true);
                             break;
+
+                        // Clear current line
+                        // ^[[K from cursor to end of line
+                        // ^[[1K from start of line to cursor
+                        // ^[[2K clear screen
                         case 'K':
                             inCmd = false;
                             if (operands[0] == 1)
@@ -187,27 +256,33 @@ namespace TerminalUI.Terminals
                             else
                                 Display.ClearCurrentLine(false, true);
                             break;
-                        case 'n':
-                            inCmd = false;
-                            if (operands[0] == 6)
-                                SendString(ESCAPE + "[" + (Display.CurrentRow + 1).ToString() + ";" + (Display.CurrentColumn + 1).ToString() + "R");
-                            break;
-                        case 's':
-                            inCmd = false;
-                            savedPos = Display.CursorPos;
-                            break;
-                        case 'u':
-                            inCmd = false;
-                            Display.CursorPos = savedPos;
-                            break;
+
+                        // attributes
+                        // no attributes                   ESC[m
+                        // no attributes                   ESC[0m
+                        // select attribute bold           ESC[1m
+                        // select attribute underline      ESC[4m
+                        // select attribute blink          ESC[5m
+                        // select attribute, reverse video ESC[7m
                         case 'm':
                             inCmd = false;
-                            if (operands.Count > 0)
+                            if (operands.Count == 0)
+                                Display.CurrentAttribute = CharacterCell.AttributeCodes.Normal;
+                            else
                             {
                                 switch (operands[0])
                                 {
                                     case 0:
                                         Display.CurrentAttribute = CharacterCell.AttributeCodes.Normal;
+                                        break;
+                                    case 1:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Bold;
+                                        break;
+                                    case 4:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Underline;
+                                        break;
+                                    case 5:
+                                        Display.CurrentAttribute = CharacterCell.AttributeCodes.Blink;
                                         break;
                                     case 7:
                                         Display.CurrentAttribute = CharacterCell.AttributeCodes.Reverse;
@@ -217,6 +292,28 @@ namespace TerminalUI.Terminals
                                 }
                             }
                             break;
+
+                        // device status report
+                        // 6: cursor position
+                        case 'n':
+                            inCmd = false;
+                            if (operands[0] == 6)
+                                SendString(ESCAPE + "[" + (Display.CurrentRow + 1).ToString() + ";" + (Display.CurrentColumn + 1).ToString() + "R");
+                            break;
+
+                        // save cursor position
+                        case 's':
+                            inCmd = false;
+                            savedPos = Display.CursorPos;
+                            break;
+
+                        // restore saved cursor position
+                        case 'u':
+                            inCmd = false;
+                            Display.CursorPos = savedPos;
+                            break;
+
+                        // invalid or unimplimented escape sequence
                         default:
                             inCmd = false;
                             System.Diagnostics.Debug.Write("Escape character ignored: " + c + " (" + ((int)c).ToString() + ") Operands:");
@@ -228,8 +325,11 @@ namespace TerminalUI.Terminals
                             }
                             System.Diagnostics.Debug.WriteLine("");
                             break;
-
                     }
+
+                    if (!inCmd)
+                        cmdPrefix = "";
+
                 }
             }
         }

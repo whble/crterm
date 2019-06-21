@@ -164,7 +164,7 @@ namespace CRTerm.Transfer
             if (Session.Transport != null)
             {
                 ITransport port = CurrentSession.Transport;
-                Session.Transport = null;
+                //Session.Transport = null;
                 this.Transport = port;
             }
         }

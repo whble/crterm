@@ -518,7 +518,7 @@ namespace TerminalUI
                     EchoMode = EchoModes.EchoOff;
                     CurrentColumn = 0;
                     int y = Rows - 1;
-                    while (GetChar(y - 1, 0) == ' ')
+                    while (y>0 && GetChar(y - 1, 0) == ' ')
                         y = y - 1;
                     CurrentRow = y;
                     BlinkCursor();
@@ -903,7 +903,16 @@ namespace TerminalUI
                         b = bg;
                     }
 
-                    g.DrawString(CharacterData[pos].ToString(), Font, b, x, y, StringFormat.GenericTypographic);
+                    if ((!CursorOn) || !(AttributeData[pos].HasFlag(CharacterCell.AttributeCodes.Blink)))
+                    {
+                        g.DrawString(CharacterData[pos].ToString(), Font, b, x, y, StringFormat.GenericTypographic);
+
+                        if (AttributeData[pos].HasFlag(CharacterCell.AttributeCodes.Underline))
+                        {
+                            float h = RowHeight / 8;
+                            g.FillRectangle(Brushes[(int)CurrentTextColor], x, y + (RowHeight - h), ColWidth, h);
+                        }
+                    }
                 }
             }
 
@@ -957,7 +966,8 @@ namespace TerminalUI
                 case EchoModes.EchoOff:
                 case EchoModes.LocalEcho:
                 default:
-                    TextCursor = TextCursorStyles.Underline;
+                    if (TextCursor != TextCursorStyles.None)
+                        TextCursor = TextCursorStyles.Underline;
                     break;
             }
         }

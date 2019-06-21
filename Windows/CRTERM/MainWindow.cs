@@ -493,7 +493,7 @@ namespace CRTerm
         {
             if (Session.captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
             {
-                Session.captureBuffer.Status = CaptureBuffer.CaptureStatusCodes.Closed;
+                Session.captureBuffer.StopCapture();
                 SaveFileDialog d = new SaveFileDialog();
                 DialogResult r = d.ShowDialog();
                 if (r == DialogResult.OK)
@@ -503,7 +503,7 @@ namespace CRTerm
                 }
             }
             else
-                Session.captureBuffer.Status = CaptureBuffer.CaptureStatusCodes.Capturing;
+                Session.captureBuffer.StartCapture();
 
 
             UpdateStatus();
@@ -720,6 +720,27 @@ namespace CRTerm
                 lastEchoMode = Session.Terminal.EchoMode;
                 Session.Terminal.EchoMode = EchoModes.FullScreenEdit;
             }
+        }
+
+        private void BufferToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Session.captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
+            {
+                Session.captureBuffer.StopCapture();
+                if (Session.captureBuffer.Buffer.Length > 0)
+                    Clipboard.SetText(Session.captureBuffer.ToString());
+            }
+            else
+                Session.captureBuffer.StartCapture();
+
+
+            UpdateStatus();
+        }
+
+        private void CancelTransferButton_Click(object sender, EventArgs e)
+        {
+            if (Session.Transfer != null)
+                Session.Transfer.Cancel();
         }
     }
 

@@ -13,7 +13,7 @@ namespace CRTerm
     [Serializable]
     public class Session : IConfigurable, IReceiveChannel
     {
-		private System.Windows.Forms.Timer ReceiveTimer = new System.Windows.Forms.Timer();
+        private System.Windows.Forms.Timer ReceiveTimer = new System.Windows.Forms.Timer();
 
         private string name = "Session";
         private ITransport _transport = null;
@@ -32,32 +32,32 @@ namespace CRTerm
             }
         }
 
-		[ConfigItem]
-		public ITerminal Terminal
-		{
-			get { return _terminal; }
-			set
-			{
-				_terminal = value;
-			}
-		}
+        [ConfigItem]
+        public ITerminal Terminal
+        {
+            get { return _terminal; }
+            set
+            {
+                _terminal = value;
+            }
+        }
 
-		[ConfigItem]
-		public string Name
-		{
-			get
-			{
-				return this.name;
-			}
+        [ConfigItem]
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
 
-			set
-			{
-				this.name = value;
-			}
-		}
+            set
+            {
+                this.name = value;
+            }
+        }
 
-		[ConfigItem]
-		public string DownloadDirectory { get; internal set; }
+        [ConfigItem]
+        public string DownloadDirectory { get; internal set; }
 
 
         private void _transport_DataReceived(IReceiveChannel receiver)
@@ -74,11 +74,11 @@ namespace CRTerm
                 Terminal.ProcessReceivedCharacter((char)receiver.Read());
         }
 
-//        private void _terminal_DataSent(ISendChannel terminal)
-//        {
-//            while (terminal.BytesWaiting > 0)
-//                Transport?.Send(terminal.Read());
-//        }
+        //        private void _terminal_DataSent(ISendChannel terminal)
+        //        {
+        //            while (terminal.BytesWaiting > 0)
+        //                Transport?.Send(terminal.Read());
+        //        }
 
         public DisplayControl Display
         {
@@ -130,7 +130,7 @@ namespace CRTerm
             }
         }
 
-            public List<string> GetPortNames()
+        public List<string> GetPortNames()
         {
             List<string> ret = new List<string>();
 
@@ -145,9 +145,9 @@ namespace CRTerm
 
         public Session()
         {
-			ReceiveTimer.Interval = 16;
-			ReceiveTimer.Tick += ReceiveTimer_Tick;
-			//ReceiveTimer.Enabled = true;
+            ReceiveTimer.Interval = 16;
+            ReceiveTimer.Tick += ReceiveTimer_Tick;
+            //ReceiveTimer.Enabled = true;
         }
 
         public void Load(string ConnectionDetails)
@@ -247,37 +247,46 @@ namespace CRTerm
         //        Terminal.ReceiveData(channel);
         //}
 
-		public int BytesWaiting {
-			get { 
-				if(this.Transport == null)
-					return 0;
-				return this.Transport.BytesWaiting;
-			}
-		}
+        public int BytesWaiting
+        {
+            get
+            {
+                if (this.Transport == null)
+                    return 0;
+                return this.Transport.BytesWaiting;
+            }
+        }
 
-		public byte Read()
-		{
+        public byte Read()
+        {
             if (BytesWaiting == 0)
                 return 0;
 
             return this.Transport.Read();
-		}
+        }
 
-		public void ReceiveTimer_Tick(object sender, EventArgs e)
-		{
-			if(Transport == null)
-				return;
-			if(Terminal == null)
-				return;
-			
-			while(this.BytesWaiting > 0)
-			{
-				char c= (char) Read();
-				Terminal.ProcessReceivedCharacter(c);
-                if (captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
-                    captureBuffer.Buffer.Append(c);
-			}
-		}
+        public void ReceiveTimer_Tick(object sender, EventArgs e)
+        {
+            if (Transport == null)
+                return;
+
+            if (Transfer != null && this.BytesWaiting > 0)
+            {
+                Transfer.ReceiveData(this.Transport);
+            }
+
+            if (Terminal != null)
+            {
+                while (this.BytesWaiting > 0)
+                {
+                    char c = (char)Read();
+                    Terminal.ProcessReceivedCharacter(c);
+                    if (captureBuffer.Status == CaptureBuffer.CaptureStatusCodes.Capturing)
+                        captureBuffer.Buffer.Append(c);
+                }
+            }
+
+        }
 
 
     }

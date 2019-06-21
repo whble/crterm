@@ -735,6 +735,12 @@ namespace CRTerm
 
             UpdateStatus();
         }
+
+        private void CancelTransferButton_Click(object sender, EventArgs e)
+        {
+            if (Session.Transfer != null)
+                Session.Transfer.Cancel();
+        }
     }
 
 }

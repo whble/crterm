@@ -74,6 +74,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
             this.StatusBox = new System.Windows.Forms.PictureBox();
+            this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -163,11 +164,12 @@
             this.TerminalOptionsButton,
             this.UploadButton,
             this.toolStripDropDownloadButton,
+            this.CancelTransferButton,
             this.toolStripSeparator2,
             this.DisplayOptionsDropdown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(584, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(631, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // ConnectButton
@@ -501,6 +503,16 @@
             this.StatusBox.TabStop = false;
             this.StatusBox.Paint += new System.Windows.Forms.PaintEventHandler(this.StatusBox_Paint);
             // 
+            // CancelTransferButton
+            // 
+            this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.CancelTransferButton.Image = ((System.Drawing.Image)(resources.GetObject("CancelTransferButton.Image")));
+            this.CancelTransferButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CancelTransferButton.Name = "CancelTransferButton";
+            this.CancelTransferButton.Size = new System.Drawing.Size(47, 22);
+            this.CancelTransferButton.Text = "Cancel";
+            this.CancelTransferButton.Click += new System.EventHandler(this.CancelTransferButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -573,6 +585,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem bitTrimToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bufferToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton CancelTransferButton;
     }
 }
 

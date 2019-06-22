@@ -42,9 +42,9 @@ namespace CRTerm
             Session = new Session();
             Session.Display = this.Crt;
             Session.Init();
+            SetActiveTerminal(Session.Terminal);
             MainWindow_SizeChanged(sender, e);
             timer1.Enabled = true;
-
         }
 
         private void LoadPortOptions()
@@ -266,11 +266,8 @@ namespace CRTerm
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string s = "";
             if (Clipboard.ContainsText())
-                s = Clipboard.GetText();
-
-            Session.Terminal.SendString(s);
+                SendText(Clipboard.GetText());
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -626,6 +623,10 @@ namespace CRTerm
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.F9)
+            {
+
+            }
             //System.Diagnostics.Debug.WriteLine(e.Alt.ToString() + " " + e.KeyCode.ToString());
             //if(e.Alt && e.KeyCode == Keys.M)
             //{
@@ -741,6 +742,36 @@ namespace CRTerm
         {
             if (Session.Transfer != null)
                 Session.Transfer.Cancel();
+        }
+
+        private void ANSIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetActiveTerminal(new ANSITerminal());
+        }
+
+        private void SetActiveTerminal(ITerminal newTerm)
+        {
+            if (newTerm != Session.Terminal)
+                Session.Terminal = newTerm;
+
+            aNSIToolStripMenuItem.ShortcutKeys = Keys.None;
+            aDM3ToolStripMenuItem.ShortcutKeys = Keys.None;
+            switch (newTerm.Name)
+            {
+                case "ANSI":
+                    aDM3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+                    break;
+                default:
+                    aNSIToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+                    break;
+            }
+
+            UpdateStatus();
+        }
+
+        private void ADM3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetActiveTerminal(new ADM3Terminal());
         }
     }
 

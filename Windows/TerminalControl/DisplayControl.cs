@@ -491,12 +491,14 @@ namespace TerminalUI
                     case EchoModes.EchoOff:
                     case EchoModes.LocalEcho:
                     default:
-                        if (e.KeyCode == Keys.F12)
+                        switch (e.KeyCode)
                         {
-                            EchoMode = EchoModes.FullScreenEdit;
-                            InsertMode = InsertKeyMode.Overwrite;
-                            BlinkCursor();
-                            e.Handled = true;
+                            case Keys.F12:
+                                EchoMode = EchoModes.FullScreenEdit;
+                                InsertMode = InsertKeyMode.Overwrite;
+                                BlinkCursor();
+                                e.Handled = true;
+                                break;
                         }
                         break;
                 }
@@ -518,7 +520,7 @@ namespace TerminalUI
                     EchoMode = EchoModes.EchoOff;
                     CurrentColumn = 0;
                     int y = Rows - 1;
-                    while (y>0 && GetChar(y - 1, 0) == ' ')
+                    while (y > 0 && GetChar(y - 1, 0) == ' ')
                         y = y - 1;
                     CurrentRow = y;
                     BlinkCursor();

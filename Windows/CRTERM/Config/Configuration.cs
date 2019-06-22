@@ -106,12 +106,16 @@ namespace CRTerm.Config
                     PopulateObject(term);
                     session.Terminal = term;
                     break;
+                case "TerminalUI.Terminals.ADM3Terminal":
+                    term = new ADM3Terminal();
+                    PopulateObject(term);
+                    session.Terminal = term;
+                    break;
                 default:
                     term = new ANSITerminal();
                     PopulateObject(term);
                     session.Terminal = term;
                     break;
-
             }
         }
 

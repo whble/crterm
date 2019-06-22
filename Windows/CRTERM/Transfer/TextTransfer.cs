@@ -80,7 +80,7 @@ namespace CRTerm.Transfer
         public void Send()
         {
             sendTimer.Elapsed += Sending_SendDelay_Elapsed;
-            sendTimer.Interval = 1;
+            sendTimer.Interval = 100;
             sendTimer.AutoReset = false;
 
             try

@@ -55,10 +55,11 @@
             this.bitTrimToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClearScreenButton = new System.Windows.Forms.ToolStripButton();
             this.TerminalOptionsButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.aNSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDM3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BasicModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.echoOnOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bSDELToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aNSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pETSCIIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lineWrapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UploadButton = new System.Windows.Forms.ToolStripDropDownButton();
@@ -69,12 +70,12 @@
             this.xMODEMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.textCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bufferToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.DisplayOptionsDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
             this.StatusBox = new System.Windows.Forms.PictureBox();
-            this.CancelTransferButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -335,10 +336,11 @@
             // 
             this.TerminalOptionsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.TerminalOptionsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aNSIToolStripMenuItem,
+            this.aDM3ToolStripMenuItem,
             this.BasicModeMenuItem,
             this.echoOnOffToolStripMenuItem,
             this.bSDELToolStripMenuItem,
-            this.aNSIToolStripMenuItem,
             this.pETSCIIToolStripMenuItem,
             this.lineWrapToolStripMenuItem});
             this.TerminalOptionsButton.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -348,17 +350,33 @@
             this.TerminalOptionsButton.Size = new System.Drawing.Size(47, 22);
             this.TerminalOptionsButton.Text = "Term";
             // 
+            // aNSIToolStripMenuItem
+            // 
+            this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
+            this.aNSIToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aNSIToolStripMenuItem.Text = "ANSI";
+            this.aNSIToolStripMenuItem.Click += new System.EventHandler(this.ANSIToolStripMenuItem_Click);
+            // 
+            // aDM3ToolStripMenuItem
+            // 
+            this.aDM3ToolStripMenuItem.Name = "aDM3ToolStripMenuItem";
+            this.aDM3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.aDM3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDM3ToolStripMenuItem.Text = "ADM3";
+            this.aDM3ToolStripMenuItem.Click += new System.EventHandler(this.ADM3ToolStripMenuItem_Click);
+            // 
             // BasicModeMenuItem
             // 
             this.BasicModeMenuItem.Name = "BasicModeMenuItem";
-            this.BasicModeMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.BasicModeMenuItem.Size = new System.Drawing.Size(180, 22);
             this.BasicModeMenuItem.Text = "BASIC Mode";
             this.BasicModeMenuItem.Click += new System.EventHandler(this.BasicModeMenuItem_Click);
             // 
             // echoOnOffToolStripMenuItem
             // 
             this.echoOnOffToolStripMenuItem.Name = "echoOnOffToolStripMenuItem";
-            this.echoOnOffToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.echoOnOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.echoOnOffToolStripMenuItem.Text = "Local Echo";
             this.echoOnOffToolStripMenuItem.Click += new System.EventHandler(this.echoOnOffToolStripMenuItem_Click);
             // 
@@ -366,35 +384,29 @@
             // 
             this.bSDELToolStripMenuItem.Name = "bSDELToolStripMenuItem";
             this.bSDELToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
-            this.bSDELToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.bSDELToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bSDELToolStripMenuItem.Text = "BS/DEL";
             this.bSDELToolStripMenuItem.Click += new System.EventHandler(this.bSDELToolStripMenuItem_Click);
-            // 
-            // aNSIToolStripMenuItem
-            // 
-            this.aNSIToolStripMenuItem.Name = "aNSIToolStripMenuItem";
-            this.aNSIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.aNSIToolStripMenuItem.Text = "ANSI";
             // 
             // pETSCIIToolStripMenuItem
             // 
             this.pETSCIIToolStripMenuItem.Name = "pETSCIIToolStripMenuItem";
-            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.pETSCIIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pETSCIIToolStripMenuItem.Text = "PETSCII";
             // 
             // lineWrapToolStripMenuItem
             // 
             this.lineWrapToolStripMenuItem.Name = "lineWrapToolStripMenuItem";
-            this.lineWrapToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.lineWrapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.lineWrapToolStripMenuItem.Text = "Line Wrap";
             // 
             // UploadButton
             // 
             this.UploadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.UploadButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xMODEMToolStripMenuItem,
             this.pasteToolStripMenuItem,
-            this.aSCIIToolStripMenuItem,
-            this.xMODEMToolStripMenuItem});
+            this.aSCIIToolStripMenuItem});
             this.UploadButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.UploadButton.Image = ((System.Drawing.Image)(resources.GetObject("UploadButton.Image")));
             this.UploadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -406,7 +418,7 @@
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
@@ -414,7 +426,7 @@
             // 
             this.aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
             this.aSCIIToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aSCIIToolStripMenuItem.Text = "ASCII";
             this.aSCIIToolStripMenuItem.Click += new System.EventHandler(this.aSCIIToolStripMenuItem_Click);
             // 
@@ -422,7 +434,7 @@
             // 
             this.xMODEMToolStripMenuItem.Name = "xMODEMToolStripMenuItem";
             this.xMODEMToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.U)));
-            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.xMODEMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.xMODEMToolStripMenuItem.Text = "XMODEM";
             this.xMODEMToolStripMenuItem.Click += new System.EventHandler(this.XModem_Send_Click);
             // 
@@ -464,6 +476,16 @@
             this.bufferToClipboardToolStripMenuItem.Text = "Capture  to Clipboard";
             this.bufferToClipboardToolStripMenuItem.Click += new System.EventHandler(this.BufferToClipboardToolStripMenuItem_Click);
             // 
+            // CancelTransferButton
+            // 
+            this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.CancelTransferButton.Image = ((System.Drawing.Image)(resources.GetObject("CancelTransferButton.Image")));
+            this.CancelTransferButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CancelTransferButton.Name = "CancelTransferButton";
+            this.CancelTransferButton.Size = new System.Drawing.Size(47, 22);
+            this.CancelTransferButton.Text = "Cancel";
+            this.CancelTransferButton.Click += new System.EventHandler(this.CancelTransferButton_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -502,16 +524,6 @@
             this.StatusBox.TabIndex = 3;
             this.StatusBox.TabStop = false;
             this.StatusBox.Paint += new System.Windows.Forms.PaintEventHandler(this.StatusBox_Paint);
-            // 
-            // CancelTransferButton
-            // 
-            this.CancelTransferButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.CancelTransferButton.Image = ((System.Drawing.Image)(resources.GetObject("CancelTransferButton.Image")));
-            this.CancelTransferButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.CancelTransferButton.Name = "CancelTransferButton";
-            this.CancelTransferButton.Size = new System.Drawing.Size(47, 22);
-            this.CancelTransferButton.Text = "Cancel";
-            this.CancelTransferButton.Click += new System.EventHandler(this.CancelTransferButton_Click);
             // 
             // MainWindow
             // 
@@ -586,6 +598,7 @@
         private System.Windows.Forms.ToolStripMenuItem bitTrimToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bufferToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton CancelTransferButton;
+        private System.Windows.Forms.ToolStripMenuItem aDM3ToolStripMenuItem;
     }
 }
 

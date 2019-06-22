@@ -38,7 +38,12 @@ namespace CRTerm
             get { return _terminal; }
             set
             {
+                if (this._terminal != null)
+                    this._terminal.ReadyToSend -= Terminal_DataToSend;
                 _terminal = value;
+                this.Terminal.Display = this.Display;
+                Display.Terminal = this.Terminal;
+                Terminal.ReadyToSend += Terminal_DataToSend;
             }
         }
 
@@ -189,9 +194,7 @@ namespace CRTerm
             config.LoadConfiguration(this);
 
             Terminal.Display = this.Display;
-            Terminal.ReadyToSend += Terminal_DataToSend;
-
-            Display.Terminal = Terminal;
+            Display.Terminal = this.Terminal;
 
             //FrameBuffer.KeyPress -= FrameBuffer_KeyPress;
             //FrameBuffer.KeyPress += FrameBuffer_KeyPress;

@@ -1,0 +1,15 @@
+﻿<Window x:Class="CRTWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRTWPF"
+        mc:Ignorable="d"
+        Title="CRTerm" Height="600" Width="900" Background="Black" Foreground="#00A000" FontFamily="Classic Console" FontSize="28">
+    <StackPanel Name="MainText">
+        <TextBlock><Run>Compiled Reality Terminal</Run></TextBlock>
+        <TextBlock>No Terminal</TextBlock>
+        <TextBlock>No Session</TextBlock>
+        <TextBlock>No Connection</TextBlock>
+    </StackPanel>
+</Window>

@@ -856,6 +856,8 @@ namespace TerminalUI
 
         private void DisplayControl_Paint(object sender, PaintEventArgs e)
         {
+            //DateTime startt = DateTime.Now;
+
             UpdateTextCursorMode();
 
             if (!FontValid)
@@ -916,6 +918,9 @@ namespace TerminalUI
                         }
                     }
                 }
+
+                //TimeSpan elapsed = DateTime.Now - startt;
+                //ParentForm.Text = elapsed.TotalMilliseconds.ToString();
             }
 
             x = CurrentColumn * ColWidth - 1;
